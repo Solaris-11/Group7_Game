@@ -19,10 +19,6 @@ void PauseMenu();
 void RunLoadGame();
 void RunTutorial();
 
-//Input Checking Functions
-void input1();
-bool checkInput1();
-
 void RunMainMenu() {
   //print out the content of the main menu
   cout << string(50, '\n');
@@ -95,10 +91,47 @@ void RunNewGame() {
 
     else if (userInput == "3" || userInput == "(3)") {
       validInput = true;
-      Setting s;
-      input(s.nRows, s.nCols, s.numF);
-      StartCustom(s);
-    }
+
+      int nRows, nCols, numF;
+      string userinput1, userinput2;
+      bool validInput1 = false;
+
+      //Take user input, stored in nRows and nCols
+      cout << "Enter the desired custom board size (2*2 to 6*6): ";
+      while (validInput1 == false) {     //Loop until a valid input is received from the user
+        validInput1 = true;
+        getline(cin, userinput1);
+        if (!(isdigit(userinput1[0])) || userinput1[1] != '*' || !(isdigit(userinput1[2]))){    //Check that the input is in the correct format
+          cout << "Input format error! Please input \"nRows*nCols\"" << endl;
+          validInput1 = false;
+        }
+
+        else {
+          stringstream ss(userInput1.substr(0, userInput.find('*')));
+          if (!(ss >> nRows)) {    //Verify that the 1st digit of the input is valid
+            cout << "Error format! First digit must be a number 2~6" << endl;
+            validInput1 = false;
+          }
+
+          else if (x > 6 || x < 2) {  //Verify that the 1st input value falls within the acceptable range
+            cout << "Out of Range! First digit must be a number 2~6" << endl;
+            validInput1 = false;
+          }
+
+          ss.str("");	   //Clear the stringstream
+          ss.clear();    //Reset error flags
+
+          ss.str(userInput1.substr(userInput1.find('*') + 1));
+          if (!(ss >> nCols)) {     //Verify that the 2nd digit of the input is valid
+            cout << "Error format! Second digit must be a number 2~6" << endl;
+            validInput1 = false;
+          }
+
+          else if (x > 6 || x < 2) {   //Verify that the 2nd input value falls within the acceptable range
+            cout << "Out of Range! Second digit must be a number 2~6" << endl;
+            validInput1 = false;
+          }
+      }
 
     else if (userInput == "4" || userInput == "(4)") {
       validInput = true;
@@ -120,4 +153,26 @@ void RunNewGame() {
       cout << "Enter (5) to return to the main menu" << endl;
     }
   }  
+}
+
+void input(int nRows, int nCols, int numF) {
+  string userinput1, userinput2;
+  while (true) {
+    cout << "Enter the desired custom board size (2*2 to 6*6): ";
+    getline(cin, userinput1);
+    if (checkInput1(userinput, nRows, nCols)) {
+      break;
+    }
+  }
+
+  while (true) {
+    cout << "Enter the desired number of cards to flip at once (2-4): ":
+    getline(cin, userinput2);
+    stringstream ss(userinput2);
+    if (!(ss >> numF)) {
+      cout << "Format error! It should be a number 2~4" << endl;
+    }
+    
+  }
+  
 }
