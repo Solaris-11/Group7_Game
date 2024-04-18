@@ -3,8 +3,37 @@
 #include <sstream>
 #include <limits>
 #include <ios>
-
+#include <termios.h>
+#include <unistd.h>
+#include <vector>
+#include <iomanip>
 using namespace std;
+void MainChoose();
+// 将终端设置为非规范模式
+void setNonCanonicalMode() {
+    struct termios term;
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+// 恢复终端的规范模式
+void restoreTerminalMode() {
+    struct termios term;
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag |= ICANON | ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+// 清空终端屏幕
+void clearScreen() {
+    cout << "\033[2J";
+}
+
+// 移动终端光标到指定位置
+void moveCursorTo(int x, int y) {
+    cout << "\033[" << y << ";" << x << "H";
+}
 
 struct Setting {
   int nRows;
@@ -25,49 +54,16 @@ void RunNewGame();
 //Checking Input Functions
 void CheckInput(int & Rows, int & Cols, int & numF);
 
-void RunMainMenu() {
-  cout << string(50, '\n');
-  cout << "Memory Matching Game" << endl;
-  cout << "Enter (1) for New game" << endl;
-  cout << "Enter (2) for Load game" << endl;
-  cout << "Enter (3) for Tutorial" << endl;
-  cout << "Enter (4) to quit" << endl;
-
-  string userInput;
-
-  //Use a boolean flag and a while loop to continuously check the validity of the input
-  bool validInput = false;
-  while (validInput == false) {
-    cin >> userInput;
-    if (userInput == "1" || userInput == "(1)") {
-      validInput = true;
-      RunNewGame();
+void RunMainMenu(int selected, vector<string> mainmap) {
+  clearScreen();
+  for(int i = 1; i <=4 ;i++){
+    if(i == selected){
+      cout << ">> " << mainmap[i-1] <<endl;
     }
-
-    else if (userInput == "2" || userInput == "(2)") {
-      validInput = true;
-      //RunLoadGame();
+    else{
+      cout << "   " << mainmap[i-1] <<endl;
     }
-
-    else if (userInput == "3" || userInput == "(3)") {
-      validInput = true;
-      //RunTutorial();
-    }
-
-    else if (userInput == "4" || userInput == "(4)") {
-      validInput = true;
-      exit(0);
-    }
-
-    else {
-      cout << "Invalid user input. Please try again." << endl;
-      cout << "Memory Matching Game" << endl;
-      cout << "Enter (1) for New game" << endl;
-      cout << "Enter (2) for Load game" << endl;
-      cout << "Enter (3) for Tutorial" << endl;
-      cout << "Enter (4) to quit" << endl;
-    } 
-  } 
+  }
 }
 
 void CheckInput(int & nRows, int & nCols, int & numF) {
@@ -134,34 +130,58 @@ void CheckInput(int & nRows, int & nCols, int & numF) {
   }
 }
 
-void RunNewGame() {
-  cout << string(50, '\n');
-  cout << "Please choose a mode" << endl;
-  cout << "Enter (1) for Endless" << endl;
-  cout << "Enter (2) for Challenge" << endl;
-  cout << "Enter (3) for Custom" << endl;
-  cout << "Enter (4) to quit" << endl;
-  cout << "Enter (5) to return to the main menu" << endl;
-
-  string userInput;
-
-  //Use a boolean flag and a while loop to continuously check the validity of the input
-  bool validInput = false;
-  while (validInput == false) {
-      cin >> userInput;
-    if (userInput == "1" || userInput == "(1)") {
-      validInput = true;
+void RunNewGame(int selected, vector<string> newgame) {
+  clearScreen();
+  for(int i = 1; i <=5 ;i++){
+    if(i == selected){
+      cout << ">> " << newgame[i-1] <<endl;
+    }
+    else{
+      cout << "   " << newgame[i-1] <<endl;
+    }
+  }
+}
+void ChooseNewGame(){
+    vector<string> newgame(5);
+    newgame[0]= "Endless Mode";
+    newgame[1]= "Challenge Mode";
+    newgame[2]= "Custom Mode" ;
+    newgame[3]= "return to the main menu";
+    newgame[4]= "quit";
+    setNonCanonicalMode();
+    int allInput = 5;
+    int userInput = 1;
+    while (true) {
+        RunNewGame(userInput, newgame);
+        char input;
+        if (read(STDIN_FILENO, &input, 1) == 1) {
+            if (input == 'w') {
+                if (userInput > 1) {
+                    userInput--;
+                }
+            } else if (input == 's') {
+                if (userInput < allInput) {
+                    userInput++;
+                }
+            } else if (input == '\n') {
+                if (userInput <= allInput) {
+                    break;
+		            }
+            }
+        }
+    }
+    restoreTerminalMode();
+    if (userInput == 1) {
+      cout << "Start Endless Mode"<< endl;
       //StartEndless();
     }
 
-    else if (userInput == "2" || userInput == "(2)") {
-      validInput = true;
+    else if (userInput == 2) {
+      cout << "Start Challenge Mode"<< endl;
       //StartChallenge();
     }
 
-    else if (userInput == "3" || userInput == "(3)") {
-      validInput = true;
-
+    else if (userInput == 3) {
       int nRows, nCols, numF;
       CheckInput(nRows, nCols, numF);
       while ((nRows * nCols) % numF != 0) {
@@ -174,29 +194,62 @@ void RunNewGame() {
       //StartCustom(c);
     }
 
-    else if (userInput == "4" || userInput == "(4)") {
-      validInput = true;
-      RunMainMenu();
+    else if (userInput == 4) {
+      MainChoose();
     }
-
-    else if (userInput == "5" || userInput == "(5)") {
-      validInput = true;
+    else if (userInput == 5) {
       exit(0);
     }
-      
-    else {
-      cout << "Invalid user input. Please try again." << endl;
-      cout << "Please choose a mode" << endl;
-      cout << "Enter (1) for Endless" << endl;
-      cout << "Enter (2) for Challenge" << endl;
-      cout << "Enter (3) for Custom" << endl;
-      cout << "Enter (4) to quit" << endl;
-      cout << "Enter (5) to return to the main menu" << endl;
-    }  
-  }
 }
 
-int main() {
-  RunMainMenu();
+void MainChoose(){
+    vector<string> mainmap(4);
+    mainmap[0]= "New game";
+    mainmap[1]= "Load game";
+    mainmap[2]= "Tutorial" ;
+    mainmap[3]= "quit";
+    setNonCanonicalMode();
+    int allselected = 4;
+    int selected = 1;
+    while (true) {
+        RunMainMenu(selected,mainmap);
+        char input;
+        if (read(STDIN_FILENO, &input, 1) == 1) {
+            if (input == 'w') {
+                if (selected > 1) {
+                    selected--;
+                }
+            } else if (input == 's') {
+                if (selected < allselected) {
+                    selected++;
+                }
+            } else if (input == '\n') {
+                if (selected <= allselected) {
+                    break;
+		            }
+            }
+        }
+    }
+    restoreTerminalMode();
+  //Use a boolean flag and a while loop to continuously check the validity of the input
+    if (selected == 1) {
+      ChooseNewGame();
+    }
+
+    else if (selected == 2) {
+      //RunLoadGame();
+    }
+
+    else if (selected == 3) {
+      //RunTutorial();
+    }
+
+    else if (selected == 4) {
+      exit(0);
+    }
+  } 
+
+int main(){
+  MainChoose();
   return 0;
 }
