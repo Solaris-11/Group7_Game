@@ -8,7 +8,6 @@
 #include <vector>
 #include <iomanip>
 using namespace std;
-void MainChoose();
 // 将终端设置为非规范模式
 void setNonCanonicalMode() {
     struct termios term;
@@ -42,8 +41,10 @@ struct Setting {
 };
 
 //Main Menu Functions
-void RunMainMenu();
-void RunNewGame();
+void RunMainMenu(int selected, vector<string> mainmap);
+void RunNewGame(int selected, vector<string> newgame);
+void MainChoose();
+void ChooseNewGame();
 //void StartEndless();  //undefined
 //void StartChallenge();
 //void StartCustom(Setting s);
