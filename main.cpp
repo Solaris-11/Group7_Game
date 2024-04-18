@@ -3,11 +3,40 @@
 #include <sstream>
 #include <limits>
 #include <ios>
-#include <termios.h>
-#include <unistd.h>
 #include <vector>
 #include <iomanip>
+#include <termios.h>
+#include <unistd.h>
+
 using namespace std;
+
+//Move Cursor Functions
+void setNonCanonicalMode();
+void restoreTerminalMode();
+void clearScreen();
+void moveCursorTo(int x, int y);
+
+//Main Menu Functions
+void RunMainMenu();
+void RunNewGame(int selected, vector<string> newgame);
+void ChooseNewGame();
+//void StartEndless();  //undefined
+//void StartChallenge();
+//void StartCustom(Setting s);
+//void PauseMenu();
+//void RunLoadGame();
+//void RunTutorial();
+
+//Checking Input Functions
+void CheckInput(int & Rows, int & Cols, int & numF);
+
+//struct
+struct Setting {
+  int nRows;
+  int nCols;
+  int numF;
+};
+
 // 将终端设置为非规范模式
 void setNonCanonicalMode() {
     struct termios term;
@@ -34,39 +63,6 @@ void moveCursorTo(int x, int y) {
     cout << "\033[" << y << ";" << x << "H";
 }
 
-struct Setting {
-  int nRows;
-  int nCols;
-  int numF;
-};
-
-//Main Menu Functions
-void RunMainMenu(int selected, vector<string> mainmap);
-void RunNewGame(int selected, vector<string> newgame);
-void MainChoose();
-void ChooseNewGame();
-//void StartEndless();  //undefined
-//void StartChallenge();
-//void StartCustom(Setting s);
-//void PauseMenu();
-//void RunLoadGame();
-//void RunTutorial();
-
-//Checking Input Functions
-void CheckInput(int & Rows, int & Cols, int & numF);
-
-void RunMainMenu(int selected, vector<string> mainmap) {
-  clearScreen();
-  for(int i = 1; i <=4 ;i++){
-    if(i == selected){
-      cout << ">> " << mainmap[i-1] <<endl;
-    }
-    else{
-      cout << "   " << mainmap[i-1] <<endl;
-    }
-  }
-}
-
 void CheckInput(int & nRows, int & nCols, int & numF) {
   string userInput1, userInput2;
   bool validInput1 = false, validInput2 = false;
@@ -75,8 +71,8 @@ void CheckInput(int & nRows, int & nCols, int & numF) {
   cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
   //Take user input, stored in nRows and nCols
-  cout << "Enter the desired custom board size (2*2 to 6*6): ";
   while (validInput1 == false) {     //Loop until a valid input is received from the user
+    cout << "Enter the desired custom board size (2*2 to 6*6): ";
     validInput1 = true;
     getline(cin, userInput1);
     if (!(isdigit(userInput1[0])) || userInput1[1] != '*' || !(isdigit(userInput1[2]))){    //Check that the input is in the correct format
@@ -113,8 +109,8 @@ void CheckInput(int & nRows, int & nCols, int & numF) {
   }
 
   //Take user input, stored in numF
-  cout << "Enter number of cards to flip (2-4): ";
   while (validInput2 == false) {
+    cout << "Enter number of cards to flip (2-4): ";
     validInput2 = true;
     getline(cin, userInput2);
     stringstream ss(userInput2);
@@ -131,126 +127,152 @@ void CheckInput(int & nRows, int & nCols, int & numF) {
   }
 }
 
-void RunNewGame(int selected, vector<string> newgame) {
-  clearScreen();
-  for(int i = 1; i <=5 ;i++){
-    if(i == selected){
-      cout << ">> " << newgame[i-1] <<endl;
-    }
-    else{
-      cout << "   " << newgame[i-1] <<endl;
+void RunNewGame(){
+  vector<string> newgame(5);
+  newgame[0]= "Endless Mode";
+  newgame[1]= "Challenge Mode";
+  newgame[2]= "Custom Mode" ;
+  newgame[3]= "return to the main menu";
+  newgame[4]= "quit";
+	
+  setNonCanonicalMode();
+  int allInput = 5;
+  int userInput = 1;
+	
+  while (true) {
+    clearScreen();
+    for(int i = 1; i <=5 ;i++){
+      if(i == selected){
+        cout << ">> " << newgame[i-1] <<endl;
+      }
+	      
+      else{
+        cout << "   " << newgame[i-1] <<endl;
+      }
     }
   }
-}
-void ChooseNewGame(){
-    vector<string> newgame(5);
-    newgame[0]= "Endless Mode";
-    newgame[1]= "Challenge Mode";
-    newgame[2]= "Custom Mode" ;
-    newgame[3]= "return to the main menu";
-    newgame[4]= "quit";
-    setNonCanonicalMode();
-    int allInput = 5;
-    int userInput = 1;
-    while (true) {
-        RunNewGame(userInput, newgame);
-        char input;
-        if (read(STDIN_FILENO, &input, 1) == 1) {
-            if (input == 'w') {
-                if (userInput > 1) {
-                    userInput--;
-                }
-            } else if (input == 's') {
-                if (userInput < allInput) {
-                    userInput++;
-                }
-            } else if (input == '\n') {
-                if (userInput <= allInput) {
-                    break;
-		            }
-            }
-        }
-    }
-    restoreTerminalMode();
-    if (userInput == 1) {
-      cout << "Start Endless Mode"<< endl;
-      //StartEndless();
-    }
-
-    else if (userInput == 2) {
-      cout << "Start Challenge Mode"<< endl;
-      //StartChallenge();
-    }
-
-    else if (userInput == 3) {
-      int nRows, nCols, numF;
-      CheckInput(nRows, nCols, numF);
-      while ((nRows * nCols) % numF != 0) {
-        cout << "Error! Board size must be a multiple of the number of cards flipped" << endl;
-        CheckInput(nRows, nCols, numF);
+	
+  char input;
+  if (read(STDIN_FILENO, &input, 1) == 1) {
+    if (input == 'w') {
+      if (userInput > 1) {
+        userInput--;
       }
-        
-      //Store the info in a struct
-      Setting c = {nRows, nCols, numF};
-      //StartCustom(c);
+    } 
+    
+    else if (input == 's') {
+      if (userInput < allInput) {
+        userInput++;
+       }
+    } 
+    
+    else if (input == '\n') {
+      if (userInput <= allInput) {
+        break;
+      }
     }
+  }
+	
+  restoreTerminalMode();
 
-    else if (userInput == 4) {
-      MainChoose();
+  if (userInput == 1) {
+    cout << "Start Endless Mode"<< endl;
+    //StartEndless();
+  }
+
+  else if (userInput == 2) {
+    cout << "Start Challenge Mode"<< endl;
+    //StartChallenge();
+  }
+
+  else if (userInput == 3) {
+    int nRows, nCols, numF;
+    CheckInput(nRows, nCols, numF);
+    while ((nRows * nCols) % numF != 0) {
+      cout << "Error! Board size must be a multiple of the number of cards flipped" << endl;
+      CheckInput(nRows, nCols, numF);
     }
-    else if (userInput == 5) {
-      exit(0);
+        
+    //Store the info in a struct
+    Setting c = {nRows, nCols, numF};
+    //StartCustom(c);
+  }
+
+  else if (userInput == 4) {
+    RunMainMenu();
     }
+	  
+  else if (userInput == 5) {
+    exit(0);
+  }
 }
 
-void MainChoose(){
-    vector<string> mainmap(4);
-    mainmap[0]= "New game";
-    mainmap[1]= "Load game";
-    mainmap[2]= "Tutorial" ;
-    mainmap[3]= "quit";
-    setNonCanonicalMode();
-    int allselected = 4;
-    int selected = 1;
-    while (true) {
-        RunMainMenu(selected,mainmap);
-        char input;
-        if (read(STDIN_FILENO, &input, 1) == 1) {
-            if (input == 'w') {
-                if (selected > 1) {
-                    selected--;
-                }
-            } else if (input == 's') {
-                if (selected < allselected) {
-                    selected++;
-                }
-            } else if (input == '\n') {
-                if (selected <= allselected) {
-                    break;
-		            }
-            }
-        }
-    }
-    restoreTerminalMode();
-  //Use a boolean flag and a while loop to continuously check the validity of the input
-    if (selected == 1) {
-      ChooseNewGame();
-    }
+void RunMainMenu(){
+  //Vector to store the main menu options
+  vector<string> mainmap(4);
+  mainmap[0]= "New game";   //Option 1: New game
+  mainmap[1]= "Load game";  //Option 2: Load game
+  mainmap[2]= "Tutorial" ;  //Option 3: Tutorial
+  mainmap[3]= "Quit";       //Option 4: Quit
 
-    else if (selected == 2) {
-      //RunLoadGame();
-    }
+  setNonCanonicalMode();    // Set terminal to non-canonical mode
+  int numOpts = 4;     // Total number of options
+  int currSel = 1;     // Currently selected option
 
-    else if (selected == 3) {
-      //RunTutorial();
+  while (true) {
+    clearScreen();     // Clear the terminal screen
+    for(int i = 1; i <=4 ;i++){
+      if(i == currSel){
+        cout << ">> " << mainmap[i-1] <<endl;    // Print selected option with a cursor (>>)
+      }
+	      
+       else{
+        cout << "   " << mainmap[i-1] <<endl;    // Print non-selected options
+       }
     }
-
-    else if (selected == 4) {
-      exit(0);
+  }
+	    
+  char input;
+  if (read(STDIN_FILENO, &input, 1) == 1) {
+    if (input == 'w') {      // If 'w' key is pressed
+      if (currSel > 1) {     // Move selection up if not already at the top
+        currSel--;
+      }
+    }
+  }
+	    
+  else if (input == 's') {     // If 's' key is pressed
+    if (currSel < numOpts) {   // Move selection down if not already at the bottom
+      currSel++;
     }
   } 
+	    
+  else if (input == '\n') {    
+    if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
+      break;                   // Exit the while loop
+    }
+  }
+	
+  restoreTerminalMode();       // Restore terminal to canonical mode
+	
+  if (currSel == 1) {          // Call function for Option 1: New game
+    ChooseNewGame();
+  }
+
+  else if (currSel == 2) {     // Call function for Option 2: Load game
+    //RunLoadGame();
+  }
+
+  else if (currSel == 3) {     // Call function for Option 3: Tutorial
+    //RunTutorial();
+  }
+
+  else if (currSel == 4) {     // Exit the program for Option 4: Quit
+    exit(0);
+  }
+} 
 
 int main(){
-  MainChoose();
+  RunMainMenu();
   return 0;
 }
