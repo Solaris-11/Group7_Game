@@ -18,8 +18,7 @@ void moveCursorTo(int x, int y);
 
 //Main Menu Functions
 void RunMainMenu();
-void RunNewGame(int selected, vector<string> newgame);
-void ChooseNewGame();
+void RunNewGame();
 //void StartEndless();  //undefined
 //void StartChallenge();
 //void StartCustom(Setting s);
@@ -128,64 +127,65 @@ void CheckInput(int & nRows, int & nCols, int & numF) {
 }
 
 void RunNewGame(){
+  //Vector to store the new game options
   vector<string> newgame(5);
-  newgame[0]= "Endless Mode";
-  newgame[1]= "Challenge Mode";
-  newgame[2]= "Custom Mode" ;
-  newgame[3]= "return to the main menu";
-  newgame[4]= "quit";
+  newgame[0]= "Endless Mode";               //Option 1: Endless Mode
+  newgame[1]= "Challenge Mode";             //Option 2: Challenge Mode
+  newgame[2]= "Custom Mode" ;               //Option 3: Custom Mode
+  newgame[3]= "Return to Main Menu";        //Option 4: Return to Main Menu
+  newgame[4]= "Quit";                       //Option 5: Quit
 	
-  setNonCanonicalMode();
-  int allInput = 5;
-  int userInput = 1;
+  setNonCanonicalMode();   // Set terminal to non-canonical mode
+  int numOpts = 5;         // Total number of options
+  int currSel = 1;         // Currently selected option
 	
   while (true) {
-    clearScreen();
+    clearScreen();         // Clear the terminal screen
     for(int i = 1; i <=5 ;i++){
-      if(i == selected){
-        cout << ">> " << newgame[i-1] <<endl;
+      if(i == currSel){
+        cout << ">> " << newgame[i-1] <<endl;    // Print selected option with a cursor (>>)
       }
 	      
       else{
-        cout << "   " << newgame[i-1] <<endl;
+        cout << "   " << newgame[i-1] <<endl;    // Print non-selected options
       }
     }
   }
 	
-  char input;
-  if (read(STDIN_FILENO, &input, 1) == 1) {
-    if (input == 'w') {
-      if (userInput > 1) {
-        userInput--;
+  char userInput;
+  if (read(STDIN_FILENO, &userInput, 1) == 1) {
+    if (userInput == 'w') {     // If 'w' key is pressed
+      if (currSel > 1) {    // Move selection up if not already at the top
+        currSel--;
       }
     } 
     
-    else if (input == 's') {
-      if (userInput < allInput) {
-        userInput++;
+    else if (userInput == 's') {       // If 's' key is pressed
+      if (currSel < numOpts) {     // Move selection down if not already at the bottom
+        currSel++;
        }
     } 
     
-    else if (input == '\n') {
-      if (userInput <= allInput) {
-        break;
+    else if (userInput == '\n') {
+      if (currSel <= numOpts) {    // If Enter key is pressed and a valid option is selected
+        break;                     // Exit the while loop
       }
     }
   }
 	
-  restoreTerminalMode();
+  restoreTerminalMode();          // Restore terminal to canonical mode
 
-  if (userInput == 1) {
+  if (currSel == 1) {
     cout << "Start Endless Mode"<< endl;
-    //StartEndless();
+    //StartEndless();             // Call function for Option 1: Endless Mode
   }
 
-  else if (userInput == 2) {
+  else if (currSel == 2) {
     cout << "Start Challenge Mode"<< endl;
-    //StartChallenge();
+    //StartChallenge();           // Call function for Option 2: Challenge Mode
   }
 
-  else if (userInput == 3) {
+  else if (currSel == 3) {        // Call function for Option 3: Custom Mode
     int nRows, nCols, numF;
     CheckInput(nRows, nCols, numF);
     while ((nRows * nCols) % numF != 0) {
@@ -193,16 +193,15 @@ void RunNewGame(){
       CheckInput(nRows, nCols, numF);
     }
         
-    //Store the info in a struct
-    Setting c = {nRows, nCols, numF};
+    Setting c = {nRows, nCols, numF};   //Store the info in a struct
     //StartCustom(c);
   }
 
-  else if (userInput == 4) {
+  else if (currSel == 4) {       // Call function for Option 4: Return to Main Menu
     RunMainMenu();
     }
 	  
-  else if (userInput == 5) {
+  else if (currSel == 5) {       // Exit the program for Option 5: Quit
     exit(0);
   }
 }
@@ -216,8 +215,8 @@ void RunMainMenu(){
   mainmap[3]= "Quit";       //Option 4: Quit
 
   setNonCanonicalMode();    // Set terminal to non-canonical mode
-  int numOpts = 4;     // Total number of options
-  int currSel = 1;     // Currently selected option
+  int numOpts = 4;          // Total number of options
+  int currSel = 1;          // Currently selected option
 
   while (true) {
     clearScreen();     // Clear the terminal screen
@@ -232,22 +231,22 @@ void RunMainMenu(){
     }
   }
 	    
-  char input;
-  if (read(STDIN_FILENO, &input, 1) == 1) {
-    if (input == 'w') {      // If 'w' key is pressed
+  char userInput;
+  if (read(STDIN_FILENO, &userInput, 1) == 1) {
+    if (userInput == 'w') {      // If 'w' key is pressed
       if (currSel > 1) {     // Move selection up if not already at the top
         currSel--;
       }
     }
   }
 	    
-  else if (input == 's') {     // If 's' key is pressed
+  else if (userInput == 's') {     // If 's' key is pressed
     if (currSel < numOpts) {   // Move selection down if not already at the bottom
       currSel++;
     }
   } 
 	    
-  else if (input == '\n') {    
+  else if (userInput == '\n') {    
     if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
       break;                   // Exit the while loop
     }
