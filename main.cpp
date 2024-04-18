@@ -66,22 +66,21 @@ void CheckInput(int & nRows, int & nCols, int & numF) {
   string userInput1, userInput2;
   bool validInput1 = false, validInput2 = false;
 
-  // Clear the input buffer
-  cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-  //Take user input, stored in nRows and nCols
+  // Take user input for board size, stored in nRows and nCols
   while (validInput1 == false) {     //Loop until a valid input is received from the user
     cout << "Enter the desired custom board size (2*2 to 6*6): ";
     validInput1 = true;
     getline(cin, userInput1);
-    if (!(isdigit(userInput1[0])) || userInput1[1] != '*' || !(isdigit(userInput1[2]))){    //Check that the input is in the correct format
+
+    // Check input format
+    if (!(isdigit(userInput1[0])) || userInput1[1] != '*' || !(isdigit(userInput1[2]))){    
       cout << "Input format error! Please input \"nRows*nCols\"" << endl;
       validInput1 = false;
     }
 
     else {
       stringstream ss(userInput1.substr(0, userInput1.find('*')));
-      if (!(ss >> nRows)) {    //Verify that the 1st digit of the input is valid
+      if (!(ss >> nRows)) {    //Verify that the 1st digit of the input is a number
         cout << "Format error! First digit must be a number 2~6" << endl;
         validInput1 = false;
       }
@@ -91,11 +90,11 @@ void CheckInput(int & nRows, int & nCols, int & numF) {
         validInput1 = false;
       }
 
-      ss.str("");	   //Clear the stringstream
+      ss.str("");    //Clear the stringstream
       ss.clear();    //Reset error flags
 
       ss.str(userInput1.substr(userInput1.find('*') + 1));
-      if (!(ss >> nCols)) {     //Verify that the 2nd digit of the input is valid
+      if (!(ss >> nCols)) {     //Verify that the 2nd digit of the input is a number
         cout << "Format error! Second digit must be a number 2~6" << endl;
         validInput1 = false;
       }
@@ -107,14 +106,14 @@ void CheckInput(int & nRows, int & nCols, int & numF) {
     }
   }
 
-  //Take user input, stored in numF
+  //Take user input for the number of cards to flip, stored in numF
   while (validInput2 == false) {
     cout << "Enter number of cards to flip (2-4): ";
     validInput2 = true;
     getline(cin, userInput2);
     stringstream ss(userInput2);
 
-    if (!(ss >> numF)) {
+    if (!(ss >> numF)) {      // Verify the input is a number
       cout << "Format error! It should be a number 2~4" << endl;
       validInput2 = false;
     }
@@ -150,25 +149,25 @@ void RunNewGame(){
         cout << "   " << newgame[i-1] <<endl;    // Print non-selected options
       }
     }
-  }
-	
-  char userInput;
-  if (read(STDIN_FILENO, &userInput, 1) == 1) {
-    if (userInput == 'w') {     // If 'w' key is pressed
-      if (currSel > 1) {    // Move selection up if not already at the top
-        currSel--;
-      }
-    } 
+
+    char userInput;
+    if (read(STDIN_FILENO, &userInput, 1) == 1) {
+      if (userInput == 'w') {     // If 'w' key is pressed
+        if (currSel > 1) {    // Move selection up if not already at the top
+          currSel--;
+        }
+      } 
     
-    else if (userInput == 's') {       // If 's' key is pressed
-      if (currSel < numOpts) {     // Move selection down if not already at the bottom
-        currSel++;
-       }
-    } 
+      else if (userInput == 's') {       // If 's' key is pressed
+        if (currSel < numOpts) {     // Move selection down if not already at the bottom
+          currSel++;
+         }
+      } 
     
-    else if (userInput == '\n') {
-      if (currSel <= numOpts) {    // If Enter key is pressed and a valid option is selected
-        break;                     // Exit the while loop
+      else if (userInput == '\n') {
+        if (currSel <= numOpts) {    // If Enter key is pressed and a valid option is selected
+          break;                     // Exit the while loop
+        }
       }
     }
   }
@@ -229,33 +228,33 @@ void RunMainMenu(){
         cout << "   " << mainmap[i-1] <<endl;    // Print non-selected options
        }
     }
-  }
 	    
-  char userInput;
-  if (read(STDIN_FILENO, &userInput, 1) == 1) {
-    if (userInput == 'w') {      // If 'w' key is pressed
-      if (currSel > 1) {     // Move selection up if not already at the top
-        currSel--;
+    char userInput;
+    if (read(STDIN_FILENO, &userInput, 1) == 1) {
+      if (userInput == 'w') {      // If 'w' key is pressed
+        if (currSel > 1) {     // Move selection up if not already at the top
+          currSel--;
+        }
       }
-    }
-  }
 	    
-  else if (userInput == 's') {     // If 's' key is pressed
-    if (currSel < numOpts) {   // Move selection down if not already at the bottom
-      currSel++;
-    }
-  } 
+      else if (userInput == 's') {     // If 's' key is pressed
+        if (currSel < numOpts) {   // Move selection down if not already at the bottom
+          currSel++;
+        }
+      } 
 	    
-  else if (userInput == '\n') {    
-    if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
-      break;                   // Exit the while loop
+      else if (userInput == '\n') {    
+        if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
+          break;                   // Exit the while loop
+        }
+      }
     }
   }
 	
   restoreTerminalMode();       // Restore terminal to canonical mode
 	
   if (currSel == 1) {          // Call function for Option 1: New game
-    ChooseNewGame();
+    RunNewGame();
   }
 
   else if (currSel == 2) {     // Call function for Option 2: Load game
