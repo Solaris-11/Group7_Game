@@ -189,15 +189,16 @@ struct Board{
 
 		//If the selected option is valid
                 if (selectedRow <= numRows && selectedCol <= numCols) {    
-                    numMove++;   // Increment the number of moves
-		    
-		    //If the selected card is not flipped
                     if (table[selectedRow-1][selectedCol-1] == false) {    
                         table[selectedRow-1][selectedCol-1] = true;   // Flip the selected card face-up
                         pairs[count%2]=card[selectedRow-1][selectedCol-1];   // Store the card value for comparison
                         coord[count%2][0]=selectedRow-1;   // Store the coordinates of the selected card
                         coord[count%2][1]=selectedCol-1;
-                        count++;   // Increment the number of stored cards
+                        count++;  // Increment the number of stored cards
+			numMove++;
+		     }
+		     else {
+			flip = false;
 		     }
                 }
             }
