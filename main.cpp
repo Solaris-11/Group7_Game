@@ -8,6 +8,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include "main.h"
+#include "MoveCursor.h"
 
 using namespace std;
 
@@ -15,6 +16,8 @@ using namespace std;
 void RunMainMenu();
 void RunNewGame();
 void StartEndless();  
+void StartEasyEndless();
+void StartHardEndless();
 void StartNewGame(int numRows, int numCols, int numF);
 //void StartChallenge();  //undefined
 //void PauseMenu();
@@ -93,6 +96,92 @@ void CheckInput(int & nRows, int & nCols, int & numF) {
       cout << "Out of range! It should be a number 2~4" << endl;
       validInput2 = false;
     }
+  }
+}
+
+void StartEasyEndless() {
+    int round = 1;
+    int EasySetting[3][3] ={{2, 4, 2}, {3, 4, 2}, {4, 4, 2}};
+    while (round <= 3) {
+        cout << "Current Round: " << round << endl;
+        StartNewGame(EasySetting[round - 1][0], EasySetting[round - 1][1], EasySetting[round - 1][2]);
+        cout << "Congratulations! You Pass Round:" << round << endl;
+        round++;
+    }
+}
+
+void StartHardEndless() {
+    int HardSetting[3][3] = {{3, 3, 3},{3, 4, 3}, {3, 5, 3}};
+    int round = 1;
+    while (round <= 3) {
+        cout << "Current Round: " << round << endl;
+        StartNewGame(HardSetting[round - 1][0], HardSetting[round - 1][1], HardSetting[round - 1][2]);
+        cout << "Congratulations! You Pass Round:" << round << endl;
+        round++;
+    }
+}
+
+void StartEndless(){
+  vector<string> difficulties (5);
+  difficulties[0] = "Easy Mode";
+  difficulties[1] = "Hard Mode";
+  difficulties[2] = "Return to Previous menu";
+  difficulties[3] = "Return to Main menu";
+  difficulties[4] = "Quit";
+	
+  setNonCanonicalMode();
+	
+  int allInputDiff = 5;
+  int userInputDiff = 1;
+  while (true) {
+    clearScreen();
+    cout << "   " << "[Choose Difficulty]" << endl;
+    cout << endl;
+	  
+    for (int j = 1; j <= difficulties.size(); j++) {
+      if (j == userInputDiff) {
+        cout << ">> " << difficulties[j-1] << endl;
+      }
+      else {
+        cout << "   " << difficulties[j-1] << endl;
+      }
+    }
+
+    char input;
+    if (read(STDIN_FILENO, &input, 1) == 1) {
+      if (input == 'w') {
+        if (userInputDiff > 1) {
+          userInputDiff--;
+        }
+      } else if (input == 's') {
+          if (userInputDiff < allInputDiff) {
+              userInputDiff++;
+          }
+      } else if (input == '\n') {
+          if (userInputDiff <= allInputDiff) {
+              break;
+	        }
+      }
+    }
+  }
+	
+  restoreTerminalMode();
+  if (userInputDiff == 1){
+    cout << "Start Easy Mode" << endl;
+    StartEasyEndless();
+  }
+  else if (userInputDiff == 2){
+    cout << "Start Hard Mode" << endl;
+    StartHardEndless();
+  }
+  else if (userInputDiff == 3){
+    RunNewGame();
+  }
+  else if (userInputDiff == 4){
+    RunMainMenu();
+  }
+  else if (userInputDiff == 5){
+    exit(0);
   }
 }
 
@@ -246,70 +335,6 @@ void RunMainMenu(){
     exit(0);
   }
 } 
-
-void StartEndless(){
-  vector<string> difficulties (5);
-  difficulties[0] = "Easy Mode";
-  difficulties[1] = "Hard Mode";
-  difficulties[2] = "Return to Previous menu";
-  difficulties[3] = "Return to Main menu";
-  difficulties[4] = "Quit";
-	
-  setNonCanonicalMode();
-	
-  int allInputDiff = 5;
-  int userInputDiff = 1;
-  while (true) {
-    clearScreen();
-    cout << "   " << "[Choose Difficulty]" << endl;
-    cout << endl;
-	  
-    for (int j = 1; j <= difficulties.size(); j++) {
-      if (j == userInputDiff) {
-        cout << ">> " << difficulties[j-1] << endl;
-      }
-      else {
-        cout << "   " << difficulties[j-1] << endl;
-      }
-    }
-
-    char input;
-    if (read(STDIN_FILENO, &input, 1) == 1) {
-      if (input == 'w') {
-        if (userInputDiff > 1) {
-          userInputDiff--;
-        }
-      } else if (input == 's') {
-          if (userInputDiff < allInputDiff) {
-              userInputDiff++;
-          }
-      } else if (input == '\n') {
-          if (userInputDiff <= allInputDiff) {
-              break;
-	        }
-      }
-    }
-  }
-	
-  restoreTerminalMode();
-  if (userInputDiff == 1){
-    cout << "Start Easy Mode" << endl;
-    StartNewGame(4,2,2);
-  }
-  else if (userInputDiff == 2){
-    cout << "Start Hard Mode" << endl;
-    StartNewGame(3,3,3);
-  }
-  else if (userInputDiff == 3){
-    RunNewGame();
-  }
-  else if (userInputDiff == 4){
-    RunMainMenu();
-  }
-  else if (userInputDiff == 5){
-    exit(0);
-  }
-}
 
 int main(){
   RunMainMenu();
