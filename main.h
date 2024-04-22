@@ -18,12 +18,9 @@ struct Board{
   int numCols;  // The number of columns in the table
   int numF;   // The number of cards filpped at a time
   int numCards = numRows * numCols;   // The size of the table
-  int numPairs = numCards / 2;  // Calculate the number of pairs
+  int numPairs = numCards / numF;  // Calculate the number of pairs
   int totalNumPairs;
   bool failure;
-
-  int selectedRow;  // The currently selected row
-  int selectedCol;  // The currently selected column
 
   vector<vector<int>> card;    // 2D vector representing the cards on the table
   vector<vector<bool>> table;  // 2D vector representing the cards on the table
@@ -67,7 +64,7 @@ struct Board{
   // Function: drawTable
   // Nested for loop to draw the table
   // Two loops to print the indicator for the selected row and column
-  void drawTable() {
+  void drawTable(int selectedRow, int selectedCol) {
     //Clear the screen
     clearScreen();
 
