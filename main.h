@@ -23,13 +23,6 @@ struct Board{
   int numCols;  // The number of columns in the table
   int numF;   // The number of cards filpped at a time
 
-  int totalNumPairs;
-  bool failure;
-
-  int numPaired;
-  int numMove;       // The number of moves made by the player
-  double points;     // The current points earned by the player
-
   // Function: setNonCanonicalMode
   // Set the terminal to non-canonical mode
   void setNonCanonicalMode() {
