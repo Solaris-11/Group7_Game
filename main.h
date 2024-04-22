@@ -14,18 +14,17 @@ using namespace std;
 #define main_h
 
 struct Board{
-  int numRows;  // The number of rows in the table
-  int numCols;  // The number of columns in the table
-  int numF;   // The number of cards filpped at a time
-  int numCards = numRows * numCols;   // The size of the table
-  int numPairs = numCards / numF;  // Calculate the number of pairs
-  int totalNumPairs;
-  bool failure;
-
   vector<vector<int>> card;    // 2D vector representing the cards on the table
   vector<vector<bool>> table;  // 2D vector representing the cards on the table
   vector<int> pairs;
   vector<vector<int>> coord;
+
+  int numRows;  // The number of rows in the table
+  int numCols;  // The number of columns in the table
+  int numF;   // The number of cards filpped at a time
+
+  int totalNumPairs;
+  bool failure;
 
   int numPaired;
   int numMove;       // The number of moves made by the player
@@ -64,7 +63,7 @@ struct Board{
   // Function: drawTable
   // Nested for loop to draw the table
   // Two loops to print the indicator for the selected row and column
-  void drawTable(int selectedRow, int selectedCol) {
+  void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vector<vector<int>> card, vector<vector<bool>>& table, int numMove, double points) {
     //Clear the screen
     clearScreen();
 
@@ -112,7 +111,10 @@ struct Board{
 
   //Function: shuffle
   //Initializes the card table and randomly shuffles the card to obtain a randomly arranged value table
-  void shuffle(){
+  void shuffle(vector<vector<int>> &card, int numRows, int numCols){
+    int numCards = numRows * numCols;   // The size of the table
+    int numPairs = numCards / numF;  // Calculate the number of pairs
+
     // Set the random seed based on the current time
     srand((unsigned int)time(NULL));    
 	
@@ -140,7 +142,7 @@ struct Board{
 
   //Funtion: checkpair
   //Check if the selected pair is matched. If true, keep the cards face-up; otherwise flip the cards back
-  void checkpair(){
+  void checkpair(vector<int> &pairs, vector<vector<int>> &coord, vector<vector<bool>> &table, int &numPaired, double &points, int totalNumPairs, bool &failure){
     //Cards are a pair
     if(pairs[0] == pairs[1]){
         numPaired++;      // Increment the number of successfully paired cards
@@ -157,14 +159,16 @@ struct Board{
     }
   }
 
-//Function: choose
-//
-void choose() {
+  //Function: choose
+  //
+  void choose(const int Rows, const int Cols) {
     setNonCanonicalMode();  //Set the terminal to non-canonical mode to read input 
 
+    const int numRows = Rows;
+    const int numCols = Cols;
     int selectedRow = numRows;  
     int selectedCol = 1;
-
+    
     vector<vector<int>> card(numRows, vector<int>(numCols));
     shuffle(card, numRows, numCols);  // Initialize and shuffle the cards
 
@@ -246,17 +250,6 @@ void choose() {
         }  
     }
     restoreTerminalMode();  // Restore the terminal to the original mode
-}
-
-
-int main(){
-    int Rows, Cols;
-    cout << "Row:";
-    cin >> Rows;
-    cout << "Col:";
-    cin >> Cols;
-    choose(Rows,Cols);
-    return 0;
-}		    
+  }		    
 };
 #endif
