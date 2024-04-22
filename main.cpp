@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <termios.h>
 #include <unistd.h>
+#include "main.h"
 
 using namespace std;
 
@@ -33,15 +34,11 @@ void CheckInput(int & Rows, int & Cols, int & numF);
 
 void StartNewGame(int numRows, int numCols, int numF) {
 	Board b = {
-		NULL,
-		NULL,
-		NULL,
-		NULL,
 		numRows,
 		numCols,
 		numF,
 	};
-	b.choose();
+	b.choose(numRows, numCols);
 }
 
 // 将终端设置为非规范模式
@@ -148,7 +145,10 @@ void RunNewGame(){
 
   while (true) {
     clearScreen();         // Clear the terminal screen
-    cout << "Choose a mode" << endl;
+	  
+    cout << "   "<< "Choose a mode" << endl;
+    cout << endl;
+	  
     for(int i = 1; i <=5 ;i++){
       if(i == currSel){
         cout << ">> " << newgame[i-1] <<endl;    // Print selected option with a cursor (>>)
@@ -200,9 +200,6 @@ void RunNewGame(){
       cout << "Error! Board size must be a multiple of the number of cards flipped" << endl;
       CheckInput(nRows, nCols, numF);
     }
-        
-    Setting c = {nRows, nCols, numF};   //Store the info in a struct
-    //StartCustom(c);
   }
 
   else if (currSel == 4) {       // Call function for Option 4: Return to Main Menu
@@ -228,7 +225,10 @@ void RunMainMenu(){
 
   while (true) {
     clearScreen();     // Clear the terminal screen
-    cout << "[Memory Matching Game]" << endl;
+	  
+    cout << "   " << "[Memory Matching Game]" << endl;
+    cout << endl;
+	  
     for(int i = 1; i <=4 ;i++){
       if(i == currSel){
         cout << ">> " << mainmap[i-1] <<endl;    // Print selected option with a cursor (>>)
