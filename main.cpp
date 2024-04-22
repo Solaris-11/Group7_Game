@@ -23,7 +23,6 @@ void RunNewGame();
 void StartEndless();  
 void StartNewGame(int numRows, int numCols, int numF);
 //void StartChallenge();  //undefined
-//void StartCustom(Setting s);
 //void PauseMenu();
 //void RunLoadGame();
 //void RunTutorial();
@@ -200,6 +199,7 @@ void RunNewGame(){
       cout << "Error! Board size must be a multiple of the number of cards flipped" << endl;
       CheckInput(nRows, nCols, numF);
     }
+    StartNewGame(nRows, nCols, numF);
   }
 
   else if (currSel == 4) {       // Call function for Option 4: Return to Main Menu
