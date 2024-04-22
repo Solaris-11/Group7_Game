@@ -3,10 +3,11 @@
 #include <string>
 #include <sstream>
 #include <cctype>
-#include <termios.h>
-#include <unistd.h>
 #include <vector>
 #include <iomanip>
+#include <termios.h>
+#include <unistd.h>
+#include <MoveCursor.h>
 
 using namespace std;
 
