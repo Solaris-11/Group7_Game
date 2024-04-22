@@ -1,11 +1,10 @@
 #include <termios.h>
 #include <unistd.h>
 
-//Move Cursor Functions
-void setNonCanonicalMode();
-void restoreTerminalMode();
-void clearScreen();
-void moveCursorTo(int x, int y);
+using namespace std;
+
+#ifndef MoveCursor_h
+#define MoveCursor_h
 
 // Function: setNonCanonicalMode
 // Set the terminal to non-canonical mode
@@ -36,3 +35,4 @@ void restoreTerminalMode() {
 void moveCursorTo(int x, int y) {
     cout << "\033[" << y << ";" << x << "H";
 }
+#endif
