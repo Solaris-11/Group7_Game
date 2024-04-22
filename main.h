@@ -10,100 +10,112 @@
 
 using namespace std;
 
-//Move Cursor Functions
-void setNonCanonicalMode();
-void restoreTerminalMode();
-void clearScreen();
-void moveCursorTo(int x, int y);
+#ifndef main_h
+#define main_h
 
-//Main Functions
-void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vector<vector<int>> card, vector<vector<bool>>& table, int numMove, double points);
-void shuffle(vector<vector<int>> &card, int numRows, int numCols);
-void swap(int &a, int &b);
-void checkpair(vector<int> &pairs, vector<vector<int>> &coord, vector<vector<bool>> &table, int &numPaired, double &points, int totalNumPairs, bool &failure);
-void choose(const int Rows, const int Cols);
+struct Board{
+  int numRows;  // The number of rows in the table
+  int numCols;  // The number of columns in the table
+  int numCards = numRows * numCols;   // The size of the table
+  int numPairs = numCards / 2;  // Calculate the number of pairs
+  int totalNumPairs;
+  bool failure;
 
+  int selectedRow;  // The currently selected row
+  int selectedCol;  // The currently selected column
+  vector<vector<int>> card;    // 2D vector representing the cards on the table
+  vector<vector<bool>> table;  // 2D vector representing the cards on the table
+  vector<int> pairs;
+  vector<vector<int>> coord;
 
-// 将终端设置为非规范模式
-void setNonCanonicalMode() {
+  int numPaired;
+  int numMove;       // The number of moves made by the player
+  double points;     // The current points earned by the player
+
+  // Function: setNonCanonicalMode
+  // Set the terminal to non-canonical mode
+  void setNonCanonicalMode() {
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);
     term.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
+  }
 
-// 恢复终端的规范模式
-void restoreTerminalMode() {
+  // Function: restoreTerminalMode
+  // Restore the terminal to canonical mode
+  void restoreTerminalMode() {
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);
     term.c_lflag |= ICANON | ECHO;
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
+  }
 
-// 清空终端屏幕
-void clearScreen() {
+  // Function: clearScreen
+  // Clear the terminal screen
+  void clearScreen() {
     cout << "\033[2J";
-}
+  }
 
-// 移动终端光标到指定位置
-void moveCursorTo(int x, int y) {
+  // Funtion: moveCursorTo
+  // Move the terminal cursor to the specified position
+  void moveCursorTo(int x, int y) {
     cout << "\033[" << y << ";" << x << "H";
-}
+  }
 
-//Function: drawTable
-//Nested for loop to draw the table
-//Two loops to print the indicator for the selected row and column
-void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vector<vector<int>> card, vector<vector<bool>>& table, int numMove, double points) {
-    clearScreen();  //Clear the screen
+  // Function: drawTable
+  // Nested for loop to draw the table
+  // Two loops to print the indicator for the selected row and column
+  void drawTable() {
+    //Clear the screen
+    clearScreen();
 
-    //Nested for loop to draw the table, print a "  *" if the selected card is face-down; otherwise print the value
-    //Iterate over each row
     for (int row = 1; row <= numRows; row++) {
-	//Iterate over each column
+        // Check if the current row is the selected row
+        if (row == selectedRow) {  
+            cout << ">  ";      //Print a ">  " is the row is selected  
+        } 
+        else {
+            cout << "   ";      //Otherwise print a "   "
+        }
+
+        //Nested for loop to draw the table
         for (int col = 1; col <= numCols; col++) {
-            if (table[row-1][col-1] == false) {    // Check if the card at the current position is face-down
-                cout << "  *";    //Print a "  *" if the card at the current position is face-down
+	    // Check if the card at the current position is face-down
+            if (table[row-1][col-1] == false) {
+                cout << "  *";       //Print a "  *" if the card at the current position is face-down
             } 
 	    else {
                 cout << setw(3) << setfill(' ') << card[row-1][col-1];    //Otherwise print the value of the card
             }
         }
-        cout << endl;
-
-    //Ierate over each row to check whether the row is selected
-    for (int row = 1; row <= numRows; row++) {
-        if (row == selectedRow) {   // Check if the current row is the selected row
-            cout << ">  ";     //Print a ">  " is the row is selected  
-        } 
-        else {
-            cout << "   ";     //Otherwise print a "   "
-        }
+        cout << endl;   
     }
-
+	  
     //To escape the first column as it is the place for the row indicator
     cout << "   ";
-    //Ierate over each column to check whether the column is selected
+
+    //Ierate over each column to check whether the column is selected 
     for(int col = 1; col<=numCols; col++){
-        if(col == selectedCol){  // Check if the current column is the selected column
-            cout << "  ^";    //Print a "  ^" is the column is selected  
+	// Check if the current column is the selected column
+        if(col == selectedCol){
+            cout << "  ^";    //Print a "  ^" is the column is selected
         }
         else{
             cout << "   ";    //Otherwise print a "   "
         }
     }
-    cout<< endl;
 
     // Print the move number and points
+    cout<< endl;
     cout << "Move: " << numMove << "    " << "Points: " << points;
     cout << endl;
 }
 
-//Function: shuffle
-//Initializes the card table and randomly shuffles the card to obtain a randomly arranged value table
-void shuffle(vector<vector<int>> &card, int numRows, int numCols){
-    int numCards = numRows * numCols;
-    int numPairs = numCards / 2;        // Calculate the number of pairs
-    srand((unsigned int)time(NULL));    // Set the random seed based on the current time
+  //Function: shuffle
+  //Initializes the card table and randomly shuffles the card to obtain a randomly arranged value table
+  void shuffle(){
+    // Set the random seed based on the current time
+    srand((unsigned int)time(NULL));    
 	
     // Card Initialization
     for (int i = 0; i < numRows; i++) {  
@@ -114,23 +126,22 @@ void shuffle(vector<vector<int>> &card, int numRows, int numCols){
 
     // Card Shuffling
     for (int i = 0; i < numCards; i++) {  
-	// Randomly select two cards and swap them
-	swap(card[rand() % numRows][rand() % numCols], card[rand() % numRows][rand() % numCols]);
+	swap(card[rand() % numRows][rand() % numCols], card[rand() % numRows][rand() % numCols]);  // Randomly select two cards and swap them
     }
-}
+  }
 
-//Function: swap
-//Swaps the value of two cards
-void swap(int &a, int &b) {
+  //Function: swap
+  //Swaps the value of two cards
+  void swap(int &a, int &b) {
 	int tmp;
 	tmp = a;
 	a = b;
 	b = tmp;
-}
+  }
 
-//Funtion: checkpair
-//Check if the selected pair is matched. If true, keep the cards face-up; otherwise flip the cards back
-void checkpair(vector<int> &pairs, vector<vector<int>> &coord, vector<vector<bool>> &table, int &numPaired, double &points, int totalNumPairs, bool &failure){
+  //Funtion: checkpair
+  //Check if the selected pair is matched. If true, keep the cards face-up; otherwise flip the cards back
+  void checkpair(){
     //Cards are a pair
     if(pairs[0] == pairs[1]){
         numPaired++;      // Increment the number of successfully paired cards
@@ -145,11 +156,11 @@ void checkpair(vector<int> &pairs, vector<vector<int>> &coord, vector<vector<boo
         table[row2][col2]=false;   // Flip the second card face-down
         failure = true;    // Pairing failed, flip the cards back
     }
-}
+  }
 
 //Function: choose
 //
-void choose(const int numRows, const int numCols) {
+void choose() {
     setNonCanonicalMode();  //Set the terminal to non-canonical mode to read input 
 
     int selectedRow = numRows;  
@@ -157,12 +168,6 @@ void choose(const int numRows, const int numCols) {
 
     vector<vector<int>> card(numRows, vector<int>(numCols));
     shuffle(card, numRows, numCols);  // Initialize and shuffle the cards
-
-    //for (int i = 0; i < Rows; i++){
-    //    for (int j = 0; j < Cols; j++){
-    //        cout << card[i][j] << " ";
-    //    }
-    //}
 
     int count = 0, numPaired = 0, numMove = 0, totalNumPairs = Rows*Cols/2;
     double points = 0;
@@ -253,6 +258,6 @@ int main(){
     cin >> Cols;
     choose(Rows,Cols);
     return 0;
-}
-
-
+}		    
+};
+#endif
