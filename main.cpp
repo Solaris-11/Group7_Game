@@ -33,13 +33,14 @@ void CheckInput(int & Rows, int & Cols, int & numF);
 
 void StartNewGame(int numRows, int numCols, int numF) {
 	Board b = {
+		NULL,
+		NULL,
+		NULL,
+		NULL,
 		numRows,
 		numCols,
 		numF,
-		NULL,
-		NULL,
-		// To do: 
-	}
+	};
 	b.choose();
 }
 
@@ -326,15 +327,19 @@ void StartEndless(){
   restoreTerminalMode();
   if (userInputDiff == 1){
     cout << "Start Easy Mode" << endl;
-    
-  }else if (userInputDiff == 2){
+    StartNewGame(4,2,2);
+  }
+  else if (userInputDiff == 2){
     cout << "Start Hard Mode" << endl;
-    //StartHardEndless();
-  }else if (userInputDiff == 3){
+    StartNewGame(3,3,3);
+  }
+  else if (userInputDiff == 3){
     RunNewGame();
-  }else if (userInputDiff == 4){
+  }
+  else if (userInputDiff == 4){
     RunMainMenu();
-  }else if (userInputDiff == 5){
+  }
+  else if (userInputDiff == 5){
     exit(0);
   }
 }
