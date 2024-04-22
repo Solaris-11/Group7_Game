@@ -7,8 +7,8 @@
 #include <iomanip>
 #include <termios.h>
 #include <unistd.h>
-#include "main.h"
-#include "MoveCursor.h"
+#include <main.h>
+#include <MoveCursor.h>
 
 using namespace std;
 
