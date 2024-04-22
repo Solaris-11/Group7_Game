@@ -167,11 +167,9 @@ void StartEndless(){
 	
   restoreTerminalMode();
   if (userInputDiff == 1){
-    cout << "Start Easy Mode" << endl;
     StartEasyEndless();
   }
   else if (userInputDiff == 2){
-    cout << "Start Hard Mode" << endl;
     StartHardEndless();
   }
   else if (userInputDiff == 3){
@@ -201,7 +199,7 @@ void RunNewGame(){
   while (true) {
     clearScreen();         // Clear the terminal screen
 	  
-    cout << "   "<< "Choose a mode" << endl;
+    cout << "   "<< "[Choose a mode]" << endl;
     cout << endl;
 	  
     for(int i = 1; i <=5 ;i++){
