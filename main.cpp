@@ -19,8 +19,9 @@ void moveCursorTo(int x, int y);
 //Main Menu Functions
 void RunMainMenu();
 void RunNewGame();
-void StartEndless();  //undefined
-//void StartChallenge();
+void StartEndless();  
+void StartNewGame(int numRows, int numCols, int numF);
+//void StartChallenge();  //undefined
 //void StartCustom(Setting s);
 //void PauseMenu();
 //void RunLoadGame();
@@ -30,12 +31,9 @@ void StartEndless();  //undefined
 //Checking Input Functions
 void CheckInput(int & Rows, int & Cols, int & numF);
 
-//struct
-struct Setting {
-  int nRows;
-  int nCols;
-  int numF;
-};
+void StartNewGame(int numRows, int numCols, int numF) {
+	
+}
 
 // 将终端设置为非规范模式
 void setNonCanonicalMode() {
@@ -273,21 +271,6 @@ void RunMainMenu(){
   }
 } 
 
-// Endless game
-void ChooseDiffEndless(int selected, vector<string> difficulties){
-  clearScreen();
-  cout << "   " << "[Choose Difficulty]" << endl;
-  cout << endl;
-  for (int j = 1; j <= difficulties.size(); j++){
-    if (j == selected){
-      cout << ">> " << difficulties[j-1] << endl;
-    }
-    else{
-      cout << "   " << difficulties[j-1] << endl;
-    }
-  }
-}
-
 void StartEndless(){
   vector<string> difficulties (5);
   difficulties[0] = "Easy Mode";
@@ -295,11 +278,25 @@ void StartEndless(){
   difficulties[2] = "Return to Previous menu";
   difficulties[3] = "Return to Main menu";
   difficulties[4] = "Quit";
+	
   setNonCanonicalMode();
+	
   int allInputDiff = 5;
   int userInputDiff = 1;
   while (true) {
-    ChooseDiffEndless(userInputDiff, difficulties);
+    clearScreen();
+    cout << "   " << "[Choose Difficulty]" << endl;
+    cout << endl;
+	  
+    for (int j = 1; j <= difficulties.size(); j++) {
+      if (j == userInputDiff) {
+        cout << ">> " << difficulties[j-1] << endl;
+      }
+      else {
+        cout << "   " << difficulties[j-1] << endl;
+      }
+    }
+
     char input;
     if (read(STDIN_FILENO, &input, 1) == 1) {
       if (input == 'w') {
@@ -321,7 +318,7 @@ void StartEndless(){
   restoreTerminalMode();
   if (userInputDiff == 1){
     cout << "Start Easy Mode" << endl;
-    //StartEasyEndless();
+    
   }else if (userInputDiff == 2){
     cout << "Start Hard Mode" << endl;
     //StartHardEndless();
