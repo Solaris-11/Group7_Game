@@ -326,9 +326,9 @@ void StartEndless(){
     cout << "Start Hard Mode" << endl;
     //StartHardEndless();
   }else if (userInputDiff == 3){
-    ChooseNewGame();
+    RunNewGame();
   }else if (userInputDiff == 4){
-    MainChoose();
+    RunMainMenu();
   }else if (userInputDiff == 5){
     exit(0);
   }
