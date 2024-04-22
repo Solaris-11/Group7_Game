@@ -178,7 +178,7 @@ void RunNewGame(){
 
   if (currSel == 1) {
     cout << "Start Endless Mode"<< endl;
-    //StartEndless();             // Call function for Option 1: Endless Mode
+    StartEndless();             // Call function for Option 1: Endless Mode
   }
 
   else if (currSel == 2) {
