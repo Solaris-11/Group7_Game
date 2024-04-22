@@ -16,6 +16,7 @@ using namespace std;
 struct Board{
   int numRows;  // The number of rows in the table
   int numCols;  // The number of columns in the table
+  int numF;   // The number of cards filpped at a time
   int numCards = numRows * numCols;   // The size of the table
   int numPairs = numCards / 2;  // Calculate the number of pairs
   int totalNumPairs;
@@ -23,6 +24,7 @@ struct Board{
 
   int selectedRow;  // The currently selected row
   int selectedCol;  // The currently selected column
+
   vector<vector<int>> card;    // 2D vector representing the cards on the table
   vector<vector<bool>> table;  // 2D vector representing the cards on the table
   vector<int> pairs;
