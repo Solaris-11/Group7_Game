@@ -14,11 +14,6 @@ using namespace std;
 #define main_h
 
 struct Board{
-  vector<vector<int>> card;    // 2D vector representing the cards on the table
-  vector<vector<bool>> table;  // 2D vector representing the cards on the table
-  vector<int> pairs;
-  vector<vector<int>> coord;
-
   int numRows;  // The number of rows in the table
   int numCols;  // The number of columns in the table
   int numF;   // The number of cards filpped at a time
@@ -237,7 +232,7 @@ struct Board{
                 }
             }
 	
-            else if (input == 'b'){  // If 'b' key is pressed
+            else if (userInput == 'b'){  // If 'b' key is pressed
                 break;  // Exit the while loop
             }
         }  
