@@ -32,7 +32,15 @@ void StartNewGame(int numRows, int numCols, int numF);
 void CheckInput(int & Rows, int & Cols, int & numF);
 
 void StartNewGame(int numRows, int numCols, int numF) {
-	
+	Board b = {
+		numRows,
+		numCols,
+		numF,
+		NULL,
+		NULL,
+		// To do: 
+	}
+	b.choose();
 }
 
 // 将终端设置为非规范模式
