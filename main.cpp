@@ -11,12 +11,6 @@
 
 using namespace std;
 
-//Move Cursor Functions
-void setNonCanonicalMode();
-void restoreTerminalMode();
-void clearScreen();
-void moveCursorTo(int x, int y);
-
 //Main Menu Functions
 void RunMainMenu();
 void RunNewGame();
@@ -26,7 +20,6 @@ void StartNewGame(int numRows, int numCols, int numF);
 //void PauseMenu();
 //void RunLoadGame();
 //void RunTutorial();
-
 
 //Checking Input Functions
 void CheckInput(int & Rows, int & Cols, int & numF);
@@ -38,32 +31,6 @@ void StartNewGame(int numRows, int numCols, int numF) {
 		numF,
 	};
 	b.choose(numRows, numCols);
-}
-
-// 将终端设置为非规范模式
-void setNonCanonicalMode() {
-    struct termios term;
-    tcgetattr(STDIN_FILENO, &term);
-    term.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
-
-// 恢复终端的规范模式
-void restoreTerminalMode() {
-    struct termios term;
-    tcgetattr(STDIN_FILENO, &term);
-    term.c_lflag |= ICANON | ECHO;
-    tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
-
-// 清空终端屏幕
-void clearScreen() {
-    cout << "\033[2J";
-}
-
-// 移动终端光标到指定位置
-void moveCursorTo(int x, int y) {
-    cout << "\033[" << y << ";" << x << "H";
 }
 
 void CheckInput(int & nRows, int & nCols, int & numF) {
