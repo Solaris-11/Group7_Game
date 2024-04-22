@@ -138,9 +138,10 @@ void RunNewGame(){
   setNonCanonicalMode();   // Set terminal to non-canonical mode
   int numOpts = 5;         // Total number of options
   int currSel = 1;         // Currently selected option
-	
+
   while (true) {
     clearScreen();         // Clear the terminal screen
+    cout << "Choose a mode" << endl;
     for(int i = 1; i <=5 ;i++){
       if(i == currSel){
         cout << ">> " << newgame[i-1] <<endl;    // Print selected option with a cursor (>>)
@@ -220,6 +221,7 @@ void RunMainMenu(){
 
   while (true) {
     clearScreen();     // Clear the terminal screen
+    cout << "[Memory Matching Game]" << endl;
     for(int i = 1; i <=4 ;i++){
       if(i == currSel){
         cout << ">> " << mainmap[i-1] <<endl;    // Print selected option with a cursor (>>)
@@ -271,7 +273,6 @@ void RunMainMenu(){
   }
 } 
 
-
 // Endless game
 void ChooseDiffEndless(int selected, vector<string> difficulties){
   clearScreen();
@@ -316,6 +317,7 @@ void StartEndless(){
       }
     }
   }
+	
   restoreTerminalMode();
   if (userInputDiff == 1){
     cout << "Start Easy Mode" << endl;
@@ -331,9 +333,6 @@ void StartEndless(){
     exit(0);
   }
 }
-
-
-
 
 int main(){
   RunMainMenu();
