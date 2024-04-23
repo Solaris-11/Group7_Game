@@ -169,7 +169,7 @@ struct Board{
 			}
 		} else if (userInput == '\n') {
 			if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
-				break;                   // Exit the while loop
+				// break;                   // Exit the while loop
 			}
 		}
 

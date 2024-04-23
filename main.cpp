@@ -23,6 +23,17 @@ void StartChallenge();
 //void RunLoadGame();
 void RunTutorial();
 
+// 进入游戏模式的提示信息
+void ShowEnterModeInfo(string mode);
+void ShowEnterModeInfo(string mode) {
+    clearScreen();
+    cout << "Now Going To " << mode;
+    for (int i = 0; i < 2; i++) {
+        cout << "..";
+        sleep(1);
+    }
+}
+
 // Checking Input Functions
 void CheckInput(int & numRows, int & numCols, int & numF);
 
@@ -217,9 +228,9 @@ void StartEndless() {
 // The time limit for each move is set to time (in seconds)
 void StartChallenge() {
 	// Difficulty settings
-	int numRows = 3, numCols = 5, numF = 3;
+	int numRows = 3, numCols = 1, numF = 3;
 	int maxMove = 30;
-	int time = 0.5;
+	int time = 1;
 
 	// Display welcome message and instructions
 	cout << "Welcome to Challenge Mode!" << endl;
@@ -227,7 +238,7 @@ void StartChallenge() {
 	
     // Start the game
 	Board b = {numRows, numCols, numF};
-    double points = b.StartNewRound(numRows, numCols, numF, maxMove, 0.5);
+    double points = b.StartNewRound(numRows, numCols, numF, maxMove, time);
 	
     // If the challenge is passed
 	if (points != -1) {
@@ -238,6 +249,7 @@ void StartChallenge() {
 	else {
 		cout << "Unfortunately! You Didn't Pass the Challenge Mode!" << endl;
 	}
+    // Todo：游戏结束后菜单
 }
 
 // Function: RunNewGame
@@ -289,10 +301,12 @@ void RunNewGame() {
     restoreTerminalMode();   // Restore terminal to canonical mode
 
     if (currSel == 1) {        // Call function for Option 1: Endless Mode
+        // 进入提示
+        ShowEnterModeInfo("Endless Mode");
         StartEndless();        
     } else if (currSel == 2) { // Call function for Option 2: Challenge Mode
-        cout << "Start Challenge Mode Game" << endl;
-        sleep(5);              // Pause 5 seconds and enter 
+        // 进入提示
+        ShowEnterModeInfo("Challenge Mode");
         StartChallenge();      
     } else if (currSel == 3) {   // Call function for Option 3: Custom Mode
         int numRows, numCols, numF;
@@ -301,10 +315,9 @@ void RunNewGame() {
             cout << "Error! Board size must be a multiple of the number of cards flipped" << endl;
             CheckInput(numRows, numCols, numF);
         }
-
-		Board b = {numRows, numCols, numF};
-        cout << "Start Custom Mode Game" << endl;
-        sleep(5);               // Pause 5 seconds and enter 
+        // 进入提示
+        ShowEnterModeInfo("Custom Mode");
+        Board b = {numRows, numCols, numF};
 		b.StartNewRound(numRows, numCols, numF, -1, 1);
     } else if (currSel == 4) {   // Call function for Option 4: Return to Main Menu
         RunMainMenu();
