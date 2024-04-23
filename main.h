@@ -5,6 +5,7 @@
 #include <cctype>
 #include <vector>
 #include <iomanip>
+#include <cmath>
 #include <termios.h>
 #include <unistd.h>
 #include "MoveCursor.h"
@@ -22,9 +23,10 @@ struct Board{
     // Function: drawTable
     // Nested for loop to draw the table
     // Two loops to print the indicator for the selected row and column
-    void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vector<vector<int> > card, vector<vector<bool> >& table, int numMove, double points) {
+    void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vector<vector<int> > card, vector<vector<bool> >& table, int numMove, double points, int round, string difficulty, string mode) {
         //Clear the screen
         clearScreen();
+        cout << " " << "[ " + mode + "--" + difficulty + "--" << round << " ]" << endl; 
         for (int row = 1; row <= numRows; row++) {
             // Check if the current row is the selected row
             if (row == selectedRow) {  
@@ -59,8 +61,23 @@ struct Board{
         }
         // Print the move number and points
         cout<< endl;
-        cout << "Move: " << numMove << "    " << "Points: " << points;
-        cout << endl;
+        cout << "Move: " << numMove << "    " << "Points: " << points << endl;
+        if (round < 3){
+            if (points == 100){
+                cout << endl;
+                cout << "Congratulations! You Pass Round: " << round << endl;
+                cout << "Now Going to the Next Round..." << endl;
+                cout << "(Press any key to continue ...)" << endl;
+            }
+        }
+        else if (round == 3){
+            if (points == 100){
+                cout << endl;
+                cout << "Hooray!!! You pass " << difficulty << " Mode!!!" << endl;
+                cout << "(Press any key to continue ...)" << endl;
+                // move to "choose mode page"
+            }
+        }   
     }
 
     //Function: shuffle
@@ -115,7 +132,8 @@ struct Board{
         // Cards are a pair
         if (failure) {
             numPaired++;      // Increment the number of successfully paired cards
-            points += (100 / (double)totalNumPairs) * numPaired;    // Update the points based on the number of pairs matched
+            points = (100 / (double)totalNumPairs) * numPaired;    // Update the points based on the number of pairs matched
+            points = ceil(points);
             failure = false;   // Pairing successful, keep the cards face-up
         }
         // Cards are not a pair
@@ -128,70 +146,10 @@ struct Board{
         }
     }
 
-    // Function: RunPauseMenu
-    //
-    void RunPauseMenu() {
-        // Vector to store the new game options
-        vector<string> newgame(5);
-        newgame[0] = "Continue";              // Option 1: Continue
-        newgame[1] = "Save and Quit";         // Option 2: Save and Quit
-        newgame[2] = "Restart";               // Option 3: Restart
-        newgame[3] = "Return to main menu";   // Option 4: Return to Main Menu
-        newgame[4] = "Quit";                  // Option 5: Quit
-
-        setNonCanonicalMode();   // Set terminal to non-canonical mode
-        int numOpts = 5;         // Total number of options
-        int currSel = 1;         // Currently selected option
-
-        while (true) {
-            clearScreen();       // Clear the terminal screen
-            cout << "                         " << "[Pause Menu]" << endl;
-            cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
-
-            for (int i = 1; i <= 5; i++) {
-                if (i == currSel) {
-                    cout << ">> " << newgame[i - 1] << endl;   // Print selected option with a cursor (>>)
-                } else {
-                    cout << "   " << newgame[i - 1] << endl;   // Print non-selected options
-                }
-            }
-        }
-
-        char userInput;
-		read(STDIN_FILENO, &userInput, 1);
-		if (userInput == 'w') {      // If 'w' key is pressed
-			if (currSel > 1) {     // Move selection up if not already at the top
-				currSel--;
-			}
-		} else if (userInput == 's') {  // If 's' key is pressed
-			if (currSel < numOpts) {   // Move selection down if not already at the bottom
-				currSel++;
-			}
-		} else if (userInput == '\n') {
-			if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
-				// break;                   // Exit the while loop
-			}
-		}
-
-    restoreTerminalMode();       // Restore terminal to canonical mode
-
-    if (currSel == 1) {          // Call function for Option 1: Continue
-        //
-    } else if (currSel == 2) {   // Call function for Option 2: Save and Quit
-        //
-    } else if (currSel == 3) {   // Call function for Option 3: Restart
-        //
-    } else if (currSel == 4) {   // Exit the program for Option 4: Return to Main Menu
-        //
-    } else if (currSel == 4) {   // Exit the program for Option 4: Quit
-        exit(0);
-    }
-    }
-
     // Function: StartNewRound
     // 开启一轮游戏，返回当前轮次获得的分数，若失败则返回-1
     // 挑战模式中设置的两个参数：step: 步数限制，time：翻牌显示的时间
-    double StartNewRound(const int numRows, const int numCols, const int numF, int step, int time) {
+    double StartNewRound(const int numRows, const int numCols, const int numF, int step, int time, int round, string difficulty, string mode) {
         setNonCanonicalMode();  // Set the terminal to non-canonical mode to read input 
 
         int selectedRow = numRows;  
@@ -210,7 +168,7 @@ struct Board{
 
         while (numPaired != totalNumPairs) {  // Keep the process until all the cards are matched
             // Draw the game table
-            drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);  
+            drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points, round, difficulty, mode);  
             // Check if a pair has been flipped
             if (flip) {
                 if(count > 0 && count % numF == 0) {
@@ -218,7 +176,7 @@ struct Board{
                     // Check if the flipped pair is a match
                     checkCards(pairs, coord, table, numPaired, points, totalNumPairs, failure);
                     // Show Cards
-                    drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
+                    drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points, round, difficulty, mode);
                 }
                 flip = false;
             }

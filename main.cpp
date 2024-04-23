@@ -23,17 +23,6 @@ void StartChallenge();
 //void RunLoadGame();
 void RunTutorial();
 
-// 进入游戏模式的提示信息
-void ShowEnterModeInfo(string mode);
-void ShowEnterModeInfo(string mode) {
-    clearScreen();
-    cout << "Now Going To " << mode;
-    for (int i = 0; i < 2; i++) {
-        cout << "..";
-        sleep(1);
-    }
-}
-
 // Checking Input Functions
 void CheckInput(int & numRows, int & numCols, int & numF);
 
@@ -104,11 +93,13 @@ void StartEasyEndless() {
 	// Difficulty Initialization
     int EasySetting[3][3] ={{2, 4, 2}, {3, 4, 2}, {4, 4, 2}};
 	int round = 1;
+    string difficulty = "Easy";
+    string mode = "Endless";
 
 	// Endless mode: infinite loop
     while (round <= 3) {
         // Start a new round of game
-        cout << "Current Round: " << round << endl;
+        // cout << "Current Round: " << round << endl;
 
         // Read the settings from EasySetting and store them in Board
 		int numRows = EasySetting[round - 1][0];   
@@ -117,14 +108,16 @@ void StartEasyEndless() {
 		Board b = {numRows, numCols, numF};
 
         // Start the new round
-		b.StartNewRound(numRows, numCols, numF, -1, 1);
+		b.StartNewRound(numRows, numCols, numF, -1, 1, round, difficulty, mode);
 
 		// Game over
-        cout << "Congratulations! You Pass Round:" << round << endl;
-		cout << "Now Going to the Next Round..." <<  endl;
-		sleep(5);    // Pause for 1 second and continue with the next game
+		sleep(1);    // Pause for 1 second and continue with the next game
         round++;
     }
+
+    // Pass 3 rounds in Easy Endless mode
+    // Go back to "Choose Difficulty" of "Endless Mode" page
+    StartEndless();
 }
 
 // Function: StartHardEndless
@@ -137,6 +130,8 @@ void StartHardEndless() {
     // Difficulty Initialization
     int HardSetting[3][3] = {{3, 3, 3},{3, 4, 3}, {3, 5, 3}};
     int round = 1;
+    string difficulty = "Hard";
+    string mode = "Endless";
 
     // Endless mode: infinite loop
     while (round <= 3) {
@@ -150,14 +145,16 @@ void StartHardEndless() {
 	Board b = {numRows, numCols, numF};
 
         // Start the new round
-	b.StartNewRound(numRows, numCols, numF, -1, 1);
+	b.StartNewRound(numRows, numCols, numF, -1, 1, round, difficulty, mode);
 	
 	// Game over
-        cout << "Congratulations! You Pass Round:" << round << endl;
-	cout << "Now Going to the Next Round..." <<  endl;
 	sleep(1);    // Pause for 1 second and continue with the next game
         round++;
     }
+
+    // Pass 3 rounds in Hard Endless mode
+    // Go back to "Choose Difficulty" of "Endless Mode" page
+    StartEndless();
 }
 
 // Function: StartEndless
@@ -178,6 +175,7 @@ void StartEndless() {
 
     while (true) {
         clearScreen();      // Clear the terminal screen
+        cout << "                         " << "[Endless]" << endl;
         cout << "                    " << "[Choose Difficulty]" << endl;
         cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
@@ -228,9 +226,12 @@ void StartEndless() {
 // The time limit for each move is set to time (in seconds)
 void StartChallenge() {
 	// Difficulty settings
-	int numRows = 3, numCols = 1, numF = 3;
+	int numRows = 3, numCols = 5, numF = 3;
 	int maxMove = 30;
-	int time = 1;
+	int time = 0.5;
+    int round = 1;
+    string difficulty = "Easy";
+    string mode = "Endless";
 
 	// Display welcome message and instructions
 	cout << "Welcome to Challenge Mode!" << endl;
@@ -238,7 +239,7 @@ void StartChallenge() {
 	
     // Start the game
 	Board b = {numRows, numCols, numF};
-    double points = b.StartNewRound(numRows, numCols, numF, maxMove, time);
+    double points = b.StartNewRound(numRows, numCols, numF, maxMove, 1, round, difficulty, mode);
 	
     // If the challenge is passed
 	if (points != -1) {
@@ -249,7 +250,6 @@ void StartChallenge() {
 	else {
 		cout << "Unfortunately! You Didn't Pass the Challenge Mode!" << endl;
 	}
-    // Todo：游戏结束后菜单
 }
 
 // Function: RunNewGame
@@ -270,6 +270,7 @@ void RunNewGame() {
 
     while (true) {
         clearScreen();       // Clear the terminal screen
+        cout << "                          " << "[NewGame]" << endl;
         cout << "                       " << "[Choose a mode]" << endl;
         cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
@@ -301,12 +302,10 @@ void RunNewGame() {
     restoreTerminalMode();   // Restore terminal to canonical mode
 
     if (currSel == 1) {        // Call function for Option 1: Endless Mode
-        // 进入提示
-        ShowEnterModeInfo("Endless Mode");
         StartEndless();        
     } else if (currSel == 2) { // Call function for Option 2: Challenge Mode
-        // 进入提示
-        ShowEnterModeInfo("Challenge Mode");
+        cout << "Start Challenge Mode Game" << endl;
+        sleep(5);              // Pause 5 seconds and enter 
         StartChallenge();      
     } else if (currSel == 3) {   // Call function for Option 3: Custom Mode
         int numRows, numCols, numF;
@@ -315,10 +314,16 @@ void RunNewGame() {
             cout << "Error! Board size must be a multiple of the number of cards flipped" << endl;
             CheckInput(numRows, numCols, numF);
         }
-        // 进入提示
-        ShowEnterModeInfo("Custom Mode");
-        Board b = {numRows, numCols, numF};
-		b.StartNewRound(numRows, numCols, numF, -1, 1);
+
+		Board b = {numRows, numCols, numF};
+        cout << "Start Custom Mode Game" << endl;
+        sleep(2);               // Pause 2 seconds and enter 
+
+        int round = 0;
+        string difficulty = "TOM";
+        string mode = "CUS";
+		b.StartNewRound(numRows, numCols, numF, -1, 1, round, difficulty, mode);
+        RunNewGame();
     } else if (currSel == 4) {   // Call function for Option 4: Return to Main Menu
         RunMainMenu();
     } else if (currSel == 5) {   // Exit the program for Option 5: Quit
@@ -344,7 +349,8 @@ void RunMainMenu() {
     while (true) {
         clearScreen();        // Clear the terminal screen
 
-        cout << "                    " << "[Memory Matching Game]" << endl;
+        cout << "                   " << "[Memory Matching Game]" << endl;
+        cout << "                         " << "[Main Menu]" << endl;
         cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
         for (int i = 1; i <= 4; i++) {
@@ -416,10 +422,14 @@ void RunTutorial() {
     cout << "(Press any key to start...)"<< endl;
     cin >> userInput;
 
+    int round = 1;
+    string difficulty = "Easy";
+    string mode = "TUT";
+
     Board b1 = {2, 2, 2};
-    b1.StartNewRound(2, 2, 2, -1, 1);
-    cout << "Congrats! You win!" << endl;
-    cout << "(Press any key to continue...)"<< endl;
+    b1.StartNewRound(2, 2, 2, -1, 1, round, difficulty, mode);
+    //cout << "Congrats! You win!" << endl;
+    //cout << "(Press any key to continue...)"<< endl;
     cin >> userInput;
 
 
@@ -431,10 +441,12 @@ void RunTutorial() {
     cout << "(Press any key to start...)"<< endl;
     cin >> userInput;
 
+    difficulty = "Hard";
+
     Board b2 = {2, 2, 2};
-    b2.StartNewRound(3, 3, 3, -1, 1);
-    cout << "Congrats! You win!" << endl;
-    cout << "(Press any key to continue...)"<< endl;
+    b2.StartNewRound(3, 3, 3, -1, 1, round, difficulty, mode);
+    //cout << "Congrats! You win!" << endl;
+    //cout << "(Press any key to continue...)"<< endl;
     cin >> userInput;
     
     //page5
