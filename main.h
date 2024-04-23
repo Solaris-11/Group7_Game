@@ -5,7 +5,7 @@
 #include <cctype>
 #include <vector>
 #include <iomanip>
-#include "termios.h"
+#include <termios.h>
 #include <unistd.h>
 #include "MoveCursor.h"
 
