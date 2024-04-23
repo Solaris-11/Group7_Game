@@ -98,7 +98,7 @@ void StartEasyEndless() {
         cout << "Congratulations! You Pass Round:" << round << endl;
 		cout << "Now Going to the Next Round..." <<  endl;
 		// 停顿1s
-		sleep(1);
+		sleep(5);
         round++;
     }
 }
@@ -245,10 +245,11 @@ void RunNewGame() {
     restoreTerminalMode();   // Restore terminal to canonical mode
 
     if (currSel == 1) {
-        cout << "Start Endless Mode" << endl;
         StartEndless();        // Call function for Option 1: Endless Mode
     } else if (currSel == 2) {
-        cout << "Start Challenge Mode" << endl;
+        cout << "Start Challenge Mode Game" << endl;
+        // 停顿5s后进入
+        sleep(5);
         StartChallenge();      // Call function for Option 2: Challenge Mode
     } else if (currSel == 3) {   // Call function for Option 3: Custom Mode
         int nRows, nCols, numF;
@@ -258,6 +259,9 @@ void RunNewGame() {
             CheckInput(nRows, nCols, numF);
         }
         // 开启一轮游戏
+        cout << "Start Custom Mode Game" << endl;
+        // 停顿5s后进入
+        sleep(5);
 		Board b = {nRows, nCols, numF};
 		b.StartNewRound(nRows, nCols, numF, -1, 1);
     } else if (currSel == 4) {   // Call function for Option 4: Return to Main Menu

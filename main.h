@@ -121,7 +121,7 @@ struct Board{
         // Cards are not a pair
         else {
             // Flip cards face-down
-            for (int i = 1; i < coord.size(); i++) {
+            for (int i = 0; i < coord.size(); i++) {
                 table[coord[i][0]][coord[i][1]] = false;
             }
             failure = true;    // Pairing failed, flip the cards back
