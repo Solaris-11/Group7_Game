@@ -21,7 +21,7 @@ void StartHardEndless();
 void StartChallenge();
 //void PauseMenu();
 //void RunLoadGame();
-//void RunTutorial();
+void RunTutorial();
 
 // Checking Input Functions
 void CheckInput(int & numRows, int & numCols, int & numF);
@@ -167,8 +167,8 @@ void StartEndless() {
 
     while (true) {
         clearScreen();      // Clear the terminal screen
-        cout << "   " << "[Choose Difficulty]" << endl;
-        cout << endl;
+        cout << "                    " << "[Choose Difficulty]" << endl;
+        cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
         for (int j = 1; j <= difficulties.size(); j++) {
             if (j == currSel ) {
@@ -258,8 +258,8 @@ void RunNewGame() {
 
     while (true) {
         clearScreen();       // Clear the terminal screen
-        cout << "   " << "[Choose a mode]" << endl;
-        cout << endl;
+        cout << "                       " << "[Choose a mode]" << endl;
+        cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
         for (int i = 1; i <= 5; i++) {
             if (i == currSel) {
@@ -331,8 +331,8 @@ void RunMainMenu() {
     while (true) {
         clearScreen();        // Clear the terminal screen
 
-        cout << "   " << "[Memory Matching Game]" << endl;
-        cout << endl;
+        cout << "                    " << "[Memory Matching Game]" << endl;
+        cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
         for (int i = 1; i <= 4; i++) {
             if (i == currSel) {
@@ -366,11 +366,116 @@ void RunMainMenu() {
     } else if (currSel == 2) {   // Call function for Option 2: Load game
         //RunLoadGame();
     } else if (currSel == 3) {   // Call function for Option 3: Tutorial
-        //RunTutorial();
+        RunTutorial();
     } else if (currSel == 4) {   // Exit the program for Option 4: Quit
         exit(0);
     }
 }
+
+// Function: RunTutorial
+// 
+void RunTutorial() {
+    string userInput;
+    //page1
+    clearScreen();
+    cout << "                 " << "--Welcome to the Game Tutorial--" << endl;
+    cout << "In this tutorial, we will guide you step by step on how to play the game" << endl;
+    cout << "(Press any key to continue...)"<< endl;
+    cin >> userInput;
+
+    //page2
+    clearScreen();
+    cout << "Here's how you can play" << endl;
+    cout << "1. Use the 'w', 's', 'a', 'd' keys to move the indicator on the table" << endl;
+    cout << "2. Press the Enter key to select a card and flip it over" << endl;
+    cout << "3. Try to uncover two cards that have the same symbol" << endl;
+    cout << "   " << "If the cards match, they will remain flipped, and you will earn points" << endl;
+    cout << "   " << "If the cards don't match, they will be flipped back over within 1 sec" << endl;
+    cout << "   " << "and your move count will increase by 1. The points will not change." << endl;
+    cout << "4. Continue flipping cards and matching pairs until all the cards are uncovered" << endl;
+    cout << "(Press any key to continue...)"<< endl;
+    cin >> userInput;
+
+    //page3
+    clearScreen();
+    cout << "Let's start with a simple 2x2 game" << endl;
+    cout << "The objective is to uncover the entire table using as few steps as possible" << endl;
+    cout << "(Press any key to start...)"<< endl;
+    cin >> userInput;
+
+    Board b1 = {2, 2, 2};
+    b1.StartNewRound(2, 2, 2, -1, 1);
+    cout << "Congrats! You win!" << endl;
+    cout << "(Press any key to continue...)"<< endl;
+    cin >> userInput;
+
+
+    //page4
+    clearScreen();
+    cout << "Now, let's move on to a slightly more challenging game with a 3x3 table" << endl;
+    cout << "This time, you can flip three cards at a time" << endl;
+    cout << "The goal remains the same—uncover all the cards with the fewest moves possible" << endl;
+    cout << "(Press any key to start...)"<< endl;
+    cin >> userInput;
+
+    Board b2 = {2, 2, 2};
+    b2.StartNewRound(3, 3, 3, -1, 1);
+    cout << "Congrats! You win!" << endl;
+    cout << "(Press any key to continue...)"<< endl;
+    cin >> userInput;
+    
+    //page5
+    clearScreen();
+    cout << "There are different modes you can try" << endl;
+    cout << "Let's introduce them one by one: " << endl;
+    cout << "(Press any key to continue...)"<< endl;
+    cin >> userInput;
+
+    //page6
+    clearScreen();
+    cout << "1. Endless Mode" << endl;
+    cout << "There are two difficulties you can choose from: " << endl;
+    cout << "Easy Mode: Two cards can be flipped at once" << endl;
+    cout << "Hard Mode: Three cards can be flipped at once" << endl;
+    cout << "In each difficulty, you will have a larger table in each new round" << endl;
+    cout << "(Press any key to continue...)"<< endl;
+    cin >> userInput;
+
+    //page7
+    clearScreen();
+    cout << "2. Challenge Mode" << endl;
+    cout << "There will be a maximum move limit and a short time interval between each flip" << endl;
+    cout << "You will lose if you don't complete the matching within the maximum move limit" << endl;
+    cout << "(Press any key to continue...)"<< endl;
+    cin >> userInput;
+
+    //page8
+    clearScreen();
+    cout << "3. Custom Mode" << endl;
+    cout << "You can define your own table: its size and the number of cards to be flipped at once" << endl;
+    cout << "(Press any key to continue...)"<< endl;
+    cin >> userInput;
+
+    //page9
+    clearScreen();
+    cout << "Let's have a look at the main menu" << endl;
+    cout << "The main menu allows you choose: " << endl;
+    cout << "\"New Game\": Start a new game" << endl;
+    cout << "\"Load Game\": Play the last unfinished game" << endl; 
+    cout << "\"Tutorial\": You're looking at it now!" << endl;
+    cout << "\"Quit\": Exit the game" << endl;
+    cout << "(Press any key to continue...)" << endl;
+    cin >> userInput;
+
+    //page10
+    clearScreen();
+    cout << "Congrats! You've finished the tutorial!" << endl;
+    cout << "Have fun playing the game!" << endl;
+    cout << "(Press any key to return to the main menu)"<< endl;
+    cin >> userInput;
+    RunMainMenu();
+} 
+
 
 int main() {
     RunMainMenu();
