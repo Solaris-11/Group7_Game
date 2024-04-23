@@ -111,7 +111,7 @@ void StartEasyEndless() {
 		// Game over
         cout << "Congratulations! You Pass Round:" << round << endl;
 		cout << "Now Going to the Next Round..." <<  endl;
-		sleep(1);    // Pause for 1 second and continue with the next game
+		sleep(5);    // Pause for 1 second and continue with the next game
         round++;
     }
 }
@@ -288,12 +288,14 @@ void RunNewGame() {
 
     restoreTerminalMode();   // Restore terminal to canonical mode
 
-    if (currSel == 1) {
-        cout << "Start Endless Mode" << endl;
-        StartEndless();        // Call function for Option 1: Endless Mode
-    } else if (currSel == 2) {
-        cout << "Start Challenge Mode" << endl;
-        StartChallenge();      // Call function for Option 2: Challenge Mode
+    if (currSel == 1) {        // Call function for Option 1: Endless Mode
+        cout << "Start Custom Mode Game" << endl;
+        sleep(5);              // Pause 5 seconds and enter 
+        StartEndless();        
+    } else if (currSel == 2) { // Call function for Option 2: Challenge Mode
+        cout << "Start Challenge Mode Game" << endl;
+        sleep(5);              // Pause 5 seconds and enter 
+        StartChallenge();      
     } else if (currSel == 3) {   // Call function for Option 3: Custom Mode
         int numRows, numCols, numF;
         CheckInput(numRows, numCols, numF);
@@ -301,8 +303,10 @@ void RunNewGame() {
             cout << "Error! Board size must be a multiple of the number of cards flipped" << endl;
             CheckInput(numRows, numCols, numF);
         }
-        // 开启一轮游戏
+
 		Board b = {numRows, numCols, numF};
+        cout << "Start Custom Mode Game" << endl;
+        sleep(5);               // Pause 5 seconds and enter 
 		b.StartNewRound(numRows, numCols, numF, -1, 1);
     } else if (currSel == 4) {   // Call function for Option 4: Return to Main Menu
         RunMainMenu();
