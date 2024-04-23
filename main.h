@@ -22,7 +22,7 @@ struct Board{
   // Function: drawTable
   // Nested for loop to draw the table
   // Two loops to print the indicator for the selected row and column
-  void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vector<vector<int>> card, vector<vector<bool>>& table, int numMove, double points) {
+  void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vector<vector<int> > card, vector<vector<bool> >& table, int numMove, double points) {
     //Clear the screen
     clearScreen();
 
@@ -70,7 +70,7 @@ struct Board{
 
   //Function: shuffle
   //Initializes the card table and randomly shuffles the card to obtain a randomly arranged value table
-  void shuffle(vector<vector<int>> &card, int numRows, int numCols){
+  void shuffle(vector<vector<int> > &card, int numRows, int numCols, int numF){
     int numCards = numRows * numCols;   // The size of the table
     int numPairs = numCards / numF;  // Calculate the number of pairs
 
@@ -79,14 +79,21 @@ struct Board{
 	
     // Card Initialization
     for (int i = 0; i < numRows; i++) {  
-	for (int j = 0; j < numCols; j++) {
-		card[i][j] = (i * numCols + j) % numPairs + 1;   // Assign a unique value to each card
-	}
+	    for (int j = 0; j < numCols; j++) {
+		    card[i][j] = (i * numCols + j) % numPairs + 1;   // Assign a unique value to each card
+	    }
     }
 
     // Card Shuffling
-    for (int i = 0; i < numCards; i++) {  
-	swap(card[rand() % numRows][rand() % numCols], card[rand() % numRows][rand() % numCols]);  // Randomly select two cards and swap them
+    for (int i = 0; i < numPairs; i++) {
+        for (int k = 0; k < numF; k++) {
+            int row1 = rand() % numRows;
+            int col1 = rand() % numCols;
+            int row2 = rand() % numRows;
+            int col2 = rand() % numCols;
+            
+            swap(card[row1][col1], card[row2][col2]);  // Randomly select two cards and swap them
+        }
     }
   }
 
@@ -101,7 +108,7 @@ struct Board{
 
   //Funtion: checkpair
   //Check if the selected pair is matched. If true, keep the cards face-up; otherwise flip the cards back
-  void checkpair(vector<int> &pairs, vector<vector<int>> &coord, vector<vector<bool>> &table, int &numPaired, double &points, int totalNumPairs, bool &failure){
+  void checkpair(vector<int> &pairs, vector<vector<int> > &coord, vector<vector<bool> > &table, int &numPaired, double &points, int totalNumPairs, bool &failure){
     //Cards are a pair
     if(pairs[0] == pairs[1]){
         numPaired++;      // Increment the number of successfully paired cards
@@ -111,33 +118,75 @@ struct Board{
 	    
     //Cards are not a pair
     else{
-        int row1 = coord[0][0], row2 = coord[1][0], col1 = coord[0][1], col2 = coord[1][1];
+        int row1 = coord[0][0], row2 = coord[1][0];
+        int col1 = coord[0][1], col2 = coord[1][1];
         table[row1][col1]=false;   // Flip the first card face-down
         table[row2][col2]=false;   // Flip the second card face-down
         failure = true;    // Pairing failed, flip the cards back
     }
   }
 
+  //Funtion: checktrio
+  //Check if the selected trio is matched. If true, keep the cards face-up; otherwise flip the cards back
+  void checktrio(vector<int> &pairs, vector<vector<int> > &coord, vector<vector<bool> > &table, int &numPaired, double &points, int totalNumPairs, bool &failure){
+    //Cards are a pair
+    if(pairs[0] == pairs[1] && pairs[0] == pairs[2]){
+        numPaired++;      // Increment the number of successfully paired cards
+        points = (100/(double)totalNumPairs)*numPaired;    // Update the points based on the number of pairs matched
+        failure = false;   // Pairing successful, keep the cards face-up
+    }
+	    
+    //Cards are not a pair
+    else{
+        int row1 = coord[0][0], row2 = coord[1][0], row3 = coord[2][0];
+        int col1 = coord[0][1], col2 = coord[1][1], col3 = coord[2][1];
+        table[row1][col1]=false;   // Flip the first card face-down
+        table[row2][col2]=false;   // Flip the second card face-down
+        table[row3][col3]=false;   // Flip the third card face-down
+        failure = true;    // Pairing failed, flip the cards back
+    }
+  }
+
+// Function: checkfour
+// Check if the selected four cards are matched. If true, keep the cards face-up; otherwise flip the cards back
+void checkfour(vector<int> &pairs, vector<vector<int> > &coord, vector<vector<bool> > &table, int &numPaired, double &points, int totalNumPairs, bool &failure){
+    // Cards are a pair
+    if (pairs[0] == pairs[1] && pairs[0] == pairs[2] && pairs[0] == pairs[3]){
+        numPaired++;      // Increment the number of successfully paired cards
+        points = (100 / (double)totalNumPairs) * numPaired;    // Update the points based on the number of pairs matched
+        failure = false;   // Pairing successful, keep the cards face-up
+    }
+    
+    // Cards are not a pair
+    else {
+        int row1 = coord[0][0], row2 = coord[1][0], row3 = coord[2][0], row4 = coord[3][0];
+        int col1 = coord[0][1], col2 = coord[1][1], col3 = coord[2][1], col4 = coord[3][1];
+        table[row1][col1] = false;   // Flip the first card face-down
+        table[row2][col2] = false;   // Flip the second card face-down
+        table[row3][col3] = false;   // Flip the third card face-down
+        table[row4][col4] = false;   // Flip the fourth card face-down
+        failure = true;    // Pairing failed, flip the cards back
+    }
+}
+
   //Function: choose
   //
-  void choose(const int Rows, const int Cols) {
+  void choose(const int numRows, const int numCols, const int numF) {
     setNonCanonicalMode();  //Set the terminal to non-canonical mode to read input 
 
-    const int numRows = Rows;
-    const int numCols = Cols;
     int selectedRow = numRows;  
     int selectedCol = 1;
     
-    vector<vector<int>> card(numRows, vector<int>(numCols));
-    shuffle(card, numRows, numCols);  // Initialize and shuffle the cards
+    vector<vector<int> > card(numRows, vector<int>(numCols));
+    shuffle(card, numRows, numCols, numF);  // Initialize and shuffle the cards
 
-    int count = 0, numPaired = 0, numMove = 0, totalNumPairs = Rows*Cols/2;
+    int count = 0, numPaired = 0, numMove = 0, totalNumPairs = numRows * numCols / numF;
     double points = 0;
     bool failure = false, flip = false;
 
-    vector<vector<bool>> table(numRows,vector<bool>(numCols,false));    //Create a table to track the state of each card (initial value: false)
-    vector<int> pairs(Rows*Cols);
-    vector<vector<int>> coord(2,vector<int>(2));
+    vector<vector<bool> > table(numRows,vector<bool>(numCols,false));    //Create a table to track the state of each card (initial value: false)
+    vector<int> pairs(numRows*numCols);
+    vector<vector<int> > coord(numF,vector<int>(numF));
 
     while (numPaired != totalNumPairs) {  //Keep the process until all the cards are matched
         //Draw the game table
@@ -145,14 +194,34 @@ struct Board{
 
 	// Check if a pair has been flipped
 	if (flip){
-            if(count>0 && count%2 ==0){
+            if(count>0 && count % numF == 0){
                 sleep(1);    // Pause for 1 second to display the flipped cards
-                checkpair(pairs, coord, table, numPaired, points, totalNumPairs, failure);   // Check if the flipped pair is a match
-                if(failure == true){    // Pairing failed, flip the cards back
-                    drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
+                if (numF == 2) {
+                    checkpair(pairs, coord, table, numPaired, points, totalNumPairs, failure);   // Check if the flipped pair is a match
+                    if(failure == true){    // Pairing failed, flip the cards back
+                        drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
+                    }
+                    else if (failure == false){   // Pairing successful, keep the cards face-up
+                        drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
+                    }
                 }
-                else if (failure == false){   // Pairing successful, keep the cards face-up
-                    drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
+                else if (numF == 3) {
+                    checktrio(pairs, coord, table, numPaired, points, totalNumPairs, failure);   // Check if the flipped pair is a match
+                    if(failure == true){    // Pairing failed, flip the cards back
+                        drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
+                    }
+                    else if (failure == false){   // Pairing successful, keep the cards face-up
+                        drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
+                    }
+                }
+                else if (numF == 4) {
+                    checkfour(pairs, coord, table, numPaired, points, totalNumPairs, failure);   // Check if the flipped pair is a match
+                    if (failure) {    // Pairing failed, flip the cards back
+                        drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
+                    } 
+                    else {   // Pairing successful, keep the cards face-up
+                        drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
+                    }
                 }
             }
             flip = false;
@@ -192,20 +261,20 @@ struct Board{
                 if (selectedRow <= numRows && selectedCol <= numCols) {    
                     if (table[selectedRow-1][selectedCol-1] == false) {    
                         table[selectedRow-1][selectedCol-1] = true;   // Flip the selected card face-up
-                        pairs[count%2]=card[selectedRow-1][selectedCol-1];   // Store the card value for comparison
-                        coord[count%2][0]=selectedRow-1;   // Store the coordinates of the selected card
-                        coord[count%2][1]=selectedCol-1;
+                        pairs[count % numF]=card[selectedRow-1][selectedCol-1];   // Store the card value for comparison
+                        coord[count % numF][0]=selectedRow-1;   // Store the coordinates of the selected card
+                        coord[count % numF][1]=selectedCol-1;
                         count++;  // Increment the number of stored cards
-			numMove++;
-		     }
-		     else {
-			flip = false;
-		     }
+			            numMove++;
+		            }
+		            else {
+			            flip = false;
+		            }
                 }
             }
 	
-            else if (userInput == 'b'){  // If 'b' key is pressed
-                break;  // Exit the while loop
+        else if (userInput == 'b'){  // If 'b' key is pressed
+            break;  // Exit the while loop
             }
         }  
     }
