@@ -133,18 +133,18 @@ void StartHardEndless() {
         cout << "Current Round: " << round << endl;
 
         // Read the settings from EasySetting and store them in Board
-		int numRows = HardSetting[round - 1][0];
-		int numCols = HardSetting[round - 1][1];
-		int numF = HardSetting[round - 1][2];
-		Board b = {numRows, numCols, numF};
+	int numRows = HardSetting[round - 1][0];
+	int numCols = HardSetting[round - 1][1];
+	int numF = HardSetting[round - 1][2];
+	Board b = {numRows, numCols, numF};
 
         // Start the new round
-		b.StartNewRound(numRows, numCols, numF, -1, 1);
-		// Game over
+	b.StartNewRound(numRows, numCols, numF, -1, 1);
+	
+	// Game over
         cout << "Congratulations! You Pass Round:" << round << endl;
-		cout << "Now Going to the Next Round..." <<  endl;
-		// Pause for 1 second and continue with the next game
-		sleep(1);
+	cout << "Now Going to the Next Round..." <<  endl;
+	sleep(1);    // Pause for 1 second and continue with the next game
         round++;
     }
 }
@@ -289,8 +289,6 @@ void RunNewGame() {
     restoreTerminalMode();   // Restore terminal to canonical mode
 
     if (currSel == 1) {        // Call function for Option 1: Endless Mode
-        cout << "Start Custom Mode Game" << endl;
-        sleep(5);              // Pause 5 seconds and enter 
         StartEndless();        
     } else if (currSel == 2) { // Call function for Option 2: Challenge Mode
         cout << "Start Challenge Mode Game" << endl;
