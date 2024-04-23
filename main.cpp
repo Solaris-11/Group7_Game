@@ -99,6 +99,9 @@ void StartEasyEndless() {
         cout << "Current Round: " << round << endl;
         StartNewGame(EasySetting[round - 1][0], EasySetting[round - 1][1], EasySetting[round - 1][2]);
         cout << "Congratulations! You Pass Round:" << round << endl;
+		cout << "Now Going to the Next Round..." <<  endl;
+		// 停顿1s
+		sleep(1);
         round++;
     }
 }
@@ -110,6 +113,9 @@ void StartHardEndless() {
         cout << "Current Round: " << round << endl;
         StartNewGame(HardSetting[round - 1][0], HardSetting[round - 1][1], HardSetting[round - 1][2]);
         cout << "Congratulations! You Pass Round:" << round << endl;
+		cout << "Now Going to the Next Round..." <<  endl;
+		// 停顿1s
+		sleep(1);
         round++;
     }
 }
@@ -138,7 +144,6 @@ void StartEndless() {
                 cout << "   " << difficulties[j - 1] << endl;
             }
         }
-
         char input;
 		read(STDIN_FILENO, &input, 1);
         if (input == 'w') {
@@ -155,7 +160,6 @@ void StartEndless() {
 			}
 		}
     }
-
     restoreTerminalMode();
     if (userInputDiff == 1) {
         StartEasyEndless();
