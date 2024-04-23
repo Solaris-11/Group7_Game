@@ -115,7 +115,7 @@ struct Board{
         // Cards are a pair
         if (failure) {
             numPaired++;      // Increment the number of successfully paired cards
-            points = (100 / (double)totalNumPairs) * numPaired;    // Update the points based on the number of pairs matched
+            points += (100 / (double)totalNumPairs) * numPaired;    // Update the points based on the number of pairs matched
             failure = false;   // Pairing successful, keep the cards face-up
         }
         // Cards are not a pair
@@ -128,9 +128,10 @@ struct Board{
         }
     }
 
-    // Function: choose
+    // Function: StartNewRound
+    // 开启一轮游戏，返回当前轮次获得的分数，若失败则返回-1
     // 挑战模式中设置的两个参数：step: 步数限制，time：翻牌显示的时间
-    bool choose(const int numRows, const int numCols, const int numF, int step, int time) {
+    double StartNewRound(const int numRows, const int numCols, const int numF, int step, int time) {
         setNonCanonicalMode();  // Set the terminal to non-canonical mode to read input 
 
         int selectedRow = numRows;  
@@ -150,7 +151,6 @@ struct Board{
         while (numPaired != totalNumPairs) {  // Keep the process until all the cards are matched
             // Draw the game table
             drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);  
-
             // Check if a pair has been flipped
             if (flip) {
                 if(count > 0 && count % numF == 0) {
@@ -162,7 +162,6 @@ struct Board{
                 }
                 flip = false;
             }
-
             // Process user input and update the position of the indicator of row and column
             char userInput;
             read(STDIN_FILENO, &userInput, 1);
@@ -198,9 +197,9 @@ struct Board{
                         coord[count % numF][1] = selectedCol - 1;
                         count++;  // Increment the number of stored cards
                         numMove++;
-                        // 若步数超标，返回false，表示游戏失败
+                        // 若步数超标，返回-1，表示游戏失败
                         if (step != -1 && numMove >= step) {
-                            return false;
+                            return -1;
                         }
                     } 
                     else {
@@ -213,8 +212,8 @@ struct Board{
             }
         }
         restoreTerminalMode();  // Restore the terminal to the original mode
-        // 返回游戏成功
-        return true;
+        // 成功通过该轮游戏，返回该轮获得的分数
+        return points;
     }
 };
 #endif

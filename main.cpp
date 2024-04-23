@@ -18,7 +18,6 @@ void RunNewGame();
 void StartEndless();  
 void StartEasyEndless();
 void StartHardEndless();
-void StartNewGame(int numRows, int numCols, int numF);
 void StartChallenge();
 //void PauseMenu();
 //void RunLoadGame();
@@ -26,16 +25,6 @@ void StartChallenge();
 
 //Checking Input Functions
 void CheckInput(int & Rows, int & Cols, int & numF);
-
-void StartNewGame(int numRows, int numCols, int numF) {
-    Board b = {
-        numRows,
-        numCols,
-        numF,
-    };
-	// 其他模式中，time=1,step=-1(不做步数要求)
-    b.choose(numRows, numCols, numF, -1, 1);
-}
 
 void CheckInput(int &nRows, int &nCols, int &numF) {
     string userInput1, userInput2;
@@ -93,11 +82,19 @@ void CheckInput(int &nRows, int &nCols, int &numF) {
 }
 
 void StartEasyEndless() {
-    int round = 1;
+	// 难度初始化
     int EasySetting[3][3] ={{2, 4, 2}, {3, 4, 2}, {4, 4, 2}};
+	int round = 1;
+	// 无尽模式：无限循环
     while (round <= 3) {
         cout << "Current Round: " << round << endl;
-        StartNewGame(EasySetting[round - 1][0], EasySetting[round - 1][1], EasySetting[round - 1][2]);
+		// 开启一轮游戏
+		int nRows = EasySetting[round - 1][0];
+		int nCols = EasySetting[round - 1][1];
+		int numF = EasySetting[round - 1][2];
+		Board b = {nRows, nCols, numF};
+		b.StartNewRound(nRows, nCols, numF, -1, 1);
+		// 游戏结束
         cout << "Congratulations! You Pass Round:" << round << endl;
 		cout << "Now Going to the Next Round..." <<  endl;
 		// 停顿1s
@@ -111,7 +108,13 @@ void StartHardEndless() {
     int round = 1;
     while (round <= 3) {
         cout << "Current Round: " << round << endl;
-        StartNewGame(HardSetting[round - 1][0], HardSetting[round - 1][1], HardSetting[round - 1][2]);
+        // 开启一轮游戏
+		int nRows = HardSetting[round - 1][0];
+		int nCols = HardSetting[round - 1][1];
+		int numF = HardSetting[round - 1][2];
+		Board b = {nRows, nCols, numF};
+		b.StartNewRound(nRows, nCols, numF, -1, 1);
+		// 游戏结束
         cout << "Congratulations! You Pass Round:" << round << endl;
 		cout << "Now Going to the Next Round..." <<  endl;
 		// 停顿1s
@@ -176,17 +179,17 @@ void StartEndless() {
 
 void StartChallenge() {
 	// 难度设置
-	int HardSetting[3] = {3, 5, 3};
+	int nRows = 3, nCols = 5, numF = 3;
 	int maxstep = 30;
 	int time = 0.5;
 	// 提示信息
 	cout << "Welcome to Challenge Mode!" << endl;
 	cout << "Note: You Need to Find All Cards in " << maxstep << " Move" << endl;
 	// 开始游戏
-	Board b = {HardSetting[0], HardSetting[1], HardSetting[2]};
-    bool flag = b.choose(HardSetting[0], HardSetting[1], HardSetting[2], maxstep, 0.5);
+	Board b = {nRows, nCols, numF};
+    double points = b.StartNewRound(nRows, nCols, numF, maxstep, 0.5);
 	// 若通过
-	if (flag) {
+	if (points != -1) {
 		cout << "Congratulations! You Pass the Challenge Mode!" << endl;
 	}
 	// 若不通过
@@ -254,7 +257,9 @@ void RunNewGame() {
             cout << "Error! Board size must be a multiple of the number of cards flipped" << endl;
             CheckInput(nRows, nCols, numF);
         }
-        StartNewGame(nRows, nCols, numF);
+        // 开启一轮游戏
+		Board b = {nRows, nCols, numF};
+		b.StartNewRound(nRows, nCols, numF, -1, 1);
     } else if (currSel == 4) {   // Call function for Option 4: Return to Main Menu
         RunMainMenu();
     } else if (currSel == 5) {   // Exit the program for Option 5: Quit
