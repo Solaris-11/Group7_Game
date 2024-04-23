@@ -128,8 +128,9 @@ struct Board{
         }
     }
 
-    //Function: choose
-    void choose(const int numRows, const int numCols, const int numF) {
+    // Function: choose
+    // 挑战模式中设置的两个参数：step: 步数限制，time：翻牌显示的时间
+    bool choose(const int numRows, const int numCols, const int numF, int step, int time) {
         setNonCanonicalMode();  // Set the terminal to non-canonical mode to read input 
 
         int selectedRow = numRows;  
@@ -153,17 +154,11 @@ struct Board{
             // Check if a pair has been flipped
             if (flip) {
                 if(count > 0 && count % numF == 0) {
-                    sleep(1);    // Pause for 1 second to display the flipped cards
+                    sleep(time);    // Pause for 1 second to display the flipped cards
                     // Check if the flipped pair is a match
                     checkCards(pairs, coord, table, numPaired, points, totalNumPairs, failure);
-                    // Pairing failed, flip the cards back
-                    if(failure == true) {    
-                        drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
-                    }
-                    // Pairing successful, keep the cards face-up
-                    else if (failure == false) {   
-                        drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
-                    }
+                    // Show Cards
+                    drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
                 }
                 flip = false;
             }
@@ -203,6 +198,10 @@ struct Board{
                         coord[count % numF][1] = selectedCol - 1;
                         count++;  // Increment the number of stored cards
                         numMove++;
+                        // 若步数超标，返回false，表示游戏失败
+                        if (step != -1 && numMove >= step) {
+                            return false;
+                        }
                     } 
                     else {
                         flip = false;
@@ -214,6 +213,8 @@ struct Board{
             }
         }
         restoreTerminalMode();  // Restore the terminal to the original mode
+        // 返回游戏成功
+        return true;
     }
 };
 #endif

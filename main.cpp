@@ -19,7 +19,7 @@ void StartEndless();
 void StartEasyEndless();
 void StartHardEndless();
 void StartNewGame(int numRows, int numCols, int numF);
-//void StartChallenge();  //undefined
+void StartChallenge();
 //void PauseMenu();
 //void RunLoadGame();
 //void RunTutorial();
@@ -33,7 +33,8 @@ void StartNewGame(int numRows, int numCols, int numF) {
         numCols,
         numF,
     };
-    b.choose(numRows, numCols, numF);
+	// 其他模式中，time=1,step=-1(不做步数要求)
+    b.choose(numRows, numCols, numF, -1, 1);
 }
 
 void CheckInput(int &nRows, int &nCols, int &numF) {
@@ -169,6 +170,27 @@ void StartEndless() {
     }
 }
 
+void StartChallenge() {
+	// 难度设置
+	int HardSetting[3] = {3, 5, 3};
+	int maxstep = 30;
+	int time = 0.5;
+	// 提示信息
+	cout << "Welcome to Challenge Mode!" << endl;
+	cout << "Note: You Need to Find All Cards in " << maxstep << " Move" << endl;
+	// 开始游戏
+	Board b = {HardSetting[0], HardSetting[1], HardSetting[2]};
+    bool flag = b.choose(HardSetting[0], HardSetting[1], HardSetting[2], maxstep, 0.5);
+	// 若通过
+	if (flag) {
+		cout << "Congratulations! You Pass the Challenge Mode!" << endl;
+	}
+	// 若不通过
+	else {
+		cout << "Unfortunately! You Didn't Pass the Challenge Mode!" << endl;
+	}
+}
+
 void RunNewGame() {
     // Vector to store the new game options
     vector<string> newgame(5);
@@ -220,7 +242,7 @@ void RunNewGame() {
         StartEndless();        // Call function for Option 1: Endless Mode
     } else if (currSel == 2) {
         cout << "Start Challenge Mode" << endl;
-        //StartChallenge();      // Call function for Option 2: Challenge Mode
+        StartChallenge();      // Call function for Option 2: Challenge Mode
     } else if (currSel == 3) {   // Call function for Option 3: Custom Mode
         int nRows, nCols, numF;
         CheckInput(nRows, nCols, numF);
