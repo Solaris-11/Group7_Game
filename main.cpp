@@ -33,7 +33,7 @@ void StartNewGame(int numRows, int numCols, int numF) {
 		numCols,
 		numF,
 	};
-	b.choose(numRows, numCols);
+	b.choose(numRows, numCols, numF);
 }
 
 void CheckInput(int & nRows, int & nCols, int & numF) {
