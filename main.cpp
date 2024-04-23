@@ -139,21 +139,20 @@ void StartEndless() {
         }
 
         char input;
-        if (read(STDIN_FILENO, &input, 1) == 1) {
-            if (input == 'w') {
-                if (userInputDiff > 1) {
-                    userInputDiff--;
-                }
-            } else if (input == 's') {
-                if (userInputDiff < allInputDiff) {
-                    userInputDiff++;
-                }
-            } else if (input == '\n') {
-                if (userInputDiff <= allInputDiff) {
-                    break;
-                }
-            }
-        }
+		read(STDIN_FILENO, &input, 1);
+        if (input == 'w') {
+			if (userInputDiff > 1) {
+				userInputDiff--;
+			}
+		} else if (input == 's') {
+			if (userInputDiff < allInputDiff) {
+				userInputDiff++;
+			}
+		} else if (input == '\n') {
+			if (userInputDiff <= allInputDiff) {
+				break;
+			}
+		}
     }
 
     restoreTerminalMode();
@@ -198,21 +197,20 @@ void RunNewGame() {
         }
 
         char userInput;
-        if (read(STDIN_FILENO, &userInput, 1) == 1) {
-            if (userInput == 'w') {     // If 'w' key is pressed
-                if (currSel > 1) {      // Move selection up if not already at the top
-                    currSel--;
-                }
-            } else if (userInput == 's') {  // If 's' key is pressed
-                if (currSel < numOpts) {   // Move selection down if not already at the bottom
-                    currSel++;
-                }
-            } else if (userInput == '\n') {
-                if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
-                    break;                 // Exit the while loop
-                }
-            }
-        }
+		read(STDIN_FILENO, &userInput, 1);
+		if (userInput == 'w') {     // If 'w' key is pressed
+			if (currSel > 1) {      // Move selection up if not already at the top
+				currSel--;
+			}
+		} else if (userInput == 's') {  // If 's' key is pressed
+			if (currSel < numOpts) {   // Move selection down if not already at the bottom
+				currSel++;
+			}
+		} else if (userInput == '\n') {
+			if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
+				break;                 // Exit the while loop
+			}
+		}
     }
 
     restoreTerminalMode();   // Restore terminal to canonical mode
@@ -265,21 +263,20 @@ void RunMainMenu() {
         }
 
         char userInput;
-        if (read(STDIN_FILENO, &userInput, 1) == 1) {
-            if (userInput == 'w') {      // If 'w' key is pressed
-                if (currSel > 1) {     // Move selection up if not already at the top
-                    currSel--;
-                }
-            } else if (userInput == 's') {  // If 's' key is pressed
-                if (currSel < numOpts) {   // Move selection down if not already at the bottom
-                    currSel++;
-                }
-            } else if (userInput == '\n') {
-                if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
-                    break;                   // Exit the while loop
-                }
-            }
-        }
+		read(STDIN_FILENO, &userInput, 1);
+		if (userInput == 'w') {      // If 'w' key is pressed
+			if (currSel > 1) {     // Move selection up if not already at the top
+				currSel--;
+			}
+		} else if (userInput == 's') {  // If 's' key is pressed
+			if (currSel < numOpts) {   // Move selection down if not already at the bottom
+				currSel++;
+			}
+		} else if (userInput == '\n') {
+			if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
+				break;                   // Exit the while loop
+			}
+		}
     }
 
     restoreTerminalMode();       // Restore terminal to canonical mode
