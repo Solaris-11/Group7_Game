@@ -5,18 +5,30 @@
 #include <iomanip>
 using namespace std;
 
+// Set the terminal to non-canonical mode
 void setNonCanonicalMode() {
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);
+    // Get the current terminal attributes and save them in the 'term' structure
+
     term.c_lflag &= ~(ICANON | ECHO);
+    // Disable canonical mode and echo in the 'term' structure
+
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
+    // Set the updated terminal attributes as the current terminal attributes
 }
 
+// Restore the terminal to canonical mode
 void restoreTerminalMode() {
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);
+    // Get the current terminal attributes and save them in the 'term' structure
+
     term.c_lflag |= ICANON | ECHO;
+    // Enable canonical mode and echo in the 'term' structure
+
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
+    // Set the updated terminal attributes as the current terminal attributes
 }
 
 void clearScreen() {
@@ -58,6 +70,7 @@ void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vecto
     }
     cout<< endl;
 }
+
 void choose(int Rows, int Cols) {
     setNonCanonicalMode();
 
