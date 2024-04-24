@@ -32,20 +32,26 @@ A list of features that you have implemented and explain how each coding element
 
 Generation of random game sets or events
 
+Feature 1: Random numbers in each round
+ 1. The game incorporates random numbers to introduce unpredictability and variability in each round.
+ 2. The coding element of generating random game sets or events is utilized to achieve this feature.
+ 3. At the start of each round, the game generates random numbers using the coding element.
+ 4. These random numbers are used to determine various aspects of the game, such as shuffling the cards, determining the order of turns, or randomizing the positions of game elements.
+ 5. The randomization ensures that each round is unique and different from the previous ones.
+
+Corresponding coding element: Generation of random game sets or events
+
+
 Data structures for storing game status (e.g., arrays, STL containers)
+
 
 Dynamic memory management (e.g., dynamic arrays, linked lists, STL containers)
 
+
 File input/output (e.g., for loading/saving game status)
 
+
 Program codes in multiple files (recall separate compilation)
-
-Proper indentation and naming styles
-
-In-code documentation
-
-
-
 
 
 
