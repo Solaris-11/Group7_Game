@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <ctime>
 #include <string>
 #include <sstream>
@@ -16,14 +17,28 @@ using namespace std;
 #define main_h
 
 struct Board{
+    string mode;
+    string difficulty;
+    int round;
+
     int numRows;  // The number of rows in the table
     int numCols;  // The number of columns in the table
-    int numF;   // The number of cards filpped at a time
+    int numF;     // The number of cards filpped at a time
+    int maxMove;
+    double pauseTime;
+
+    int numMove;
+    double points;
+    int selectedRow;
+    int selectedCol;
+
+    vector<vector<int>> card;
+    vector<vector<bool>> table;
 
     // Function: drawTable
-    // Nested for loop to draw the table
+    // Nested for loop to draw the *table
     // Two loops to print the indicator for the selected row and column
-    void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vector<vector<int> > card, vector<vector<bool> >& table, int numMove, double points, int round, string difficulty, string mode) {
+    void drawTable() {
         //Clear the screen
         clearScreen();
         cout << " " << "[ " + mode + "--" + difficulty + "--" << round << " ]" << endl; 
@@ -35,14 +50,14 @@ struct Board{
             else {
                 cout << "   ";      //Otherwise print a "   "
             }
-            //Nested for loop to draw the table
+            //Nested for loop to draw the *table
             for (int col = 1; col <= numCols; col++) {
-            // Check if the card at the current position is face-down
+            // Check if the *card at the current position is face-down
                 if (table[row-1][col-1] == false) {
-                    cout << "  *";       //Print a "  *" if the card at the current position is face-down
+                    cout << "  *";       //Print a "  *" if the *card at the current position is face-down
                 } 
                 else {
-                    cout << setw(3) << setfill(' ') << card[row-1][col-1];    //Otherwise print the value of the card
+                    cout << setw(3) << setfill(' ') << card[row-1][col-1];    //Otherwise print the value of the *card
                 }
             }
             cout << endl;   
@@ -81,9 +96,9 @@ struct Board{
     }
 
     //Function: shuffle
-    //Initializes the card table and randomly shuffles the card to obtain a randomly arranged value table
-    void shuffle(vector<vector<int> > &card, int numRows, int numCols, int numF){
-        int numCards = numRows * numCols;   // The size of the table
+    //Initializes the *card *table and randomly shuffles the *card to obtain a randomly arranged value *table
+    void shuffle(){
+        int numCards = numRows * numCols;   // The size of the *table
         int numPairs = numCards / numF;  // Calculate the number of pairs
 
         // Set the random seed based on the current time
@@ -92,7 +107,7 @@ struct Board{
         // Card Initialization
         for (int i = 0; i < numRows; i++) {  
             for (int j = 0; j < numCols; j++) {
-                card[i][j] = (i * numCols + j) % numPairs + 1;   // Assign a unique value to each card
+                card[i][j] = (i * numCols + j) % numPairs + 1;   // Assign a unique value to each *card
             }
         }
 
@@ -120,7 +135,7 @@ struct Board{
 
     // Function: checkCards
     // Check if the selected cards are matched. If true, keep the cards face-up; otherwise flip the cards back
-    void checkCards(vector<int> &pairs, vector<vector<int> > &coord, vector<vector<bool> > &table, int &numPaired, double &points, int totalNumPairs, bool &failure){
+    void checkCards(vector<int> &pairs, vector<vector<int> > &coord, int &numPaired, int totalNumPairs, bool &failure){
         // Check if the selected cards are matched.
         failure = true;
         int value = pairs[0];
@@ -149,34 +164,30 @@ struct Board{
     // Function: StartNewRound
     // 开启一轮游戏，返回当前轮次获得的分数，若失败则返回-1
     // 挑战模式中设置的两个参数：step: 步数限制，time：翻牌显示的时间
-    double StartNewRound(const int numRows, const int numCols, const int numF, int step, int time, int round, string difficulty, string mode) {
+    double StartNewRound() {
         setNonCanonicalMode();  // Set the terminal to non-canonical mode to read input 
 
-        int selectedRow = numRows;  
-        int selectedCol = 1;
+        card = vector<vector<int> > (numRows, vector<int>(numCols));
+        shuffle();  // Initialize and shuffle the cards
 
-        vector<vector<int> > card(numRows, vector<int>(numCols));
-        shuffle(card, numRows, numCols, numF);  // Initialize and shuffle the cards
-
-        int count = 0, numPaired = 0, numMove = 0, totalNumPairs = numRows * numCols / numF;
-        double points = 0;
+        int count = 0, numPaired = 0, totalNumPairs = numRows * numCols / numF;
         bool failure = false, flip = false;
 
-        vector<vector<bool> > table(numRows,vector<bool>(numCols,false));    // Create a table to track the state of each card (initial value: false)
+        table = vector<vector<bool> > (numRows,vector<bool>(numCols,false));    // Create a table to track the state of each *card (initial value: false)
         vector<int> pairs(numF);
         vector<vector<int> > coord(numF,vector<int>(numF));
 
         while (numPaired != totalNumPairs) {  // Keep the process until all the cards are matched
             // Draw the game table
-            drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points, round, difficulty, mode);  
+            drawTable();  
             // Check if a pair has been flipped
             if (flip) {
                 if(count > 0 && count % numF == 0) {
-                    sleep(time);    // Pause for 1 second to display the flipped cards
+                    sleep(pauseTime);    // Pause for 1 second to display the flipped cards
                     // Check if the flipped pair is a match
-                    checkCards(pairs, coord, table, numPaired, points, totalNumPairs, failure);
+                    checkCards(pairs, coord, numPaired, totalNumPairs, failure);
                     // Show Cards
-                    drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points, round, difficulty, mode);
+                    drawTable();
                 }
                 flip = false;
             }
@@ -203,20 +214,23 @@ struct Board{
                     selectedCol++;
                 }
             } 
+            else if (userInput == 'q') {
+                RunPauseMenu();
+            }
             else if (userInput == '\n') {  // If Enter key is pressed
                 flip = true;   // Set the flip flagto true
 
                 // If the selected option is valid
                 if (selectedRow <= numRows && selectedCol <= numCols) {
                     if (table[selectedRow-1][selectedCol-1] == false) {
-                        table[selectedRow-1][selectedCol-1] = true;   // Flip the selected card face-up
-                        pairs[count % numF] = card[selectedRow-1][selectedCol-1];   // Store the card value for comparison
-                        coord[count % numF][0] = selectedRow - 1;   // Store the coordinates of the selected card
+                        table[selectedRow-1][selectedCol-1] = true;   // Flip the selected *card face-up
+                        pairs[count % numF] = card[selectedRow-1][selectedCol-1];   // Store the *card value for comparison
+                        coord[count % numF][0] = selectedRow - 1;   // Store the coordinates of the selected *card
                         coord[count % numF][1] = selectedCol - 1;
                         count++;  // Increment the number of stored cards
                         numMove++;
                         // 若步数超标，返回-1，表示游戏失败
-                        if (step != -1 && numMove >= step) {
+                        if (maxMove != -1 && numMove >= maxMove) {
                             return -1;
                         }
                     } 
@@ -232,6 +246,92 @@ struct Board{
         restoreTerminalMode();  // Restore the terminal to the original mode
         // 成功通过该轮游戏，返回该轮获得的分数
         return points;
+    }
+    
+    // Function: RunPauseMenu
+    //
+    void RunPauseMenu() {
+        saveGame();
+        // Vector to store the new game options
+        vector<string> newgame(5);
+        newgame[0] = "Continue";              // Option 1: Continue
+        newgame[1] = "Save and Quit";         // Option 2: Save and Quit
+        newgame[2] = "Restart";               // Option 3: Restart
+        newgame[3] = "Return to main menu";   // Option 4: Return to Main Menu
+        newgame[4] = "Quit";                  // Option 5: Quit
+
+        setNonCanonicalMode();   // Set terminal to non-canonical mode
+        int numOpts = 5;         // Total number of options
+        int currSel = 1;         // Currently selected option
+
+        while (true) {
+            clearScreen();       // Clear the terminal screen
+            cout << "                         " << "[Pause Menu]" << endl;
+            cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
+
+            for (int i = 1; i <= 5; i++) {
+                if (i == currSel) {
+                    cout << ">> " << newgame[i - 1] << endl;   // Print selected option with a cursor (>>)
+                } else {
+                    cout << "   " << newgame[i - 1] << endl;   // Print non-selected options
+                }
+            }
+
+            char userInput;
+		    read(STDIN_FILENO, &userInput, 1);
+		    if (userInput == 'w') {      // If 'w' key is pressed
+			    if (currSel > 1) {     // Move selection up if not already at the top
+				    currSel--;
+			    }
+		    } else if (userInput == 's') {  // If 's' key is pressed
+			    if (currSel < numOpts) {   // Move selection down if not already at the bottom
+				    currSel++;
+			    }
+		    } else if (userInput == '\n') {
+			    if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
+				    break;                   // Exit the while loop
+			    }
+		    }
+        }
+
+        restoreTerminalMode();       // Restore terminal to canonical mode
+
+        if (currSel == 1) {          // Call function for Option 1: Continue
+            //
+        } else if (currSel == 2) {   // Call function for Option 2: Save and Quit
+            //
+        } else if (currSel == 3) {   // Call function for Option 3: Restart
+            //
+        } else if (currSel == 4) {   // Exit the program for Option 4: Return to Main Menu
+            //
+        } else if (currSel == 4) {   // Exit the program for Option 4: Quit
+            exit(0);
+        }
+    }
+
+    void saveGame() {
+        ofstream fout;
+        fout.open("savegame.txt");
+        if (fout.fail()){
+            cout << "Error: cannot open the file" << endl;
+            return;
+        }
+        fout << mode << endl;
+        fout << difficulty << endl;
+        fout << round << endl;
+
+        fout << numRows << endl;
+        fout << numCols << endl;
+        fout << numF << endl;
+        fout << maxMove << endl;
+        fout << time << endl;
+
+        fout << numMove << endl;
+        fout << points << endl;
+        fout << selectedRow << endl;
+        fout << selectedCol << endl;
+
+        fout.close();
     }
 };
 #endif
