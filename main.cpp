@@ -21,7 +21,7 @@ void StartEasyEndless();
 void StartHardEndless();
 void StartChallenge();
 void RunPauseMenu();
-//void RunLoadGame();
+void RunLoadGame();
 void RunTutorial();
 
 // Checking Input Functions
@@ -115,11 +115,21 @@ void StartEasyEndless() {
         EasySetting[round - 1][0],
         1,
 
-        {},
-        {},
+        vector<vector<int> > (EasySetting[round - 1][0], vector<int>(EasySetting[round - 1][1])),
+        vector<vector<bool> > (EasySetting[round - 1][0],vector<bool>(EasySetting[round - 1][1],false)),
+
+        0,
+        0,
+        false,
+        false,
+        true,
+
+        vector<int> (EasySetting[round - 1][2]),
+        vector<vector<int> > (EasySetting[round - 1][2],vector<int>(EasySetting[round - 1][2])),
         };
 
         // Start the new round
+        b.shuffle();  // Initialize and shuffle the cards
 		b.StartNewRound();
 
 		// Game over
@@ -165,10 +175,20 @@ void StartHardEndless() {
         HardSetting[round - 1][0],
         1,
 
-        {},
-        {},
+        vector<vector<int> > (HardSetting[round - 1][0], vector<int>(HardSetting[round - 1][1])),
+        vector<vector<bool> > (HardSetting[round - 1][0],vector<bool>(HardSetting[round - 1][1],false)),
+
+        0,
+        0,
+        false,
+        false,
+        true,
+
+        vector<int> (HardSetting[round - 1][2]),
+        vector<vector<int> > (HardSetting[round - 1][2],vector<int>(HardSetting[round - 1][2])),
         };
         // Start the new round
+        b.shuffle();  // Initialize and shuffle the cards
 	    b.StartNewRound();
 	
 	    // Game over
@@ -277,11 +297,21 @@ void StartEasyChallenge() {
         EasySetting[round - 1][0],
         1,
 
-        {},
-        {},
+        vector<vector<int> > (EasySetting[round - 1][0], vector<int>(EasySetting[round - 1][1])),
+        vector<vector<bool> > (EasySetting[round - 1][0],vector<bool>(EasySetting[round - 1][1],false)),
+
+        0,
+        0,
+        false,
+        false,
+        true,
+
+        vector<int> (EasySetting[round - 1][2]),
+        vector<vector<int> > (EasySetting[round - 1][2],vector<int>(EasySetting[round - 1][2])),
         };
 
         // Start the new round
+        b.shuffle();  // Initialize and shuffle the cards
         double result = b.StartNewRound();
         if (result == -1){  // lose
             cout << "Unfortunately! You Didn't Pass [Challenge--Easy] Mode!" << endl;
@@ -332,11 +362,21 @@ void StartHardChallenge() {
         HardSetting[round - 1][0],
         1,
 
-        {},
-        {},
+        vector<vector<int> > (HardSetting[round - 1][0], vector<int>(HardSetting[round - 1][1])),
+        vector<vector<bool> > (HardSetting[round - 1][0],vector<bool>(HardSetting[round - 1][1],false)),
+
+        0,
+        0,
+        false,
+        false,
+        true,
+
+        vector<int> (HardSetting[round - 1][2]),
+        vector<vector<int> > (HardSetting[round - 1][2],vector<int>(HardSetting[round - 1][2])),
         };
 
         // Start the new round
+        b.shuffle();  // Initialize and shuffle the cards
         double result = b.StartNewRound();
         if (result == -1){  // lose
             cout << "Unfortunately! You Didn't Pass [Challenge--Hard] Mode!" << endl;
@@ -565,7 +605,7 @@ void RunMainMenu() {
     if (currSel == 1) {          // Call function for Option 1: New game
         RunNewGame();
     } else if (currSel == 2) {   // Call function for Option 2: Load game
-        //RunLoadGame();
+        RunLoadGame();
     } else if (currSel == 3) {   // Call function for Option 3: Tutorial
         RunTutorial();
     } else if (currSel == 4) {   // Exit the program for Option 4: Quit
@@ -620,10 +660,20 @@ void RunTutorial() {
         2,
         1,
 
-        {},
-        {},
-        };
+        vector<vector<int> > (2, vector<int>(2)),
+        vector<vector<bool> > (2,vector<bool>(2,false)),
 
+        0,
+        0,
+        false,
+        false,
+        true,
+
+        vector<int> (2),
+        vector<vector<int> > (2,vector<int>(2)),
+        };
+        
+    b1.shuffle();  // Initialize and shuffle the cards
     b1.StartNewRound();
     //cout << "Congrats! You win!" << endl;
     //cout << "(Press any key to continue...)"<< endl;
@@ -654,10 +704,19 @@ void RunTutorial() {
         3,
         1,
 
-        {},
-        {},
-        };
+        vector<vector<int> > (3, vector<int>(3)),
+        vector<vector<bool> > (3,vector<bool>(3,false)),
 
+        0,
+        0,
+        false,
+        false,
+        true,
+
+        vector<int> (3),
+        vector<vector<int> > (3,vector<int>(3)),
+        };   
+    b2.shuffle();  // Initialize and shuffle the cards
     b2.StartNewRound();
     //cout << "Congrats! You win!" << endl;
     //cout << "(Press any key to continue...)"<< endl;
@@ -715,6 +774,100 @@ void RunTutorial() {
     RunMainMenu();
 } 
 
+void RunLoadGame() {
+    ifstream fin;
+    fin.open("savegame.txt");
+
+    if (fin.fail()){
+    cout << "Game not found!" << endl;
+    }
+
+    else {
+        string mode, difficulty;
+        int round, numRows, numCols, numF, maxMove, numMove, selectedRow, selectedCol, count, numPaired;
+        double pauseTime, points;
+        bool failure, flip, challengePass;
+
+        fin >> mode >> difficulty >> round >> numRows >> numCols >> numF >> maxMove >> pauseTime >> numMove >> points >> selectedRow >> selectedCol;
+       
+        vector<vector<int>> card(numRows, vector<int>(numCols));
+        vector<vector<bool>> table(numRows, vector<bool>(numCols));
+        vector<int> pairs(numF);
+        vector<vector<int> > coord(numF,vector<int>(numF));
+
+        // Read the card vector from the file
+        int value;
+        for (int row = 0; row < numRows; ++row) {
+            for (int col = 0; col < numCols; ++col) {
+                if (fin >> value) {
+                    card[row][col] = value;
+                } 
+            }
+        }
+
+        // Read the table vector from the file
+        bool boolean;
+        for (int row = 0; row < numRows; ++row) {
+            for (int col = 0; col < numCols; ++col) {
+                if (fin >> boolean) {
+                    table[row][col] = boolean;
+                } 
+            }
+        }
+
+        fin >> count >> numPaired >> failure >> flip >> challengePass;
+
+        // Read the pairs vector from the file
+        int value1;
+        for (int num = 0; num < numF; ++num) {
+            if (fin >> value1) {
+                pairs[num] = value1;
+            }
+        }
+
+        // Read the coord vector from the file
+        bool boolean1;
+        for (int row = 0; row < numF; ++row) {
+            for (int col = 0; col < numF; ++col) {
+                if (fin >> boolean1) {
+                    coord[row][col] = boolean1;
+                } 
+            }
+        }
+
+        fin.close();
+
+        Board b {
+            mode,
+            difficulty,
+            round,
+
+            numRows,  
+            numCols,  
+            numF,   
+            maxMove,
+            pauseTime,
+
+            numMove,
+            points,
+            selectedRow,
+            selectedCol,
+
+            card,
+            table,
+
+            count,
+            numPaired,
+            failure,
+            flip,
+            challengePass,
+
+            pairs,
+            coord,
+        };
+        b.StartNewRound();
+    }
+}
 
 int main() {
     RunMainMenu();
