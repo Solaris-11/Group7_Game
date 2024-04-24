@@ -559,11 +559,20 @@ void RunNewGame() {
             numRows,
             1,
 
-            {},
-            {},
+            vector<vector<int> > (numRows, vector<int>(numCols)),
+	    vector<vector<bool> > (numRows,vector<bool>(numCols,false)),
+
+            0,
+	    0,
+	    false,
+	    false,
+	    true,
+
+	    vector<int> (numF),
+	    vector<vector<int> > (numF,vector<int>(numF)),
         };
 
-		b.StartNewRound();
+	b.StartNewRound();
         RunNewGame();
     } else if (currSel == 4) {   // Call function for Option 4: Return to Main Menu
         RunMainMenu();
