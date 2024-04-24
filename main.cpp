@@ -567,11 +567,11 @@ void RunNewGame() {
 	    false,
 	    false,
 	    true,
-
+   
 	    vector<int> (numF),
 	    vector<vector<int> > (numF,vector<int>(numF)),
         };
-
+ 	b.shuffle();
 	b.StartNewRound();
         RunNewGame();
     } else if (currSel == 4) {   // Call function for Option 4: Return to Main Menu
