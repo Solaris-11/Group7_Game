@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <sstream>
 #include <limits>
@@ -19,7 +20,7 @@ void StartEndless();
 void StartEasyEndless();
 void StartHardEndless();
 void StartChallenge();
-//void PauseMenu();
+void PauseMenu();
 //void RunLoadGame();
 void RunTutorial();
 
@@ -93,20 +94,33 @@ void StartEasyEndless() {
     // Difficulty Initialization
     int EasySetting[3][3] ={{2, 4, 2}, {3, 4, 2}, {4, 4, 2}};
     int round = 1;
-    string difficulty = "Easy";
-    string mode = "Endless";
 
     // Endless mode: infinite loop
     while (round <= 3) {
         // Start a new round of game
         // Read the settings from EasySetting and store them in Board
-	int numRows = EasySetting[round - 1][0];   
-	int numCols = EasySetting[round - 1][1];
-	int numF = EasySetting[round - 1][2];
-	Board b = {numRows, numCols, numF};
+	Board b = {
+        "Endless",
+        "Easy",
+        round,
+
+        EasySetting[round - 1][0],
+        EasySetting[round - 1][1],
+        EasySetting[round - 1][2],
+        -1,
+        1,
+
+        0,
+        0,
+        EasySetting[round - 1][0],
+        1,
+
+        {},
+        {},
+        };
 
         // Start the new round
-	b.StartNewRound(numRows, numCols, numF, -1, 1, round, difficulty, mode);
+	b.StartNewRound();
 
         // Game over
 	sleep(1);    // Pause for 1 second and continue with the next game
@@ -128,20 +142,32 @@ void StartHardEndless() {
     // Difficulty Initialization
     int HardSetting[3][3] = {{3, 3, 3},{3, 4, 3}, {3, 5, 3}};
     int round = 1;
-    string difficulty = "Hard";
-    string mode = "Endless";
 
     // Endless mode: infinite loop
     while (round <= 3) {
         // Start a new round of game
         // Read the settings from EasySetting and store them in Board
-	int numRows = HardSetting[round - 1][0];
-	int numCols = HardSetting[round - 1][1];
-	int numF = HardSetting[round - 1][2];
-	Board b = {numRows, numCols, numF};
+	Board b = {
+        "Endless",
+        "Hard",
+        round,
 
+        HardSetting[round - 1][0],
+        HardSetting[round - 1][1],
+        HardSetting[round - 1][2],
+        -1,
+        1,
+
+        0,
+        0,
+        HardSetting[round - 1][0],
+        1,
+
+        {},
+        {},
+        };
         // Start the new round
-	b.StartNewRound(numRows, numCols, numF, -1, 1, round, difficulty, mode);
+	b.StartNewRound();
 	
 	// Game over
 	sleep(1);    // Pause for 1 second and continue with the next game
@@ -221,21 +247,32 @@ void StartEndless() {
 // The maximum number of moves allowed is specified by maxMove
 // The time limit for each move is set to time (in seconds)
 void StartChallenge() {
-	// Difficulty settings
-	int numRows = 3, numCols = 5, numF = 3;
-	int maxMove = 30;
-	int time = 0.5;
-    int round = 1;
-    string difficulty = "Easy";
-    string mode = "Endless";
-
+    int maxMove = 30;
 	// Display welcome message and instructions
 	cout << "Welcome to Challenge Mode!" << endl;
 	cout << "Note: You Need to Find All Cards in " << maxMove << " Move" << endl;
 	
     // Start the game
-	Board b = {numRows, numCols, numF};
-    double points = b.StartNewRound(numRows, numCols, numF, maxMove, 1, round, difficulty, mode);
+	Board b = {
+        "Challenge",
+        "Easy",
+        1,
+
+        3,
+        5,
+        3,
+        maxMove,
+        0.5,
+
+        0,
+        0,
+        3,
+        1,
+
+        {},
+        {},
+        };
+    double points = b.StartNewRound();
 	
     // If the challenge is passed
 	if (points != -1) {
@@ -311,14 +348,30 @@ void RunNewGame() {
             CheckInput(numRows, numCols, numF);
         }
 
-		Board b = {numRows, numCols, numF};
         cout << "Start Custom Mode Game" << endl;
         sleep(2);               // Pause 2 seconds and enter 
 
-        int round = 0;
-        string difficulty = "TOM";
-        string mode = "CUS";
-		b.StartNewRound(numRows, numCols, numF, -1, 1, round, difficulty, mode);
+        Board b = {
+            "Custom",
+            "",
+            1,
+
+            numRows,
+            numCols,
+            numF,
+            -1,
+            1,
+
+            0,
+            0,
+            numRows,
+            1,
+
+            {},
+            {},
+        };
+
+		b.StartNewRound();
         RunNewGame();
     } else if (currSel == 4) {   // Call function for Option 4: Return to Main Menu
         RunMainMenu();
@@ -418,14 +471,28 @@ void RunTutorial() {
     cout << "(Press any key to start...)"<< endl;
     cin >> userInput;
 
-    int round = 1;
-    string difficulty = "Easy";
-    string mode = "TUT";
+	Board b1 = {
+        "Tutorial",
+        "Easy",
+        1,
 
-    Board b1 = {2, 2, 2};
-    b1.StartNewRound(2, 2, 2, -1, 1, round, difficulty, mode);
-    //cout << "Congrats! You win!" << endl;
-    //cout << "(Press any key to continue...)"<< endl;
+        2,
+        2,
+        2,
+        -1,
+        1,
+
+        0,
+        0,
+        2,
+        1,
+
+        {},
+        {},
+        };
+
+        // Start the new round
+	b1.StartNewRound();
     cin >> userInput;
 
 
@@ -437,12 +504,27 @@ void RunTutorial() {
     cout << "(Press any key to start...)"<< endl;
     cin >> userInput;
 
-    difficulty = "Hard";
+    Board b2 = {
+        "Tutorial",
+        "Hard",
+        2,
 
-    Board b2 = {2, 2, 2};
-    b2.StartNewRound(3, 3, 3, -1, 1, round, difficulty, mode);
-    //cout << "Congrats! You win!" << endl;
-    //cout << "(Press any key to continue...)"<< endl;
+        3,
+        3,
+        3,
+        -1,
+        1,
+
+        0,
+        0,
+        3,
+        1,
+
+        {},
+        {},
+        };
+
+    b2.StartNewRound();
     cin >> userInput;
     
     //page5
