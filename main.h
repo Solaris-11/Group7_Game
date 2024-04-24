@@ -196,9 +196,9 @@ struct Board{
         }
     }
 
-    // Function: StartNewRound
-    // 开启一轮游戏，返回当前轮次获得的分数，若失败则返回-1
-    // 挑战模式中设置的两个参数：maxMove: 步数限制，time：翻牌显示的时间
+    // Function: StartNewRoun
+    // Start new game, return the points from previous round, if failure occurs, return -1
+    // Two paramteters in the Challenge mode: maxMove and time
     double StartNewRound() {
         setNonCanonicalMode();  // Set the terminal to non-canonical mode to read input 
 
@@ -276,7 +276,7 @@ struct Board{
         }
 
         restoreTerminalMode();  // Restore the terminal to the original mode
-        // 成功通过该轮游戏，返回该轮获得的分数
+        // if successfully pass the current round, return the points got from this round
         double result = -1;
         if (challengePass == false){
             return result;
@@ -287,7 +287,6 @@ struct Board{
     }
 
     // Function: RunPauseMenu
-    //
     void RunPauseMenu() {
         saveGame();
         // Vector to store the new game options
