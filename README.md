@@ -5,21 +5,70 @@ Identification of the team members:
  4. Nie Mingyang 3036086713
  5. Wu Zhikai 3035973804
 
+
 Game description and rules
-Welcome to the Flip Card Game! This is a text_base game based on C++, your objective is to flip cards and match pairs. Each mode offers its own level of difficulty and challenges. 
+Welcome to the Flip Card Game! This is a text_base game based on C++, your objective is to flip cards and match them. Each mode offers its own level of difficulty and challenges.
+
+The operation method of the game is to use the "wasd" key for selection and flipping. 
+
+If you want to pause the game during gameplay, you can press "q" to enter the pause menu. In the pause menu, you can choose to save the game and exit, continue the game, and restart.
 
 You can test your memory and matching skills across different game modes: Endless, Challenge, and Custom, each game mode refers to different rules.
- 1. Endless Mode: including esay mode and hard mode
-     1. Esay Mode: Two cards can be flipped at once, larger table will be set in each new round, there are no move limit
-     2. Hard Mode: Three cards can be flipped at once, larger table will be set in each new round, there are no move limit
- 2. Challenge Mode: There will be a maximum move limit, there will be a shorter time interval between each flip
- 3. Custom Mode: You can define your own table: its size and the number of cards to be flipped at once, there are no move limit
-All of the instructions can be found in the tutorial part, you can check
+  1. Endless Mode: including easy mode and hard mode, 3 rounds will be included
+      1. Easy Mode: Two cards can be flipped at once, larger table will be set in each new round, there are no move limit
+      2. Hard Mode: Three cards can be flipped at once, larger table will be set in each new round, there are no move limit
+  2. Challenge Mode: There will be a maximum move limit, there will be a shorter time interval between each flip
+  3. Custom Mode: You can define your own table: its size and the number of cards to be flipped at once, there are no move limit
+All of the instructions can be found in the tutorial part, you can check any time if you forget.
 
-▪ A list of features that you have implemented and explain how each coding element
-1 to 5 listed under the coding requirements aforementioned support your features.
-▪ A list of non-standard C/C++ libraries, if any, that are used in your work and integrated
-to your code repo. Please also indicate what features in your game are supported by
-these libraries.
+
+Game features and corresponding coding element
+
+
+
+A list of features that you have implemented and explain how each coding element 1 to 5 listed under the coding requirements aforementioned support your features.
+
+
+
+Generation of random game sets or events
+
+Data structures for storing game status (e.g., arrays, STL containers)
+
+Dynamic memory management (e.g., dynamic arrays, linked lists, STL containers)
+
+File input/output (e.g., for loading/saving game status)
+
+Program codes in multiple files (recall separate compilation)
+
+Proper indentation and naming styles
+
+In-code documentation
+
+
+
+
+
+
+
+
+▪ A list of non-standard C/C++ libraries, if any, that are used in your work and integrated to your code repo. 
+Please also indicate what features in your game are supported by these libraries.
+
+
+
+
+
+
+
+
 ▪ Compilation and execution instructions. This serves like a "Quick start" of your game.
 The teaching team will follow your instructions to compile and run your game
+
+
+
+
+
+
+
+
+
