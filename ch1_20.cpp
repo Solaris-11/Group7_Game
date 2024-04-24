@@ -14,28 +14,39 @@ void shuffle(vector<vector<int>> &card, int numRows, int numCols);
 void swap(int &a, int &b);
 
 
-// 将终端设置为非规范模式
+// Set the terminal to non-canonical mode
 void setNonCanonicalMode() {
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);
+
+    // Get the current terminal attributes and save them in the 'term' structure
+    // Disable canonical mode and echo
     term.c_lflag &= ~(ICANON | ECHO);
+
+    // Set the updated terminal attributes as the current terminal attributes
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-// 恢复终端的规范模式
+// Restore the terminal to canonical mode
 void restoreTerminalMode() {
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);
+
+    // Get the current terminal attributes and save them in the 'term' structure
+    // Enable canonical mode and echo
     term.c_lflag |= ICANON | ECHO;
+
+    // Set the updated terminal attributes as the current terminal attributes
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-// 清空终端屏幕
+
+// Clear the terminal screen
 void clearScreen() {
     cout << "\033[2J";
 }
 
-// 移动终端光标到指定位置
+// Move the terminal cursor to the specified location
 void moveCursorTo(int x, int y) {
     cout << "\033[" << y << ";" << x << "H";
 }
@@ -80,13 +91,13 @@ void drawTable(int numRows, int numCols, int selectedRow, int selectedCol, vecto
 void shuffle(vector<vector<int>> &card, int numRows, int numCols){
     int numCards = numRows * numCols;
     int numPairs = numCards / 2;    // Assume each pair has 2 cards
-    srand((unsigned int)time(NULL));    //讓亂數隨著時間改變
-	for (int i = 0; i < numRows; i++) {  //進行卡片初始化
+    srand((unsigned int)time(NULL));    // Let random numbers change over time
+	for (int i = 0; i < numRows; i++) {  // Initialize the card
 		for (int j = 0; j < numCols; j++) {
 			card[i][j] = (i * numCols + j) % numPairs + 1;
 		}
 	}
-	for (int i = 0; i < numCards; i++) {  //隨機挑兩張牌交換
+	for (int i = 0; i < numCards; i++) {  // Pick two cards at random and exchange them
 		swap(card[rand() % numRows][rand() % numCols], card[rand() % numRows][rand() % numCols]);
 	}
 }
@@ -102,12 +113,12 @@ void checkpair(vector<int> &pairs, vector<vector<int>> &coord, vector<vector<boo
     if(pairs[0] == pairs[1]){
         numPaired++;
         points = (100/(double)totalNumPairs)*numPaired;
-        failure = false;   // 配對成功 保持翻牌
+        failure = false;   // Pairing successful, keep flopping
     }else{
         int row1 = coord[0][0], row2 = coord[1][0], col1 = coord[0][1], col2 = coord[1][1];
         table[row1][col1]=false;
         table[row2][col2]=false;
-        failure = true;    // 配對失敗 重新drawtable（蓋回去）
+        failure = true;    // Pairing failed. Redrawtable (cover it back)
     }
 }
 
@@ -120,7 +131,7 @@ void choose(const int Rows, const int Cols) {
     int selectedCol = 1;
 
     vector<vector<int>> card(numRows, vector<int>(numCols));
-    shuffle(card, numRows, numCols);  // 卡牌初始化 + 洗牌
+    shuffle(card, numRows, numCols);  // Card initialization + shuffling
 
     //for (int i = 0; i < Rows; i++){
     //    for (int j = 0; j < Cols; j++){
@@ -140,7 +151,7 @@ void choose(const int Rows, const int Cols) {
             if(count>0 && count%2 ==0){
                 sleep(1);
                 checkpair(pairs, coord, table, numPaired, points, totalNumPairs, failure);
-                if(failure == true){    // 配對失敗 重新drawtable（蓋回去）
+                if(failure == true){    // Pairing failed. Redrawtable (cover it back)
                     drawTable(numRows, numCols, selectedRow, selectedCol, card, table, numMove, points);
                 }
                 else if (failure == false){
