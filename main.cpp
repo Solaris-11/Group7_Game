@@ -90,31 +90,29 @@ void CheckInput(int &numRows, int &numCols, int &numF) {
 // The settings for the current round are read from EasySetting and passed to the Board object
 // The StartNewRound function of the Board is called to start the game
 void StartEasyEndless() {
-	// Difficulty Initialization
+    // Difficulty Initialization
     int EasySetting[3][3] ={{2, 4, 2}, {3, 4, 2}, {4, 4, 2}};
-	int round = 1;
+    int round = 1;
     string difficulty = "Easy";
     string mode = "Endless";
 
-	// Endless mode: infinite loop
+    // Endless mode: infinite loop
     while (round <= 3) {
         // Start a new round of game
-        // cout << "Current Round: " << round << endl;
-
         // Read the settings from EasySetting and store them in Board
-		int numRows = EasySetting[round - 1][0];   
-		int numCols = EasySetting[round - 1][1];
-		int numF = EasySetting[round - 1][2];
-		Board b = {numRows, numCols, numF};
+	int numRows = EasySetting[round - 1][0];   
+	int numCols = EasySetting[round - 1][1];
+	int numF = EasySetting[round - 1][2];
+	Board b = {numRows, numCols, numF};
 
         // Start the new round
-		b.StartNewRound(numRows, numCols, numF, -1, 1, round, difficulty, mode);
+	b.StartNewRound(numRows, numCols, numF, -1, 1, round, difficulty, mode);
 
-		// Game over
-		sleep(1);    // Pause for 1 second and continue with the next game
+        // Game over
+	sleep(1);    // Pause for 1 second and continue with the next game
         round++;
     }
-
+	
     // Pass 3 rounds in Easy Endless mode
     // Go back to "Choose Difficulty" of "Endless Mode" page
     StartEndless();
@@ -136,8 +134,6 @@ void StartHardEndless() {
     // Endless mode: infinite loop
     while (round <= 3) {
         // Start a new round of game
-        cout << "Current Round: " << round << endl;
-
         // Read the settings from EasySetting and store them in Board
 	int numRows = HardSetting[round - 1][0];
 	int numCols = HardSetting[round - 1][1];
@@ -188,11 +184,11 @@ void StartEndless() {
         }
 
         char userInput;
-		read(STDIN_FILENO, &userInput, 1);
+	read(STDIN_FILENO, &userInput, 1);
         if (userInput == 'w') {               // If 'w' key is pressed
-			if (currSel  > 1) {               // Move selection up if not already at the top
-				currSel --;
-			}
+		if (currSel  > 1) {               // Move selection up if not already at the top
+			currSel --;
+		}
 		} else if (userInput == 's') {        // If 's' key is pressed
 			if (currSel  < numOpts) {         // Move selection down if not already at the bottom
 				currSel ++;
