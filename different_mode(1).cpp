@@ -1,5 +1,5 @@
 /**
- * 不同游戏模式设计
+ * Different game mode designs
 */
 #include <iostream>
 #include <string>
@@ -22,10 +22,10 @@ struct Position {
   int col;
 };
 
-// 显示牌桌
+// Show card table
 void ShowCards(vector<vector<int>> table, vector<vector<bool>> flipped) {
   int row = table.size(), col = table[0].size();
-  // 第一行
+  // First row
   cout << "\t";
   for (int i = 1; i <= col; i++) {
     cout << "[" << i << "]";
@@ -36,7 +36,7 @@ void ShowCards(vector<vector<int>> table, vector<vector<bool>> flipped) {
 			cout << "\t";
 		}
   }
-  // 后续几行，翻牌则显示数字，未翻牌显示*
+  // In the following lines, numbers are displayed when the cards are turned over, and * is displayed when the cards are not turned over.
   for (int i = 0; i < row; i++) {
     cout << "[" << (i + 1) << "]\t";
     for (int j = 0; j < col; j++) {
@@ -56,44 +56,44 @@ void ShowCards(vector<vector<int>> table, vector<vector<bool>> flipped) {
   }
 }
 
-// 洗牌
+// shuffle
 void shuffles(vector<vector<int>>& table){
   int rows = table.size();
   int cols = table[0].size();
-  // 创建随机数生成器
+  // create random number generator
   srand((unsigned int)time(NULL));
-  // 随机交换多次
+  // Swap randomly multiple times
   for (int i = 0; i < rows*cols; i++) {
-    // 生成两个随机索引
+    // Generate two random indexes
     int row1 = rand() % rows, col1 = rand() % cols;
     int row2 = rand() % rows, col2 = rand() % cols;
-    // 交换两个随机索引对应的元素
+    // Swap elements corresponding to two random indices
     swap(table[row1][col1], table[row2][col2]);
   }
 }
 
-// 读取玩家输入并判断是否合法
+// Read player input and determine whether it is legal
 void GameInput(vector<Position>& coordinates, Setting s) {
-  // 接收玩家输入
+  // Receive the input from player
   for (int i = 1; i < coordinates.size(); i++) {
-    // 直到输入合法
+    // until the input is legal
     string input;
     while (true) {
       cout << "Please enter the coordinate" << i << " : ";
       cin >> input;
-      // 检查输入是否合法
-      // 重复检测
-      // 已翻牌检测
+      // Check whether the input is legal
+      // Check repeatedly
+      // Flipped card testing
     }
   }
   
 }
 
-// 根据设置开启一轮游戏
+// Starting game according to the setting
 void StartNewRound(Setting s) {
-  // 牌型 table[0]
+  // Card type table[0]
   vector<vector<int>> table(s.nRows, vector<int>(s.nCols, 0));
-  // 初始化:3*3,2   table[0][0] = 1 table[0][1]=2 table[0][2]=3 table[1][0]=2
+  // Initialize:3*3,2   table[0][0] = 1 table[0][1]=2 table[0][2]=3 table[1][0]=2
   for (int i = 0; i < table.size(); ++i) {
     for (int j = 0; j < table[i].size(); ++j) {
       int seq = i * table.size() + j;
@@ -101,26 +101,26 @@ void StartNewRound(Setting s) {
       table[i][j] = seq % sum + 1;
     }
   }
-  // 洗牌
+  // shuffle
   shuffles(table);
-  // 是否翻牌
+  // Check whether shuffled or not
   vector<vector<bool>> flipped(s.nRows, vector<bool>(s.nCols, true));
-  // 当前进度和目标
+  // current progress and goal
   int isFound = 0, target = s.nRows * s.nCols / s.numF;
-  // 是否匹配
+  // check whether it can be matched
   bool isMatch = true;
-  // 显示牌桌
+  // Display cards
   ShowCards(table, flipped);
-  // 游戏循环
+  // Looping the game
   while (isFound < target) {
-    // 玩家输入
+    // Input from player
     vector<Position> inputs(s.numF);
     GameInput(inputs, s);
-    // 翻牌处理
+    // Flipping the cards
     for (int i = 0; i < inputs.size(); i++) {
       flipped[inputs[i].row - 1][inputs[i].col - 1] = true;
     }
-    // 判断是否匹配
+    // Determine whether it matches
     int cur = table[inputs[0].row - 1][inputs[0].col - 1];
     for (int i = 1; i < inputs.size(); i++) {
       if (table[inputs[i].row - 1][inputs[i].col - 1] != cur) {
@@ -128,60 +128,60 @@ void StartNewRound(Setting s) {
         break;
       }
     }
-    // 匹配成功
+    // Successfully matches
     if (isMatch) {
-      // 进度+1
+      // Progress +1
       isFound++;
-      // 显示info
+      // Display information
     }
-    // 匹配失败
+    // Failure to match
     else {
-      // 重置翻牌
+      // Reset flop
       for (int i = 0; i < inputs.size(); i++) {
         flipped[inputs[i].row - 1][inputs[i].col - 1] = false;
       }
-      // 显示info
+      // Display information
     }
-    // 显示牌桌
+    // show the crads
     ShowCards(table, flipped);
-    // 重置匹配位
+    // Reset matching bit
     bool isMatch = true;
   }
 }
 
-// 简单无尽模式
+// Simple unlimited mode
 void StartEasyEndless() {
-    // 不同轮次的难度设置
+    // Difficulty settings for different rounds
     vector<Setting> settings{
         {2, 4, 2},
         {3, 4, 2},
         {4, 4, 2}
     };
-    // 轮次
+    // Number of rounds
     int round = 1;
-    // 无尽模式
+    // unlimited mode
     while (true) {
-        // 提示
+        // Hint
         cout << "Current Round: " << round << endl;
-        // 根据当前轮次的难度开启游戏回合
+        // Start a game round based on the difficulty of the current round
         StartNewRound(settings[round - 1]);
-        // 恭喜信息
+        // Congratulations message
         cout << "Congratulations! You Pass Round:" << round << endl;
         round++;
     }
 }
 
-// 困难无尽模式 
+// Diffuclt unlimited mode
 void StartHardEndless() {
 
 }
 
-// 挑战模式
+// Challenge mode
 void StartChallenge(){
 
 }
 
-// 自定义模式
+// Custom mode
 void StartCustom(Setting s) {
 
 }
