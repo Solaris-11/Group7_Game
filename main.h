@@ -17,13 +17,14 @@ using namespace std;
 #define main_h
 
 struct Board{
+
     string mode;
     string difficulty;
     int round;
 
     int numRows;  // The number of rows in the table
     int numCols;  // The number of columns in the table
-    int numF;     // The number of cards filpped at a time
+    int numF;   // The number of cards filpped at a time
     int maxMove;
     double pauseTime;
 
@@ -76,27 +77,49 @@ struct Board{
         }
         // Print the move number and points
         cout<< endl;
-        cout << "Move: " << numMove << "    " << "Points: " << points << endl;
-        if (round < 3){
-            if (points == 100){
-                cout << endl;
-                cout << "Congratulations! You Pass Round: " << round << endl;
-                cout << "Now Going to the Next Round..." << endl;
-                cout << "(Press any key to continue ...)" << endl;
+        if (mode == "Endless"){
+            cout << "Move: " << numMove << "    " << "Points: " << points << endl;
+            if (round < 3){
+                if (points == 100){
+                    cout << endl;
+                    cout << "Congratulations! You Pass Round: " << round << endl;
+                    cout << "Now Going to the Next Round..." << endl;
+                    cout << "(Press any key to continue ...)" << endl;
+                }
+            }
+            else if (round == 3){
+                if (points == 100){
+                    cout << endl;
+                    cout << "Hooray!!! You pass " << "[" + mode + "--" + difficulty +"]"<< "!!!" << endl;
+                    cout << "(Press any key to continue ...)" << endl;
+                    // move to "choose mode page"
+                }
+            }   
+        }
+        else if (mode == "Challenge"){
+            cout << "Remaining Move: " << maxMove - numMove << "    " << "Points: " << points << endl;
+            if (round < 3){
+                if (points == 100){
+                    cout << endl;
+                    cout << "Congratulations! You Pass Round: " << round << endl;
+                    cout << "Now Going to the Next Round..." << endl;
+                    cout << "(Press any key to continue ...)" << endl;
+                }
+            }
+            else if (round == 3){
+                if (points == 100){
+                    cout << endl;
+                    cout << "Hooray!!! You pass " << "[" + mode + "--" + difficulty +"]"<< "!!!" << endl;
+                    cout << "(Press any key to continue ...)" << endl;
+                    // move to "choose mode page"
+                }
             }
         }
-        else if (round == 3){
-            if (points == 100){
-                cout << endl;
-                cout << "Hooray!!! You pass " << difficulty << " Mode!!!" << endl;
-                cout << "(Press any key to continue ...)" << endl;
-                // move to "choose mode page"
-            }
-        }   
+        
     }
 
     //Function: shuffle
-    //Initializes the *card *table and randomly shuffles the *card to obtain a randomly arranged value *table
+    //Initializes the card table and randomly shuffles the card to obtain a randomly arranged value table
     void shuffle(){
         int numCards = numRows * numCols;   // The size of the *table
         int numPairs = numCards / numF;  // Calculate the number of pairs
@@ -163,7 +186,7 @@ struct Board{
 
     // Function: StartNewRound
     // 开启一轮游戏，返回当前轮次获得的分数，若失败则返回-1
-    // 挑战模式中设置的两个参数：step: 步数限制，time：翻牌显示的时间
+    // 挑战模式中设置的两个参数：maxMove: 步数限制，time：翻牌显示的时间
     double StartNewRound() {
         setNonCanonicalMode();  // Set the terminal to non-canonical mode to read input 
 
@@ -171,7 +194,7 @@ struct Board{
         shuffle();  // Initialize and shuffle the cards
 
         int count = 0, numPaired = 0, totalNumPairs = numRows * numCols / numF;
-        bool failure = false, flip = false;
+        bool failure = false, flip = false, challengePass = true;
 
         table = vector<vector<bool> > (numRows,vector<bool>(numCols,false));    // Create a table to track the state of each *card (initial value: false)
         vector<int> pairs(numF);
@@ -191,6 +214,14 @@ struct Board{
                 }
                 flip = false;
             }
+
+            if (mode == "Challenge"){
+                if (numMove > maxMove){
+                    challengePass = false;
+                    break;
+                }
+            }
+
             // Process user input and update the position of the indicator of row and column
             char userInput;
             read(STDIN_FILENO, &userInput, 1);
@@ -229,10 +260,6 @@ struct Board{
                         coord[count % numF][1] = selectedCol - 1;
                         count++;  // Increment the number of stored cards
                         numMove++;
-                        // 若步数超标，返回-1，表示游戏失败
-                        if (maxMove != -1 && numMove >= maxMove) {
-                            return -1;
-                        }
                     } 
                     else {
                         flip = false;
@@ -243,11 +270,18 @@ struct Board{
                 break;  // Exit the while loop
             }
         }
+
         restoreTerminalMode();  // Restore the terminal to the original mode
         // 成功通过该轮游戏，返回该轮获得的分数
-        return points;
+        double result = -1;
+        if (challengePass == false){
+            return result;
+        }
+        else{
+            return points;
+        }
     }
-    
+
     // Function: RunPauseMenu
     //
     void RunPauseMenu() {
