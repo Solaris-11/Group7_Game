@@ -6,28 +6,15 @@ Identification of the team members:
  5. Wu Zhikai 3035973804
 
 Game description and rules
-Welcome to the Flip Card Game! This is a text_base game based on C++. 
+Welcome to the Flip Card Game! This is a text_base game based on C++, your objective is to flip cards and match pairs. Each mode offers its own level of difficulty and challenges. 
 
-You can test your memory and matching skills across different game modes: Easy, Hard, Challenge, and Endless, each game mode refers to different rules.
- 1. Endless Mode: Including esay mode and hard mode:
+You can test your memory and matching skills across different game modes: Endless, Challenge, and Custom, each game mode refers to different rules.
+ 1. Endless Mode: including esay mode and hard mode
      1. Esay Mode: Two cards can be flipped at once, larger table will be set in each new round, there are no move limit
      2. Hard Mode: Three cards can be flipped at once, larger table will be set in each new round, there are no move limit
  2. Challenge Mode: There will be a maximum move limit, there will be a shorter time interval between each flip
- 3. Custom Mode: 
-
-Your objective is to flip cards and match pairs. Each mode offers its own level of difficulty and challenges. 
-
-
-
-introduce the game rules.
-
-
-
-
-
-
-
-
+ 3. Custom Mode: You can define your own table: its size and the number of cards to be flipped at once, there are no move limit
+All of the instructions can be found in the tutorial part, you can check
 
 ▪ A list of features that you have implemented and explain how each coding element
 1 to 5 listed under the coding requirements aforementioned support your features.
