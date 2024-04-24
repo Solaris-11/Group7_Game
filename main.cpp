@@ -90,51 +90,56 @@ void CheckInput(int &numRows, int &numCols, int &numF) {
 // The function uses a while loop to proceed to the next round after completing each round
 // The settings for the current round are read from EasySetting and passed to the Board object
 // The StartNewRound function of the Board is called to start the game
-void StartEasyEndless() {
+void StartEasyEndless(int round, Board b1, bool new1) {
 	// Difficulty Initialization
     int EasySetting[3][3] ={{2, 4, 2}, {3, 4, 2}, {4, 4, 2}};
-	int round = 1;
-
+    Board b;
 	// Endless mode: infinite loop
     while (round <= 3) {
         // Start a new round of game
         // Read the settings from EasySetting and store them in Board
-	    Board b = {
-        "Endless",
-        "Easy",
-        round,
+        if(new1==true){
+	    b = {
+            "Endless",
+            "Easy",
+            round,
 
-        EasySetting[round - 1][0],
-        EasySetting[round - 1][1],
-        EasySetting[round - 1][2],
-        -1,
-        1,
+            EasySetting[round - 1][0],
+            EasySetting[round - 1][1],
+            EasySetting[round - 1][2],
+            -1,
+            1,
 
-        0,
-        0,
-        EasySetting[round - 1][0],
-        1,
+            0,
+            0,
+            EasySetting[round - 1][0],
+            1,
 
-        vector<vector<int> > (EasySetting[round - 1][0], vector<int>(EasySetting[round - 1][1])),
-        vector<vector<bool> > (EasySetting[round - 1][0],vector<bool>(EasySetting[round - 1][1],false)),
+            vector<vector<int> > (EasySetting[round - 1][0], vector<int>(EasySetting[round - 1][1])),
+            vector<vector<bool> > (EasySetting[round - 1][0],vector<bool>(EasySetting[round - 1][1],false)),
 
-        0,
-        0,
-        false,
-        false,
-        true,
+            0,
+            0,
+            false,
+            false,
+            true,
 
-        vector<int> (EasySetting[round - 1][2]),
-        vector<vector<int> > (EasySetting[round - 1][2],vector<int>(EasySetting[round - 1][2])),
-        };
+            vector<int> (EasySetting[round - 1][2]),
+            vector<vector<int> > (EasySetting[round - 1][2],vector<int>(EasySetting[round - 1][2])),
+            };
 
-        // Start the new round
-        b.shuffle();  // Initialize and shuffle the cards
+            // Start the new round
+            b.shuffle();  // Initialize and shuffle the cards
+        }
+        else{
+            b = b1;
+        }
 		b.StartNewRound();
 
 		// Game over
 		sleep(1);    // Pause for 1 second and continue with the next game
         round++;
+        new1 = true;
     }
 
     // Pass 3 rounds in Easy Endless mode
@@ -148,52 +153,54 @@ void StartEasyEndless() {
 // The function uses a while loop to proceed to the next round after completing each round
 // The settings for the current round are read from HardSetting and passed to the Board object
 // The StartNewRound function of the Board is called to start the game
-void StartHardEndless() {
+void StartHardEndless(int round, Board b1, bool new1) {
     // Difficulty Initialization
     int HardSetting[3][3] = {{3, 3, 3},{3, 4, 3}, {3, 5, 3}};
-    int round = 1;
-    string difficulty = "Hard";
-    string mode = "Endless";
-
+    Board b;
     // Endless mode: infinite loop
     while (round <= 3) {
         // Start a new round of game
         // Read the settings from EasySetting and store them in Board
-	    Board b = {
-        "Endless",
-        "Hard",
-        round,
+	    if(new1 == true){
+            b = {
+            "Endless",
+            "Hard",
+            round,
 
-        HardSetting[round - 1][0],
-        HardSetting[round - 1][1],
-        HardSetting[round - 1][2],
-        -1,
-        1,
+            HardSetting[round - 1][0],
+            HardSetting[round - 1][1],
+            HardSetting[round - 1][2],
+            -1,
+            1,
 
-        0,
-        0,
-        HardSetting[round - 1][0],
-        1,
+            0,
+            0,
+            HardSetting[round - 1][0],
+            1,
 
-        vector<vector<int> > (HardSetting[round - 1][0], vector<int>(HardSetting[round - 1][1])),
-        vector<vector<bool> > (HardSetting[round - 1][0],vector<bool>(HardSetting[round - 1][1],false)),
+            vector<vector<int> > (HardSetting[round - 1][0], vector<int>(HardSetting[round - 1][1])),
+            vector<vector<bool> > (HardSetting[round - 1][0],vector<bool>(HardSetting[round - 1][1],false)),
 
-        0,
-        0,
-        false,
-        false,
-        true,
+            0,
+            0,
+            false,
+            false,
+            true,
 
-        vector<int> (HardSetting[round - 1][2]),
-        vector<vector<int> > (HardSetting[round - 1][2],vector<int>(HardSetting[round - 1][2])),
-        };
-        // Start the new round
-        b.shuffle();  // Initialize and shuffle the cards
+            vector<int> (HardSetting[round - 1][2]),
+            vector<vector<int> > (HardSetting[round - 1][2],vector<int>(HardSetting[round - 1][2])),
+            };
+            // Start the new round
+            b.shuffle();  // Initialize and shuffle the cards
+        }else{
+            b =b1;
+        }
 	    b.StartNewRound();
-	
+
 	    // Game over
 	    sleep(1);    // Pause for 1 second and continue with the next game
         round++;
+        new1 = true;
     }
 
     // Pass 3 rounds in Hard Endless mode
@@ -249,11 +256,13 @@ void StartEndless() {
     }
 
     restoreTerminalMode();        // Restore terminal to canonical mode
-
+    int round = 1;
+    Board b;
+    bool new1 = true;
     if (currSel  == 1) {
-        StartEasyEndless();            // Call function for Option 1: Easy Mode
+        StartEasyEndless(round, b, new1);            // Call function for Option 1: Easy Mode
     } else if (currSel  == 2) {
-        StartHardEndless();            // Call function for Option 2: Hard Mode
+        StartHardEndless(round, b, new1);            // Call function for Option 2: Hard Mode
     } else if (currSel  == 3) {        
         RunNewGame();                  // Call function for Option 3: Return to Previous menu
     } else if (currSel  == 4) {
@@ -271,47 +280,50 @@ void StartEndless() {
 // The StartNewRound function of the Board is called to start the game
 // There is a maximum moves for each round in Challenge mode
 // When player has reached the maximum moves and has not flipped all cards, then return -1 as result
-void StartEasyChallenge() {
+void StartEasyChallenge(int round, Board b1, bool new1) {
 	// Difficulty Initialization
     int EasySetting[3][4] ={{2, 4, 2, 12}, {3, 4, 2, 18}, {4, 4, 2, 24}};
-	int round = 1;
-
+    Board b;
 	// Challenge mode: limited move
     while (round <= 3) {
         // Start a new round of game
         // Read the settings from EasySetting and store them in Board
+        if(new1==true){
+            b = {
+            "Challenge",
+            "Easy",
+            round,
 
-	    Board b = {
-        "Challenge",
-        "Easy",
-        round,
+            EasySetting[round - 1][0],
+            EasySetting[round - 1][1],
+            EasySetting[round - 1][2],
+            EasySetting[round - 1][3],
+            1,
 
-        EasySetting[round - 1][0],
-        EasySetting[round - 1][1],
-        EasySetting[round - 1][2],
-        EasySetting[round - 1][3],
-        1,
+            0,
+            0,
+            EasySetting[round - 1][0],
+            1,
 
-        0,
-        0,
-        EasySetting[round - 1][0],
-        1,
+            vector<vector<int> > (EasySetting[round - 1][0], vector<int>(EasySetting[round - 1][1])),
+            vector<vector<bool> > (EasySetting[round - 1][0],vector<bool>(EasySetting[round - 1][1],false)),
 
-        vector<vector<int> > (EasySetting[round - 1][0], vector<int>(EasySetting[round - 1][1])),
-        vector<vector<bool> > (EasySetting[round - 1][0],vector<bool>(EasySetting[round - 1][1],false)),
+            0,
+            0,
+            false,
+            false,
+            true,
 
-        0,
-        0,
-        false,
-        false,
-        true,
+            vector<int> (EasySetting[round - 1][2]),
+            vector<vector<int> > (EasySetting[round - 1][2],vector<int>(EasySetting[round - 1][2])),
+            };
 
-        vector<int> (EasySetting[round - 1][2]),
-        vector<vector<int> > (EasySetting[round - 1][2],vector<int>(EasySetting[round - 1][2])),
-        };
+            // Start the new round
+            b.shuffle();  // Initialize and shuffle the cards  
+        }else{
+            b=b1;
+        }
 
-        // Start the new round
-        b.shuffle();  // Initialize and shuffle the cards
         double result = b.StartNewRound();
         if (result == -1){  // lose
             cout << "Unfortunately! You Didn't Pass [Challenge--Easy] Mode!" << endl;
@@ -322,6 +334,7 @@ void StartEasyChallenge() {
 		// Game over
 		sleep(1);    // Pause for 1 second and continue with the next game
         round++;
+        new1 = true;
     }
 
     // Pass 3 rounds in Easy Challenge mode
@@ -337,46 +350,49 @@ void StartEasyChallenge() {
 // The StartNewRound function of the Board is called to start the game
 // There is a maximum moves for each round in Challenge mode
 // When player has reached the maximum moves and has not flipped all cards, then return -1 as result
-void StartHardChallenge() {
+void StartHardChallenge(int round, Board b1, bool new1) {
     // Difficulty Initialization
     int HardSetting[3][4] = {{3, 3, 3, 15},{3, 4, 3, 21}, {3, 5, 3, 27}};
-    int round = 1;
-
+    Board b;
     // Endless mode: infinite loop
     while (round <= 3) {
         // Start a new round of game
         // Read the settings from EasySetting and store them in Board
-	    Board b = {
-        "Challenge",
-        "Hard",
-        round,
+        if(new1 ==true){
+	    b = {
+            "Challenge",
+            "Hard",
+            round,
 
-        HardSetting[round - 1][0],
-        HardSetting[round - 1][1],
-        HardSetting[round - 1][2],
-        HardSetting[round - 1][3],
-        1,
+            HardSetting[round - 1][0],
+            HardSetting[round - 1][1],
+            HardSetting[round - 1][2],
+            HardSetting[round - 1][3],
+            1,
 
-        0,
-        0,
-        HardSetting[round - 1][0],
-        1,
+            0,
+            0,
+            HardSetting[round - 1][0],
+            1,
 
-        vector<vector<int> > (HardSetting[round - 1][0], vector<int>(HardSetting[round - 1][1])),
-        vector<vector<bool> > (HardSetting[round - 1][0],vector<bool>(HardSetting[round - 1][1],false)),
+            vector<vector<int> > (HardSetting[round - 1][0], vector<int>(HardSetting[round - 1][1])),
+            vector<vector<bool> > (HardSetting[round - 1][0],vector<bool>(HardSetting[round - 1][1],false)),
 
-        0,
-        0,
-        false,
-        false,
-        true,
+            0,
+            0,
+            false,
+            false,
+            true,
 
-        vector<int> (HardSetting[round - 1][2]),
-        vector<vector<int> > (HardSetting[round - 1][2],vector<int>(HardSetting[round - 1][2])),
-        };
+            vector<int> (HardSetting[round - 1][2]),
+            vector<vector<int> > (HardSetting[round - 1][2],vector<int>(HardSetting[round - 1][2])),
+            };
 
-        // Start the new round
-        b.shuffle();  // Initialize and shuffle the cards
+            // Start the new round
+            b.shuffle();  // Initialize and shuffle the cards
+        }else{
+            b= b1;
+        }
         double result = b.StartNewRound();
         if (result == -1){  // lose
             cout << "Unfortunately! You Didn't Pass [Challenge--Hard] Mode!" << endl;
@@ -387,6 +403,7 @@ void StartHardChallenge() {
 	    // Game over
 	    sleep(1);    // Pause for 1 second and continue with the next game
         round++;
+        new1 = true;
     }
 
     // Pass 3 rounds in Hard Endless mode
@@ -444,11 +461,13 @@ void StartChallenge() {
     }
 
     restoreTerminalMode();        // Restore terminal to canonical mode
-
+    int round = 1;
+    Board b;
+    bool new1 = true;
     if (currSel  == 1) {
-        StartEasyChallenge();            // Call function for Option 1: Easy Mode
+        StartEasyChallenge(round, b, new1);            // Call function for Option 1: Easy Mode
     } else if (currSel  == 2) {
-        StartHardChallenge();            // Call function for Option 2: Hard Mode
+        StartHardChallenge(round, b, new1);            // Call function for Option 2: Hard Mode
     } else if (currSel  == 3) {        
         RunNewGame();                  // Call function for Option 3: Return to Previous menu
     } else if (currSel  == 4) {
@@ -865,7 +884,19 @@ void RunLoadGame() {
             pairs,
             coord,
         };
-        b.StartNewRound();
+        bool new1 = false;
+        if(mode == "Endless" && difficulty == "Easy"){
+            StartEasyEndless(round, b, new1);
+        }
+        else if(mode == "Endless" && difficulty == "Hard"){
+            StartHardEndless(round, b, new1);
+        }
+        else if(mode == "Challenge" && difficulty == "Easy"){
+            StartEasyChallenge(round, b, new1);
+        }
+        else if(mode == "Challenge" && difficulty == "Hard"){
+            StartHardChallenge(round, b, new1);
+        }
     }
 }
 
