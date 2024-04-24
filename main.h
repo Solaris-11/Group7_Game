@@ -13,6 +13,8 @@
 
 using namespace std;
 
+void RunMainMenu();
+
 #ifndef main_h
 #define main_h
 
@@ -36,6 +38,16 @@ struct Board{
     vector<vector<int>> card;
     vector<vector<bool>> table;
 
+
+    int count;
+    int numPaired;
+    bool failure;
+    bool flip; 
+    bool challengePass;
+
+    vector<int> pairs;
+    vector<vector<int>> coord;
+
     // Function: drawTable
     // Nested for loop to draw the *table
     // Two loops to print the indicator for the selected row and column
@@ -53,7 +65,7 @@ struct Board{
             }
             //Nested for loop to draw the *table
             for (int col = 1; col <= numCols; col++) {
-            // Check if the *card at the current position is face-down
+            // Check if the card at the current position is face-down
                 if (table[row-1][col-1] == false) {
                     cout << "  *";       //Print a "  *" if the *card at the current position is face-down
                 } 
@@ -190,15 +202,7 @@ struct Board{
     double StartNewRound() {
         setNonCanonicalMode();  // Set the terminal to non-canonical mode to read input 
 
-        card = vector<vector<int> > (numRows, vector<int>(numCols));
-        shuffle();  // Initialize and shuffle the cards
-
-        int count = 0, numPaired = 0, totalNumPairs = numRows * numCols / numF;
-        bool failure = false, flip = false, challengePass = true;
-
-        table = vector<vector<bool> > (numRows,vector<bool>(numCols,false));    // Create a table to track the state of each *card (initial value: false)
-        vector<int> pairs(numF);
-        vector<vector<int> > coord(numF,vector<int>(numF));
+        int totalNumPairs = numRows * numCols / numF;
 
         while (numPaired != totalNumPairs) {  // Keep the process until all the cards are matched
             // Draw the game table
@@ -291,11 +295,9 @@ struct Board{
         newgame[0] = "Continue";              // Option 1: Continue
         newgame[1] = "Save and Quit";         // Option 2: Save and Quit
         newgame[2] = "Restart";               // Option 3: Restart
-        newgame[3] = "Return to main menu";   // Option 4: Return to Main Menu
-        newgame[4] = "Quit";                  // Option 5: Quit
 
         setNonCanonicalMode();   // Set terminal to non-canonical mode
-        int numOpts = 5;         // Total number of options
+        int numOpts = 3;         // Total number of options
         int currSel = 1;         // Currently selected option
 
         while (true) {
@@ -303,7 +305,7 @@ struct Board{
             cout << "                         " << "[Pause Menu]" << endl;
             cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
-            for (int i = 1; i <= 5; i++) {
+            for (int i = 1; i <= 3; i++) {
                 if (i == currSel) {
                     cout << ">> " << newgame[i - 1] << endl;   // Print selected option with a cursor (>>)
                 } else {
@@ -328,18 +330,16 @@ struct Board{
 		    }
         }
 
-        restoreTerminalMode();       // Restore terminal to canonical mode
-
         if (currSel == 1) {          // Call function for Option 1: Continue
-            //
+            // No specific action needed for the "Continue" option
         } else if (currSel == 2) {   // Call function for Option 2: Save and Quit
-            //
+            RunMainMenu();
         } else if (currSel == 3) {   // Call function for Option 3: Restart
-            //
-        } else if (currSel == 4) {   // Exit the program for Option 4: Return to Main Menu
-            //
-        } else if (currSel == 4) {   // Exit the program for Option 4: Quit
-            exit(0);
+            numMove = 0;
+            points = 0;
+            selectedRow = numRows;
+            selectedCol = 1;
+            StartNewRound();
         }
     }
 
@@ -364,6 +364,38 @@ struct Board{
         fout << points << endl;
         fout << selectedRow << endl;
         fout << selectedCol << endl;
+
+        for (const auto & row : card) {
+            for (const auto & value : row) {
+                fout << value << " ";
+            }
+            fout << '\n';
+        }
+
+        for (const auto & row : table) {
+            for (const auto & value : row) {
+                fout << value << " ";
+            }
+            fout << '\n';
+        }
+
+        fout << count << endl;
+        fout << numPaired << endl;
+        fout << failure << endl;
+        fout << flip << endl;
+        fout << challengePass << endl;
+
+        for (const auto & value : pairs) {
+            fout << value << " ";
+        }
+        fout << '\n';
+
+        for (const auto & row : coord) {
+            for (const auto & value : row) {
+                fout << value << " ";
+            }
+            fout << '\n';
+        }
 
         fout.close();
     }
