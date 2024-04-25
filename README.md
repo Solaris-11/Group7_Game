@@ -64,7 +64,9 @@ We use this function to initialize and shuffle the cards in the game to ensure t
 
 **Feature 2**: Custom data structure - Structure Board
 
+
 The Struct Board we use is a custom data structure used to represent the board status and properties of the flop game. It combines different data types and containers to provide the necessary information and functionality to support game play and management.
+
 
 The following is a more detailed description of some important member variables and functions in `struct Board`:
 
@@ -134,7 +136,10 @@ vector<vector<bool> > (EasySetting[round - 1][0],vector<bool>(EasySetting[round 
    We also create one-dimensional vectors using the `vector<T>` syntax. By specifying the size of the vector in the constructor, we dynamically allocate a one-dimensional vector and allocate memory space for each element.
 
 
+
 Example:
+
+
 ```cpp
 vector<int> (EasySetting[round - 1][2]),
 ```
