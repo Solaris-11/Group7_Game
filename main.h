@@ -128,7 +128,7 @@ struct Board{
             }
         }
 	else if (mode == "Custom"){
-            cout << "Remaining Move: " << maxMove - numMove << "    " << "Points: " << points << endl;
+            cout << "Move: " << numMove << "    " << "Points: " << points << endl;
             if (round < 3){
                 if (points == 100){
                     cout << endl;
@@ -144,7 +144,7 @@ struct Board{
                     cout << "(Press any key to continue ...)" << endl;
                     // move to "choose mode page"
                 }
-            }
+            }   
         }
         
         
