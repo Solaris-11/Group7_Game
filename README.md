@@ -7,11 +7,16 @@ Identification of the team members:
 
 
 Game description and rules
+
+
 Welcome to the Flip Card Game! This is a text_base game based on C++, your objective is to flip cards and match them. Each mode offers its own level of difficulty and challenges.
+
 
 The operation method of the game is to use the "wasd" key for selection and flipping. 
 
+
 If you want to pause the game during gameplay, you can press "q" to enter the pause menu. In the pause menu, you can choose to save the game and exit, continue the game, and restart.
+
 
 You can test your memory and matching skills across different game modes: Endless, Challenge, and Custom, each game mode refers to different rules.
   1. Endless Mode: including easy mode and hard mode, 3 rounds will be included
@@ -41,8 +46,49 @@ Feature 1: Random numbers in each round
 
 Corresponding coding element: Generation of random game sets or events
 
+Feature 2: Custom data structure - Structure Board
 
-Data structures for storing game status (e.g., arrays, STL containers)
+The Struct Board we use is a custom data structure used to represent the board status and properties of the flop game. It combines different data types and containers to provide the necessary information and functionality to support game play and management.
+
+The following is a more detailed description of some important member variables and functions in `struct Board`:
+
+ 1. `mode` and `difficulty`: These string variables are used to store the mode and difficulty level of the game and can be set and used according to the design of the game rules.
+
+ 2. `round`: This integer variable is used to track the number of rounds of the game, indicating which round of the game is currently.
+
+`numRows` and `numCols`: These two integer variables represent the number of rows and columns of the game board respectively and are used to determine the size of the game board.
+
+`numF`: This integer variable represents the number of cards flipped each time, that is, the number of pairs of cards flipped at the same time.
+
+`maxMove`: This integer variable represents the maximum number of moves in the game, that is, the maximum number of flips allowed by the player.
+
+`pauseTime`: This float variable represents the pause time after flipping the card to control the rhythm and speed of the game.
+
+`numMove`: This integer variable is used to track the player's total number of moves, i.e. the number of pairs of cards that have been flipped.
+
+`points`: This floating point variable is used to record the player's score or game progress.
+
+`selectedRow` and `selectedCol`: These two integer variables represent the currently selected row and column and are used to track the player's selection.
+
+`card`: This two-dimensional integer vector (`vector<vector<int>>`) is used to store the value or identity of the card at each position on the game board.
+
+`table`: This two-dimensional vector of booleans (`vector<vector<bool>>`) is used to track whether the card at each position on the game board has been flipped.
+
+`count`: This integer variable is used to count the number of cards that have been flipped so far.
+
+`numPaired`: This integer variable is used to record the number of matched card pairs.
+
+`failure`: This Boolean variable indicates whether the current game failed and is set based on the game rules.
+
+`flip`: This Boolean variable indicates whether flipping the card is allowed, and is set based on the game state.
+
+`challengePass`: This Boolean variable indicates whether the current challenge is passed or not, and is set based on the game rules.
+
+`pairs`: This integer vector (`vector<int>`) is used to store the value or identity of the matched card pair.
+
+`coord`: This two-dimensional integer vector (`vector<vector<int>>`) is used to store the coordinate information of the card position.
+
+Corresponding coding element: Data structures for storing game status (e.g., arrays, STL containers)
 
 
 Dynamic memory management (e.g., dynamic arrays, linked lists, STL containers)
