@@ -38,17 +38,23 @@ All of the instructions can be found in the tutorial part, you can check any tim
 **Game features and corresponding coding element**
 
 
-**Feature 1**: Random numbers in each round
+**Feature 1**: Shuffling mechanism
 
- 1. The game incorporates random numbers to introduce unpredictability and variability in each round.
+Every time a player starts a new round, the number positions corresponding to the original cards will be disrupted.
  
- 2. The coding element of generating random game sets or events is utilized to achieve this feature.
- 
- 3. At the start of each round, the game generates random numbers using the coding element.
- 
- 4. These random numbers are used to determine various aspects of the game, such as shuffling the cards, determining the order of turns, or randomizing the positions of game elements.
- 
- 5. The randomization ensures that each round is unique and different from the previous ones.
+We define a `shuffle()` function to initialize and shuffle the cards in the game. Here are the steps for the code:
+
+1. By calculating the value of `numCards`, the total number of cards on the game table is determined. The `numRows` and `numCols` variables are used here, which represent the number of rows and columns of the game desktop respectively.
+
+2. Calculate the logarithm of the cards, divide `numCards` by `numF` (the number of occurrences of each card), and get the value of `numPairs`. This value represents the number of pairs of cards in the game.
+
+3. By calling the `srand()` function, use the current time as the random number seed to ensure that the generated random number sequence is different each time the program is run.
+
+4. Initialize the card. Use a nested `for` loop to iterate through each position on the game table and assign a unique value to the card in each position. The formula `(i * numCols + j) % numPairs + 1` is used here to determine the value of each card. Among them, `i` and `j` represent the row and column index of the current position, and `numPairs` represents the number of pairs of cards. This way, each pair of cards is assigned a unique value from 1 to `numPairs`.
+
+5. Shuffle the cards. Use two nested `for` loops, iterating `numPairs` times. In each iteration, two cards are randomly selected by generating random row and column indices. Then, use the `swap()` function to exchange the values ​​of these two cards to achieve random shuffling of the cards.
+
+We use this function to initialize and shuffle the cards in the game to ensure that each pair of cards has a unique value, and to achieve the shuffling effect by randomly exchanging the positions of the cards.
 
 **Corresponding coding element**: Generation of random game sets or events
 
@@ -118,9 +124,8 @@ We mainly use vector as our `STL containers`
 
 Examples:
 ```cpp
-vector<vector<int>> matrix(numRows, vector<int>(numCols));
-vector<vector<bool>> booleanMatrix(numRows, vector<bool>(numCols, false));
-vector<vector<int>> nestedMatrix(numF, vector<int>(numF));
+vector<vector<int> > (EasySetting[round - 1][0], vector<int>(EasySetting[round - 1][1])),
+vector<vector<bool> > (EasySetting[round - 1][0],vector<bool>(EasySetting[round - 1][1],false)),
 ```
 
 
@@ -131,7 +136,7 @@ vector<vector<int>> nestedMatrix(numF, vector<int>(numF));
 
 Example:
 ```cpp
-vector<int> singleVector(numF);
+vector<int> (EasySetting[round - 1][2]),
 ```
 
 
@@ -150,21 +155,8 @@ Save game:
 
 During the game, if the you want to save and quit, you can press the key "q" to enter the pause menu, the pause menu will show the save and quit option. We use `saveGame()` function to realize the file saving.
 
-The different instructions in the `saveGame()` function will run the following steps:
 
- 1. `ofstream fout;` - Create an `ofstream` object `fout` for writing to a file.
 
- 2. `fout.open("savegame.txt");` - Open the file named "savegame.txt". If the file cannot be opened (for example, the file does not exist or does not have sufficient permissions), an error message is printed and returned.
-
- 3. The code writes each variable value of the game to the file line by line through the `fout` object in order to save the game state. These variables include `mode`, `difficulty`, `round`, `numRows`, `numCols`, `numF`, `maxMove`, `time`, `numMove`, `points`, `selectedRow`, `selectedCol` etc. The value of each variable is written to the file using `fout << variable name << endl;`, with a newline character after each line.
-
- 4. Write the values in the two-dimensional arrays `card` and `table` to the file through nested loops. For each array, the inner loop writes the value of each element to the file, adding a newline character at the end of each line.
-
- 5. Write the remaining variable values and array values to the file in sequence, including `count`, `numPaired`, `failure`, `flip`, `challengePass` and `pairs` arrays, etc.
-
- 6. Close the file via `fout.close();` to ensure that the write operation is completed.
-
-After completing the run, each variable value and array data in the game will be saved to a file so that the game state can be reloaded when needed.
 
 
 Load game: 
@@ -172,21 +164,7 @@ Load game:
 After quit the current round, you can find the load game option in the main menu.
 You can choose the option "load game" to return to previous game progress. The function `RunLoadGame()` will help you to access the game progress which you have saved.
 
-The different instructions in the `RunLoadGame()` function will run the following steps:
 
- 1. `ifstream fin;` - Create an `ifstream` object `fin` for reading files.
-
- 2. `fin.open("savegame.txt");` - Open the file named "savegame.txt". If the file cannot be opened (for example, the file does not exist or does not have sufficient permissions), the error message "Game not found!" is output.
-
- 3. If the file is opened successfully, code execution will continue. After this, a series of variables are defined to store the game data read from the file, including `mode`, `difficulty`, `round`, `numRows`, `numCols`, `numF`, `maxMove`, ` pauseTime`, `numMove`, `points`, `selectedRow`, `selectedCol`, `count`, `numPaired`, `failure`, `flip` and `challengePass`.
-
- 4. Use `fin >> variable name` to read the value of each variable from the file and store it in the corresponding variable.
-
- 5. Define several two-dimensional arrays `card`, `table`, `coord`, and a one-dimensional array `pairs` to store game data read from the file. Through nested loops and similar, data is read from the file and stored into the corresponding array.
-
- 6. `fin.close();` - Close the file and the read operation is completed.
-
- 7. Based on the read game data and mode selection, a `Board` object `b` is created, and the corresponding function is called according to different modes and difficulties to start the game. The specific function call depends on the values of the `mode` and `difficulty` variables.
 
 
 **Corresponding coding element**: File input/output
@@ -200,21 +178,20 @@ The different instructions in the `RunLoadGame()` function will run the followin
 We spread the program code into multiple files to implement separate compilation.
 We scattered the code into the following files:
 
- 1. `.gitattributes`: Git version control related configuration files.
+ 1. `MoveCursor.h`: header file, containing declarations of functions or classes related to cursor movement.
  
- 2. `MoveCursor.h`: header file, containing declarations of functions or classes related to cursor movement.
+ 2. `README.md`: The project description document, including an overview of the project, how to use it, and other information.
  
- 3. `README.md`: The project description document, including an overview of the project, how to use it, and other information.
+ 3. `main.cpp`: The main program file, containing the entry point of the program (`main` function) and the implementation of other functions or classes related to the main logic.
  
- 4. `main.cpp`: The main program file, containing the entry point of the program (`main` function) and the implementation of other functions or classes related to the main logic.
+ 4. `main.h`: header file, containing declarations of functions or classes related to the main program file `main.cpp`.
  
- 5. `main.h`: header file, containing declarations of functions or classes related to the main program file `main.cpp`.
+ 5. `makefile`: Makefile used to build and compile programs, containing rules for compilation and linking.
  
- 6. `makefile`: Makefile used to build and compile programs, containing rules for compilation and linking.
+ 6. `termios.h`: header file, containing declarations of functions or classes related to terminal input and output.
  
- 7. `termios.h`: header file, containing declarations of functions or classes related to terminal input and output.
- 
- 8. `unistd.h`: header file, containing declarations of functions or classes related to the operating system interface.
+ 7. `unistd.h`: header file, containing declarations of functions or classes related to the operating system interface.
+
 
 Through these files, we can have faster compilation speed, while reducing resource consumption and improving code maintainability.
 
@@ -235,16 +212,11 @@ In order to start playing the game, you can follow the steps below
 2. **Log in to the virtual machine**: You can use the SSH client to log in to the Linux system of the virtual machine.
 
 3. **Compile and run the C++ file**: On the Linux system in the virtual machine, use the appropriate compiler and commands to compile and run the C++ file.
-You can run the following command to compile:
+You can use the code in makefile to compile:
 
       ```
-      g++ -std=c++11 main.cpp -o main
-      ```
-      This will generate an executable named `main`.
-
-Run the generated executable file by entering
-      ```
-      ./main
+      memorymatching: main.cpp main.h MoveCursor.h termios.h unistd.h
+	          g++ -pedantic-errors -std=c++11 main.cpp -o memorymatching
       ```
 
 After that, you can start the game.
