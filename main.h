@@ -147,7 +147,6 @@ struct Board{
             }
         }
         
-    }
         
     }
 
