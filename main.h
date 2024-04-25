@@ -127,7 +127,26 @@ struct Board{
                 }
             }
         }
-	else if (mode == "Custom"){
+	else if (mode == "CUS"){
+            cout << "Move: " << numMove << "    " << "Points: " << points << endl;
+            if (round < 3){
+                if (points == 100){
+                    cout << endl;
+                    cout << "Congratulations! You Pass Round: " << round << endl;
+                    cout << "Now Going to the Next Round..." << endl;
+                    cout << "(Press any key to continue ...)" << endl;
+                }
+            }
+            else if (round == 3){
+                if (points == 100){
+                    cout << endl;
+                    cout << "Hooray!!! You pass " << "[" + mode + "--" + difficulty +"]"<< "!!!" << endl;
+                    cout << "(Press any key to continue ...)" << endl;
+                    // move to "choose mode page"
+                }
+            }   
+        }
+	else if (mode == "TUT"){
             cout << "Move: " << numMove << "    " << "Points: " << points << endl;
             if (round < 3){
                 if (points == 100){
