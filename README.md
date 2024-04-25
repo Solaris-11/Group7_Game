@@ -1,4 +1,4 @@
-Identification of the team members:
+**Identification of the team members:**
 
  1. Chen Shiyang 3035974432
  2. Hu Yujia 3035980302
@@ -9,9 +9,8 @@ Identification of the team members:
 
 ******************************************
 
-Game description and rules
+**Game description and rules**
 
-******************************************
 
 Welcome to the Flip Card Game! This is a text_base game based on C++, your objective is to flip cards and match them. Each mode offers its own level of difficulty and challenges.
 
@@ -21,27 +20,25 @@ If you want to pause the game during gameplay, you can press "q" to enter the pa
 
 You can test your memory and matching skills across different game modes: Endless, Challenge, and Custom, each game mode refers to different rules.
   
-  1. Endless Mode: including easy mode and hard mode, 3 rounds will be included
+  1. **Endless Mode**: including easy mode and hard mode, 3 rounds will be included
       
       1. Easy Mode: Two cards can be flipped at once, larger table will be set in each new round, there are no move limit
 
       2. Hard Mode: Three cards can be flipped at once, larger table will be set in each new round, there are no move limit
   
-  2. Challenge Mode: There will be a maximum move limit, there will be a shorter time interval between each flip
+  2. **Challenge Mode**: There will be a maximum move limit, there will be a shorter time interval between each flip
   
-  3. Custom Mode: You can define your own table: its size and the number of cards to be flipped at once, there are no move limit
+  3. **Custom Mode**: You can define your own table: its size and the number of cards to be flipped at once, there are no move limit
 
 All of the instructions can be found in the tutorial part, you can check any time if you forget.
 
 
 ******************************************
 
-Game features and corresponding coding element
-
-******************************************
+**Game features and corresponding coding element**
 
 
-Feature 1: Random numbers in each round
+**Feature 1**: Random numbers in each round
 
  1. The game incorporates random numbers to introduce unpredictability and variability in each round.
  
@@ -53,13 +50,13 @@ Feature 1: Random numbers in each round
  
  5. The randomization ensures that each round is unique and different from the previous ones.
 
-Corresponding coding element: Generation of random game sets or events
+**Corresponding coding element**: Generation of random game sets or events
 
 
 ******************************************
 
 
-Feature 2: Custom data structure - Structure Board
+**Feature 2**: Custom data structure - Structure Board
 
 The Struct Board we use is a custom data structure used to represent the board status and properties of the flop game. It combines different data types and containers to provide the necessary information and functionality to support game play and management.
 
@@ -101,13 +98,13 @@ The following is a more detailed description of some important member variables 
 
  18. `coord`: This two-dimensional integer vector (`vector<vector<int>>`) is used to store the coordinate information of the card position.
 
-Corresponding coding element: Data structures for storing game status (e.g., arrays, STL containers)
+**Corresponding coding element**: Data structures for storing game status
 
 
 ******************************************
 
 
-Feature 3: Using of STL
+**Feature 3**: Using of STL
 We mainly use vector as our `STL containers` 
 
 1. Using `vector` for dynamic memory allocation:
@@ -141,13 +138,13 @@ vector<int> singleVector(numF);
 By utilizing `vector` for dynamic memory management, we can dynamically allocate and adjust the memory size as needed. This allows for more efficient memory management and eliminates the complexity of manual memory allocation and deallocation. Additionally, the `vector` class provides convenient member functions and operators, making it easier to access and manipulate dynamically allocated memory.
 
 
-Corresponding coding element: Dynamic memory management (e.g., dynamic arrays, linked lists, STL containers)
+**Corresponding coding element**: Dynamic memory management
 
 
 ******************************************
 
 
-Feature 4: Save and load game
+**Feature 4**: Save and load game
 
 Save game:
 
@@ -192,13 +189,13 @@ The different instructions in the `RunLoadGame()` function will run the followin
  7. Based on the read game data and mode selection, a `Board` object `b` is created, and the corresponding function is called according to different modes and difficulties to start the game. The specific function call depends on the values of the `mode` and `difficulty` variables.
 
 
-Corresponding coding element: File input/output (e.g., for loading/saving game status)
+**Corresponding coding element**: File input/output
 
 
 ******************************************
 
 
-Feature 5: Faster operation speed and less resource consumption
+**Feature 5**: Faster operation speed and less resource consumption
 
 We spread the program code into multiple files to implement separate compilation.
 We scattered the code into the following files:
@@ -222,18 +219,35 @@ We scattered the code into the following files:
 Through these files, we can have faster compilation speed, while reducing resource consumption and improving code maintainability.
 
 
-Corresponding coding element: Program codes in multiple files (recall separate compilation)
+**Corresponding coding element**: Program codes in multiple files
+
 
 
 ******************************************
 
 
-Compilation and execution instructions
+**Compilation and execution instructions**
 
+In order to start playing the game, you can follow the steps below
 
-This serves like a "Quick start" of your game.
-The teaching team will follow your instructions to compile and run your game
+1. **File Transfer**: Transfer files from the local computer to the virtual machine. 
 
+2. **Log in to the virtual machine**: You can use the SSH client to log in to the Linux system of the virtual machine.
+
+3. **Compile and run the C++ file**: On the Linux system in the virtual machine, use the appropriate compiler and commands to compile and run the C++ file.
+You can run the following command to compile:
+
+      ```
+      g++ -std=c++11 main.cpp -o main
+      ```
+      This will generate an executable named `main`.
+
+Run the generated executable file by entering
+      ```
+      ./main
+      ```
+
+After that, you can start the game.
 
 
 
