@@ -17,10 +17,11 @@ using namespace std;
 void RunMainMenu();
 void RunNewGame();
 void StartEndless();  
-void StartEasyEndless();
-void StartHardEndless();
+void StartEasyEndless(int round, Board b1, bool new1);
+void StartHardEndless(int round, Board b1, bool new1);
 void StartChallenge();
-void RunPauseMenu();
+void StartEasyChallenge(int round, Board b1, bool new1);
+void StartHardChallenge(int round, Board b1, bool new1);
 void RunLoadGame();
 void RunTutorial();
 
@@ -91,14 +92,15 @@ void CheckInput(int &numRows, int &numCols, int &numF) {
 // The settings for the current round are read from EasySetting and passed to the Board object
 // The StartNewRound function of the Board is called to start the game
 void StartEasyEndless(int round, Board b1, bool new1) {
-	// Difficulty Initialization
+    // Difficulty Initialization
     int EasySetting[3][3] ={{2, 4, 2}, {3, 4, 2}, {4, 4, 2}};
     Board b;
-	// Endless mode: infinite loop
+	
+    // While loop to track the rounds
     while (round <= 3) {
-        // Start a new round of game
-        // Read the settings from EasySetting and store them in Board
+        // 
         if(new1==true){
+	    // Read the settings from EasySetting and store them in Board
 	    b = {
             "Endless",
             "Easy",
@@ -127,17 +129,18 @@ void StartEasyEndless(int round, Board b1, bool new1) {
             vector<int> (EasySetting[round - 1][2]),
             vector<vector<int> > (EasySetting[round - 1][2],vector<int>(EasySetting[round - 1][2])),
             };
-
-            // Start the new round
             b.shuffle();  // Initialize and shuffle the cards
         }
         else{
             b = b1;
         }
-		b.StartNewRound();
+	
+	// Start the new round
+	b.StartNewRound();
 
-		// Game over
-		sleep(1);    // Pause for 1 second and continue with the next game
+	// Game over
+	// Pause for 1 second and continue with the next game
+	sleep(1);    
         round++;
         new1 = true;
     }
@@ -157,11 +160,12 @@ void StartHardEndless(int round, Board b1, bool new1) {
     // Difficulty Initialization
     int HardSetting[3][3] = {{3, 3, 3},{3, 4, 3}, {3, 5, 3}};
     Board b;
-    // Endless mode: infinite loop
+	
+    // While loop to track the rounds
     while (round <= 3) {
-        // Start a new round of game
-        // Read the settings from EasySetting and store them in Board
-	    if(new1 == true){
+        //
+	if(new1 == true){
+	    // Read the settings from EasySetting and store them in Board
             b = {
             "Endless",
             "Hard",
@@ -190,17 +194,19 @@ void StartHardEndless(int round, Board b1, bool new1) {
             vector<int> (HardSetting[round - 1][2]),
             vector<vector<int> > (HardSetting[round - 1][2],vector<int>(HardSetting[round - 1][2])),
             };
-            // Start the new round
-            b.shuffle();  // Initialize and shuffle the cards
+            // Initialize and shuffle the cards
+            b.shuffle();  
         }else{
             b =b1;
         }
+	    // Start the new round
 	    b.StartNewRound();
 
 	    // Game over
-	    sleep(1);    // Pause for 1 second and continue with the next game
-        round++;
-        new1 = true;
+	    // Pause for 1 second and continue with the next game
+	    sleep(1);    
+            round++;
+            new1 = true;
     }
 
     // Pass 3 rounds in Hard Endless mode
@@ -225,11 +231,15 @@ void StartEndless() {
     int currSel = 1;           // Currently selected option
 
     while (true) {
-        clearScreen();      // Clear the terminal screen
+	// Clear the terminal screen
+        clearScreen();
+	    
+	// Print out the header message
         cout << "                         " << "[Endless]" << endl;
         cout << "                    " << "[Choose Difficulty]" << endl;
         cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
+	// Display options and indicator(>>) on the screen 
         for (int j = 1; j <= difficulties.size(); j++) {
             if (j == currSel ) {
                 cout << ">> " << difficulties[j - 1] << endl;     // Print selected option with a cursor (>>)
@@ -238,24 +248,28 @@ void StartEndless() {
             }
         }
 
+	// Read the userinput and move the indicator(>>) accordingly
         char userInput;
-		read(STDIN_FILENO, &userInput, 1);
-        if (userInput == 'w') {               // If 'w' key is pressed
-			if (currSel  > 1) {               // Move selection up if not already at the top
-				currSel --;
-			}
-		} else if (userInput == 's') {        // If 's' key is pressed
-			if (currSel  < numOpts) {         // Move selection down if not already at the bottom
-				currSel ++;
-			}
-		} else if (userInput == '\n') {       // If '\n' key is pressed
-			if (currSel  <= numOpts) {        // Exit the while loop
-				break;
-			}
+	read(STDIN_FILENO, &userInput, 1);
+        if (userInput == 'w') {                   // If 'w' key is pressed
+		if (currSel  > 1) {               // Move selection up if not already at the top
+			currSel --;
 		}
+	} else if (userInput == 's') {            // If 's' key is pressed
+		if (currSel  < numOpts) {         // Move selection down if not already at the bottom
+			currSel ++;
+		}
+	} else if (userInput == '\n') {           // If '\n' key is pressed
+		if (currSel  <= numOpts) {        // Exit the while loop
+			break;
+		}
+	}
     }
 
-    restoreTerminalMode();        // Restore terminal to canonical mode
+    // Restore terminal to canonical mode
+    restoreTerminalMode();  
+
+    
     int round = 1;
     Board b;
     bool new1 = true;
@@ -264,11 +278,11 @@ void StartEndless() {
     } else if (currSel  == 2) {
         StartHardEndless(round, b, new1);            // Call function for Option 2: Hard Mode
     } else if (currSel  == 3) {        
-        RunNewGame();                  // Call function for Option 3: Return to Previous menu
+        RunNewGame();                                // Call function for Option 3: Return to Previous menu
     } else if (currSel  == 4) {
-        RunMainMenu();                 // Call function for Option 3: Return to Main menu
+        RunMainMenu();                               // Call function for Option 3: Return to Main menu
     } else if (currSel  == 5) {
-        exit(0);                       // Exit the program for Option 5: Quit
+        exit(0);                                     // Exit the program for Option 5: Quit
     }
 }
 
@@ -281,14 +295,14 @@ void StartEndless() {
 // There is a maximum moves for each round in Challenge mode
 // When player has reached the maximum moves and has not flipped all cards, then return -1 as result
 void StartEasyChallenge(int round, Board b1, bool new1) {
-	// Difficulty Initialization
+    // Difficulty Initialization
     int EasySetting[3][4] ={{2, 4, 2, 12}, {3, 4, 2, 18}, {4, 4, 2, 24}};
     Board b;
-	// Challenge mode: limited move
+	
+    // Challenge mode: limited move
     while (round <= 3) {
-        // Start a new round of game
-        // Read the settings from EasySetting and store them in Board
         if(new1==true){
+	    // Read the settings from EasySetting and store them in Board
             b = {
             "Challenge",
             "Easy",
@@ -317,22 +331,23 @@ void StartEasyChallenge(int round, Board b1, bool new1) {
             vector<int> (EasySetting[round - 1][2]),
             vector<vector<int> > (EasySetting[round - 1][2],vector<int>(EasySetting[round - 1][2])),
             };
-
-            // Start the new round
-            b.shuffle();  // Initialize and shuffle the cards  
+            // Initialize and shuffle the cards  
+            b.shuffle();  
         }else{
             b=b1;
         }
-
+        // Start the new round and store the result
         double result = b.StartNewRound();
-        if (result == -1){  // lose
+	// If lose
+        if (result == -1){  
             cout << "Unfortunately! You Didn't Pass [Challenge--Easy] Mode!" << endl;
             sleep(4);
             break;
         }
 
-		// Game over
-		sleep(1);    // Pause for 1 second and continue with the next game
+	// Game over
+	// Pause for 1 second and continue with the next game
+	sleep(1);    
         round++;
         new1 = true;
     }
@@ -354,11 +369,12 @@ void StartHardChallenge(int round, Board b1, bool new1) {
     // Difficulty Initialization
     int HardSetting[3][4] = {{3, 3, 3, 15},{3, 4, 3, 21}, {3, 5, 3, 27}};
     Board b;
-    // Endless mode: infinite loop
+	
+    // Challenge mode: limited move
     while (round <= 3) {
-        // Start a new round of game
-        // Read the settings from EasySetting and store them in Board
+        // 
         if(new1 ==true){
+	    // Read the settings from EasySetting and store them in Board
 	    b = {
             "Challenge",
             "Hard",
@@ -387,21 +403,24 @@ void StartHardChallenge(int round, Board b1, bool new1) {
             vector<int> (HardSetting[round - 1][2]),
             vector<vector<int> > (HardSetting[round - 1][2],vector<int>(HardSetting[round - 1][2])),
             };
-
-            // Start the new round
-            b.shuffle();  // Initialize and shuffle the cards
+	    // Initialize and shuffle the cards
+            b.shuffle();  
         }else{
             b= b1;
         }
+	
+	// Start the new round and store the result
         double result = b.StartNewRound();
-        if (result == -1){  // lose
+	// If lose
+        if (result == -1){  
             cout << "Unfortunately! You Didn't Pass [Challenge--Hard] Mode!" << endl;
             sleep(4);
             break;
         }
 
-	    // Game over
-	    sleep(1);    // Pause for 1 second and continue with the next game
+	// Game over
+	// Pause for 1 second and continue with the next game
+	sleep(1);    
         round++;
         new1 = true;
     }
@@ -430,11 +449,15 @@ void StartChallenge() {
     int currSel = 1;           // Currently selected option
 
     while (true) {
-        clearScreen();      // Clear the terminal screen
+	// Clear the terminal screen
+        clearScreen();    
+	    
+	// Print out the header message
         cout << "                        " << "[Challenge]" << endl;
         cout << "                    " << "[Choose Difficulty]" << endl;
         cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
+	// Display options and indicator(>>) on the screen 
         for (int j = 1; j <= difficulties.size(); j++) {
             if (j == currSel ) {
                 cout << ">> " << difficulties[j - 1] << endl;     // Print selected option with a cursor (>>)
@@ -443,24 +466,26 @@ void StartChallenge() {
             }
         }
 
+	// Read the userinput and move the indicator(>>) accordingly
         char userInput;
 		read(STDIN_FILENO, &userInput, 1);
         if (userInput == 'w') {               // If 'w' key is pressed
-			if (currSel  > 1) {               // Move selection up if not already at the top
-				currSel --;
-			}
-		} else if (userInput == 's') {        // If 's' key is pressed
-			if (currSel  < numOpts) {         // Move selection down if not already at the bottom
-				currSel ++;
-			}
-		} else if (userInput == '\n') {       // If '\n' key is pressed
-			if (currSel  <= numOpts) {        // Exit the while loop
-				break;
-			}
+		if (currSel  > 1) {           // Move selection up if not already at the top
+			currSel --;
 		}
+	} else if (userInput == 's') {        // If 's' key is pressed
+		if (currSel  < numOpts) {     // Move selection down if not already at the bottom
+			currSel ++;
+		}
+	} else if (userInput == '\n') {       // If '\n' key is pressed
+		if (currSel  <= numOpts) {    // Exit the while loop
+			break;
+		}
+	}
     }
-
-    restoreTerminalMode();        // Restore terminal to canonical mode
+    // Restore terminal to canonical mode
+    restoreTerminalMode(); 
+	
     int round = 1;
     Board b;
     bool new1 = true;
@@ -469,11 +494,11 @@ void StartChallenge() {
     } else if (currSel  == 2) {
         StartHardChallenge(round, b, new1);            // Call function for Option 2: Hard Mode
     } else if (currSel  == 3) {        
-        RunNewGame();                  // Call function for Option 3: Return to Previous menu
+        RunNewGame();                                  // Call function for Option 3: Return to Previous menu
     } else if (currSel  == 4) {
-        RunMainMenu();                 // Call function for Option 3: Return to Main menu
+        RunMainMenu();                                 // Call function for Option 3: Return to Main menu
     } else if (currSel  == 5) {
-        exit(0);                       // Exit the program for Option 5: Quit
+        exit(0);                                       // Exit the program for Option 5: Quit
     }
 
 }
@@ -496,11 +521,15 @@ void RunNewGame() {
     int currSel = 1;         // Currently selected option
 
     while (true) {
-        clearScreen();       // Clear the terminal screen
+	// Clear the terminal screen
+        clearScreen();      
+
+	// Print out the header message
         cout << "                          " << "[NewGame]" << endl;
         cout << "                       " << "[Choose a mode]" << endl;
         cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
 
+	// Display options and indicator(>>) on the screen 
         for (int i = 1; i <= 5; i++) {
             if (i == currSel) {
                 cout << ">> " << newgame[i - 1] << endl;   // Print selected option with a cursor (>>)
@@ -509,32 +538,35 @@ void RunNewGame() {
             }
         }
 
+	// Read the userinput and move the indicator(>>) accordingly
         char userInput;
-		read(STDIN_FILENO, &userInput, 1);
-		if (userInput == 'w') {     // If 'w' key is pressed
-			if (currSel > 1) {      // Move selection up if not already at the top
-				currSel--;
-			}
-		} else if (userInput == 's') {  // If 's' key is pressed
-			if (currSel < numOpts) {   // Move selection down if not already at the bottom
-				currSel++;
-			}
-		} else if (userInput == '\n') {
-			if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
-				break;                 // Exit the while loop
-			}
+	read(STDIN_FILENO, &userInput, 1);
+	if (userInput == 'w') {         // If 'w' key is pressed
+		if (currSel > 1) {      // Move selection up if not already at the top
+			currSel--;
 		}
+	} else if (userInput == 's') {     // If 's' key is pressed
+		if (currSel < numOpts) {   // Move selection down if not already at the bottom
+			currSel++;
+		}
+	} else if (userInput == '\n') {
+		if (currSel <= numOpts) {      // If Enter key is pressed and a valid option is selected
+			break;                 // Exit the while loop
+		}
+	}
     }
 
-    restoreTerminalMode();   // Restore terminal to canonical mode
+    // Restore terminal to canonical mode
+    restoreTerminalMode();   
 
-    if (currSel == 1) {        // Call function for Option 1: Endless Mode
+    if (currSel == 1) {          // Call function for Option 1: Endless Mode
         StartEndless();        
-    } else if (currSel == 2) { // Call function for Option 2: Challenge Mode
+    } else if (currSel == 2) {   // Call function for Option 2: Challenge Mode
         StartChallenge();      
     } else if (currSel == 3) {   // Call function for Option 3: Custom Mode
         int numRows, numCols, numF;
         CheckInput(numRows, numCols, numF);
+	    
         while ((numRows * numCols) % numF != 0) {
             cout << "Error! Board size must be a multiple of the number of cards flipped" << endl;
             CheckInput(numRows, numCols, numF);
@@ -612,20 +644,20 @@ void RunMainMenu() {
         }
 
         char userInput;
-		read(STDIN_FILENO, &userInput, 1);
-		if (userInput == 'w') {      // If 'w' key is pressed
-			if (currSel > 1) {     // Move selection up if not already at the top
-				currSel--;
-			}
-		} else if (userInput == 's') {  // If 's' key is pressed
-			if (currSel < numOpts) {   // Move selection down if not already at the bottom
-				currSel++;
-			}
-		} else if (userInput == '\n') {
-			if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
-				break;                   // Exit the while loop
-			}
+	read(STDIN_FILENO, &userInput, 1);
+	if (userInput == 'w') {      // If 'w' key is pressed
+		if (currSel > 1) {     // Move selection up if not already at the top
+			currSel--;
 		}
+	} else if (userInput == 's') {  // If 's' key is pressed
+		if (currSel < numOpts) {   // Move selection down if not already at the bottom
+			currSel++;
+		}
+	} else if (userInput == '\n') {
+		if (currSel <= numOpts) {  // If Enter key is pressed and a valid option is selected
+			break;                   // Exit the while loop
+		}
+	}
     }
 
     restoreTerminalMode();       // Restore terminal to canonical mode
@@ -642,7 +674,7 @@ void RunMainMenu() {
 }
 
 // Function: RunTutorial
-// 
+// A short tutorial for the user
 void RunTutorial() {
     string userInput;
     //page1
@@ -657,9 +689,9 @@ void RunTutorial() {
     cout << "Here's how you can play" << endl;
     cout << "1. Use the 'w', 's', 'a', 'd' keys to move the indicator on the table" << endl;
     cout << "2. Press the Enter key to select a card and flip it over" << endl;
-    cout << "3. Try to uncover two cards that have the same symbol" << endl;
+    cout << "3. Try to uncover two (or more) cards that have the same number" << endl;
     cout << "   " << "If the cards match, they will remain flipped, and you will earn points" << endl;
-    cout << "   " << "If the cards don't match, they will be flipped back over within 1 sec" << endl;
+    cout << "   " << "If the cards don't match, they will be flipped back over within 1 sec (or shorter)" << endl;
     cout << "   " << "and your move count will increase by 1. The points will not change." << endl;
     cout << "4. Continue flipping cards and matching pairs until all the cards are uncovered" << endl;
     cout << "(Enter any word to continue...)"<< endl;
@@ -802,6 +834,9 @@ void RunTutorial() {
     RunMainMenu();
 } 
 
+// Funtion: RunLoadGame
+// Read the board variables from the file
+// Call the function StartNewRound with those variables to continue the game
 void RunLoadGame() {
     ifstream fin;
     fin.open("savegame.txt");
@@ -893,6 +928,8 @@ void RunLoadGame() {
             pairs,
             coord,
         };
+
+	// Call different Start function based on the mode and difficulty
         bool new1 = false;
         if(mode == "Endless" && difficulty == "Easy"){
             StartEasyEndless(round, b, new1);
