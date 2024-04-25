@@ -147,33 +147,91 @@ Corresponding coding element: Dynamic memory management (e.g., dynamic arrays, l
 ******************************************
 
 
-Feature 4:
-During the game, if the player want to 
+Feature 4: Save and load game
 
-File input/output (e.g., for loading/saving game status)
+Save game:
+
+During the game, if the you want to save and quit, you can press the key "q" to enter the pause menu, the pause menu will show the save and quit option. We use `saveGame()` function to realize the file saving.
+
+The different instructions in the `saveGame()` function will run the following steps:
+
+ 1. `ofstream fout;` - Create an `ofstream` object `fout` for writing to a file.
+
+ 2. `fout.open("savegame.txt");` - Open the file named "savegame.txt". If the file cannot be opened (for example, the file does not exist or does not have sufficient permissions), an error message is printed and returned.
+
+ 3. The code writes each variable value of the game to the file line by line through the `fout` object in order to save the game state. These variables include `mode`, `difficulty`, `round`, `numRows`, `numCols`, `numF`, `maxMove`, `time`, `numMove`, `points`, `selectedRow`, `selectedCol` etc. The value of each variable is written to the file using `fout << variable name << endl;`, with a newline character after each line.
+
+ 4. Write the values in the two-dimensional arrays `card` and `table` to the file through nested loops. For each array, the inner loop writes the value of each element to the file, adding a newline character at the end of each line.
+
+ 5. Write the remaining variable values and array values to the file in sequence, including `count`, `numPaired`, `failure`, `flip`, `challengePass` and `pairs` arrays, etc.
+
+ 6. Close the file via `fout.close();` to ensure that the write operation is completed.
+
+After completing the run, each variable value and array data in the game will be saved to a file so that the game state can be reloaded when needed.
+
+
+Load game: 
+
+After quit the current round, you can find the load game option in the main menu.
+You can choose the option "load game" to return to previous game progress. The function `RunLoadGame()` will help you to access the game progress which you have saved.
+
+The different instructions in the `RunLoadGame()` function will run the following steps:
+
+ 1. `ifstream fin;` - Create an `ifstream` object `fin` for reading files.
+
+ 2. `fin.open("savegame.txt");` - Open the file named "savegame.txt". If the file cannot be opened (for example, the file does not exist or does not have sufficient permissions), the error message "Game not found!" is output.
+
+ 3. If the file is opened successfully, code execution will continue. After this, a series of variables are defined to store the game data read from the file, including `mode`, `difficulty`, `round`, `numRows`, `numCols`, `numF`, `maxMove`, ` pauseTime`, `numMove`, `points`, `selectedRow`, `selectedCol`, `count`, `numPaired`, `failure`, `flip` and `challengePass`.
+
+ 4. Use `fin >> variable name` to read the value of each variable from the file and store it in the corresponding variable.
+
+ 5. Define several two-dimensional arrays `card`, `table`, `coord`, and a one-dimensional array `pairs` to store game data read from the file. Through nested loops and similar, data is read from the file and stored into the corresponding array.
+
+ 6. `fin.close();` - Close the file and the read operation is completed.
+
+ 7. Based on the read game data and mode selection, a `Board` object `b` is created, and the corresponding function is called according to different modes and difficulties to start the game. The specific function call depends on the values of the `mode` and `difficulty` variables.
+
+
+Corresponding coding element: File input/output (e.g., for loading/saving game status)
 
 
 ******************************************
 
 
-Feature 5:
+Feature 5: Faster operation speed and less resource consumption
 
-Program codes in multiple files (recall separate compilation)
+We spread the program code into multiple files to implement separate compilation.
+We scattered the code into the following files:
+
+ 1. `.gitattributes`: Git version control related configuration files.
+ 
+ 2. `MoveCursor.h`: header file, containing declarations of functions or classes related to cursor movement.
+ 
+ 3. `README.md`: The project description document, including an overview of the project, how to use it, and other information.
+ 
+ 4. `main.cpp`: The main program file, containing the entry point of the program (`main` function) and the implementation of other functions or classes related to the main logic.
+ 
+ 5. `main.h`: header file, containing declarations of functions or classes related to the main program file `main.cpp`.
+ 
+ 6. `makefile`: Makefile used to build and compile programs, containing rules for compilation and linking.
+ 
+ 7. `termios.h`: header file, containing declarations of functions or classes related to terminal input and output.
+ 
+ 8. `unistd.h`: header file, containing declarations of functions or classes related to the operating system interface.
+
+Through these files, we can have faster compilation speed, while reducing resource consumption and improving code maintainability.
+
+
+Corresponding coding element: Program codes in multiple files (recall separate compilation)
 
 
 ******************************************
 
 
+Compilation and execution instructions
 
 
-
-
-
-
-
-
-
-▪ Compilation and execution instructions. This serves like a "Quick start" of your game.
+This serves like a "Quick start" of your game.
 The teaching team will follow your instructions to compile and run your game
 
 
