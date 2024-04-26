@@ -341,7 +341,7 @@ struct Board{
         while (true) {
             clearScreen();       // Clear the terminal screen
             cout << "                         " << "[Pause Menu]" << endl;
-            cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
+            cout << "   " << "--Press 'W' & 'S' keys to navigate and \"Enter\" to select options--" << endl;
 
             for (int i = 1; i <= 3; i++) {
                 if (i == currSel) {
