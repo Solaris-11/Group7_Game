@@ -1,4 +1,4 @@
-**Identification of the team members:**
+**Identification of the Team Members:**
 
  1. Chen Shiyang 3035974432
  2. Hu Yujia 3035980302
@@ -9,12 +9,12 @@
 
 ******************************************
 
-**Game description and rules**
+**Game Description and Rules**
 
 
 Welcome to the Flip Card Game! This is a text_base game based on C++, your objective is to flip cards and match them. Each mode offers its own level of difficulty and challenges.
 
-The operation method of the game is to use the "wasd" key for selection and flipping. 
+The operation method of the game is to use the "W,A,S,D, Enter" 5 keys for selection and flipping. 
 
 If you want to pause the game during gameplay, you can press "q" to enter the pause menu. In the pause menu, you can choose to save the game and exit, continue the game, and restart.
 
