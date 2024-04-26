@@ -216,17 +216,7 @@ In order to start playing the game, you can follow the steps below
 
 2. **Log in to the virtual machine**: You can use the SSH client to log in to the Linux system of the virtual machine.
 
-3. **Compile and run the C++ file**: On the Linux system in the virtual machine, use the appropriate compiler and commands to compile and run the C++ file.
-You can use the code in makefile to compile:
-
-      ```
-      memorymatching: main.cpp main.h MoveCursor.h termios.h unistd.h
-	          g++ -pedantic-errors -std=c++11 main.cpp -o memorymatching
-      ```
-
-After that, you can start the game.
-
-
+3. **Compile and run the C++ file**:On the Linux system in the virtual machine, please type the command `make memorymatching` in the terminal to compile `main.cpp` file to `memorymatching`. Then type `./memorymatching` to execute the program.
 
 
 
