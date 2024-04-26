@@ -377,6 +377,11 @@ struct Board{
             points = 0;
             selectedRow = numRows;
             selectedCol = 1;
+            for (int i = 0; i < numRows; i++){
+                for (int j = 0; j < numCols; j++){
+                    table[i][j] = false;
+                }
+            }
             StartNewRound();
         }
     }
