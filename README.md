@@ -12,7 +12,7 @@
 **Game Description and Rules**
 
 
-Welcome to the Flip Card Game! This is a text_base game based on C++, your objective is to flip cards and match them. Each mode offers its own level of difficulty and challenges.
+Welcome to “Memory Matching Game"! This is a text_base game based on C++, your objective is to flip cards and match them. Each mode offers its own level of difficulty and challenges.
 
 The operation method of the game is to use the "W,A,S,D, Enter" 5 keys for selection and flipping. 
 
