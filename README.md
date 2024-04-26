@@ -20,7 +20,7 @@ If you want to pause the game during gameplay, you can press "q" to enter the pa
 
 You can test your memory and matching skills across different game modes: Endless, Challenge, and Custom, each game mode refers to different rules.
   
-  1. **Endless Mode**: including easy mode and hard mode, unlimited numbers of rounds and limited 3 types of rounds will be included
+  1. **Endless Mode**: including easy mode and hard mode, unlimited numbers of moves and limited 3 types of rounds will be included
       
       1. Easy Mode: Two cards can be flipped at once, larger table will be set in each new round, there are no move limit
 
@@ -35,7 +35,7 @@ All of the instructions can be found in the tutorial part, you can check any tim
 
 ******************************************
 
-**Game features and corresponding coding element**
+**Game features and corresponding coding elements**
 
 
 **Feature 1**: Shuffling mechanism
