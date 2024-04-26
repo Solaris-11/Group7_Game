@@ -237,7 +237,7 @@ void StartEndless() {
 	// Print out the header message
         cout << "                         " << "[Endless]" << endl;
         cout << "                    " << "[Choose Difficulty]" << endl;
-        cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
+        cout << "   " << "--Press 'W' & 'S' keys to navigate and \"Enter\" to select options--" << endl;
 
 	// Display options and indicator(>>) on the screen 
         for (int j = 1; j <= difficulties.size(); j++) {
@@ -455,7 +455,7 @@ void StartChallenge() {
 	// Print out the header message
         cout << "                        " << "[Challenge]" << endl;
         cout << "                    " << "[Choose Difficulty]" << endl;
-        cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
+        cout << "   " << "--Press 'W' & 'S' keys to navigate and \"Enter\" to select options--" << endl;
 
 	// Display options and indicator(>>) on the screen 
         for (int j = 1; j <= difficulties.size(); j++) {
@@ -527,7 +527,7 @@ void RunNewGame() {
 	// Print out the header message
         cout << "                          " << "[NewGame]" << endl;
         cout << "                       " << "[Choose a mode]" << endl;
-        cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
+        cout << "   " << "--Press 'W' & 'S' keys to navigate and \"Enter\" to select options--" << endl;
 
 	// Display options and indicator(>>) on the screen 
         for (int i = 1; i <= 5; i++) {
@@ -633,7 +633,7 @@ void RunMainMenu() {
 
         cout << "                   " << "[Memory Matching Game]" << endl;
         cout << "                         " << "[Main Menu]" << endl;
-        cout << "   " << "--Use 'w' and 's' keys to navigate and select options--" << endl;
+        cout << "   " << "--Press 'W' & 'S' keys to navigate and \"Enter\" to select options--" << endl;
 
         for (int i = 1; i <= 4; i++) {
             if (i == currSel) {
