@@ -7,6 +7,8 @@
  5. Wu Zhikai 3035973804
 
 
+Video link: https://drive.google.com/file/d/1JcxpS6anIOks9hW1wQnu0wZXCBBnxvFs/view?usp=drive_link
+
 ******************************************
 
 **Game Description and Rules**
